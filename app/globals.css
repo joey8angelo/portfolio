@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --primary: #ededed;
+  --secondary: #363030;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--foreground) var(--secondary);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.blurs-strong {
+  backdrop-filter: saturate(120%) blur(5px) contrast(108%) brightness(350%);
+}
+
+.blurs-light {
+  backdrop-filter: saturate(120%) blur(5px);
+}
+
+.bold {
+  transition: font-weight 0.3s ease-in-out;
+
+  &:hover {
+    font-weight: 900;
+  }
+}
+
+.project-main {
+  width: 100%;
+  height: 100%;
+  margin: auto;
+  --slide-height: 100%;
+  --slide-spacing: 3px;
+  --slide-size: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.project-viewport {
+  overflow: hidden;
+  flex: 1;
+}
+.project-container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+  margin-left: calc(var(--slide-spacing) * -1);
+  height: 100%;
+}
+.project-slide {
+  height: 100%;
+  transform: translate3d(0, 0, 0);
+  flex: 0 0 var(--slide-size);
+  min-width: 0;
+  padding-left: var(--slide-spacing);
+}
+.project-slide-number {
+  font-size: 4rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--slide-height);
+  user-select: none;
+}
+.project-controls {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  justify-content: space-between;
+  gap: 1.2rem;
+}
+.project-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+  align-items: center;
+}
+.embla__button {
+  -webkit-tap-highlight-color: rgba(var(--text-high-contrast-rgb-value), 0.5);
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  touch-action: manipulation;
+  display: inline-flex;
+  text-decoration: none;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);
+  width: 3.6rem;
+  height: 3.6rem;
+  z-index: 1;
+  border-radius: 50%;
+  color: var(--text-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.embla__button:disabled {
+  color: var(--detail-high-contrast);
+}
+.embla__button__svg {
+  width: 35%;
+  height: 35%;
+}
+.embla__selected-snap-display {
+  justify-self: flex-end;
+  align-self: center;
+  color: var(--text-low-contrast);
+  font-weight: 600;
+  padding-right: 1.2rem;
+}

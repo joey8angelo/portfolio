@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/legacy/plant-system/style.css" />
+    <title>L-System Final</title>
+  </head>
+  <body>
+    <div id="select" class="selector_list">
+      <div class="selector">
+        <label for="system_select">System: </label>
+        <select id="system_select">
+          <option value="my_plant">Random Tree</option>
+          <option value="koch">Koch Curve</option>
+          <option value="binary">Binary Tree</option>
+          <option value="plant">Plant</option>
+          <option value="dragon">Dragon Curve</option>
+          <option value="sierpinski">Sierpinski Triangle</option>
+          <option value="sierpinski_approx">Sierpinski Approximation</option>
+          <option value="sierpinski_carpet">Sierpinski Carpet</option>
+          <option value="pentigree">Pentigree</option>
+          <option value="bush">Bush</option>
+          <option value="flower_plant">Flower Plant</option>
+          <option value="custom">Custom</option>
+          ;
+        </select>
+      </div>
+      <div class="selector">
+        <label for="draw_mode_select">Draw Mode: </label>
+        <select id="draw_mode_select">
+          <option value="normal">Normal</option>
+          <option value="wireframe">Wireframe</option>
+          <option value="skeleton">Skeleton</option>
+        </select>
+      </div>
+      <div class="selector_check">
+        <label for="auto_rotate">Auto Rotate:</label>
+        <input type="checkbox" id="auto_rotate" />
+      </div>
+      <div class="selector_number">
+        <label for="segments">Segments: </label>
+        <input type="number" id="segments" min="3" max="30" value="8" />
+      </div>
+      <div class="selecttor_check">
+        <label for="whiteout">Whiteout background:</label>
+        <input type="checkbox" id="whiteout" />
+      </div>
+      <div class="selector">
+        <label L-System: </label>
+        <textarea id="text_input" rows="4" cols="30">text</textarea>
+      </div>
+    </div>
+    <canvas id="threejs_canvas" class="canvas"></canvas>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@v0.176.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.176.0/examples/jsm/"
+        }
+      }
+    </script>
+    <script src="/legacy/plant-system/Vector.js"></script>
+    <script src="/legacy/plant-system/Grammar.js"></script>
+    <script src="/legacy/plant-system/LSystem.js"></script>
+    <script src="/legacy/plant-system/Turtle.js"></script>
+    <script src="/legacy/plant-system/systems.js"></script>
+    <script type="module" src="/legacy/plant-system/three.js"></script>
+  </body>
+</html>

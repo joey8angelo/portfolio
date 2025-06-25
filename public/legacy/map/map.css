@@ -1,0 +1,130 @@
+@media (max-width: 1000px) {
+  .map-inputs div {
+    display: flex;
+    flex-direction: column;
+    max-width: fit-content;
+  }
+  .map-inputs {
+    left: 0vw !important;
+  }
+}
+
+h2 {
+  width: fit-content;
+}
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#c-unordered-map-container,
+#q-unordered-map-container {
+  display: grid;
+  grid-template-columns: repeat(15, 6.6666%);
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#c-unordered-map-container div,
+#q-unordered-map-container div {
+  padding: 10px;
+  font-size: 8px;
+  text-align: center;
+  background-color: #1d1c1c;
+  border: 1px solid gray;
+}
+
+#c-unordered-map-container p {
+  padding-bottom: 10px;
+  padding-top: 10px;
+  margin: 0;
+  border-bottom: 1px solid gray;
+}
+
+@keyframes flashgreen {
+  50% {
+    background-color: green;
+  }
+}
+
+.flashg {
+  -webkit-animation: flashgreen 0.3s;
+  animation: flashgreen 0.5s;
+}
+
+@keyframes flashyellow {
+  50% {
+    background-color: yellow;
+  }
+}
+
+.flashy {
+  -webkit-animation: flashyellow 0.3s;
+  animation: flashyellow 0.5s;
+}
+
+@keyframes flashred {
+  50% {
+    background-color: darkred;
+  }
+}
+
+.flashr {
+  -webkit-animation: flashred 0.3s;
+  animation: flashred 0.5s;
+}
+
+.map-inputs {
+  position: fixed;
+  top: 50vh;
+  left: 10px;
+}
+
+.map-inputs input {
+  width: 100px;
+  background-color: #262222;
+  color: white;
+  border-radius: 5px;
+  border-color: gray;
+  text-align: left;
+  margin-bottom: 10px;
+  overflow: scroll;
+}
+
+.c-unordered-map-label,
+.q-unordered-map-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.c-unordered-map-label input,
+.q-unordered-map-label input {
+  width: 30px;
+  background-color: #262222;
+  color: white;
+  border-radius: 5px;
+  border-color: gray;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.c-unordered-map-label div,
+.q-unordered-map-label div {
+  text-align: center;
+  margin-right: 30px;
+  margin-left: 30px;
+}
+
+select {
+  background-color: #262222;
+  border-radius: 5px;
+  border-color: gray;
+  color: white;
+}
+
