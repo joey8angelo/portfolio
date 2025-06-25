@@ -16,7 +16,6 @@ interface ProjectProps {
   description: React.ReactNode;
   images?: ImageType[];
   linkHint?: boolean;
-  autoPlay?: boolean;
 }
 
 export default function Project({
@@ -26,7 +25,6 @@ export default function Project({
   description,
   images = [],
   linkHint = false,
-  autoPlay = false,
 }: ProjectProps) {
   const divRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<TextScrambleHandle>(null);
@@ -108,7 +106,7 @@ export default function Project({
                 />
               </a>
             ))}
-            options={{ loop: true, autoPlay: autoPlay ? 500 : false }}
+            options={{ loop: true }}
             classes={{
               main: "project-main blurs-light border-2 border-(--secondary)/30 rounded-lg",
               viewport: "project-viewport",
