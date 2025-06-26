@@ -288,6 +288,7 @@ export default function ParticleSimulation({
       isStatic
     )
       return;
+
     console.log(
       "Dynamic particle count sim cycle: ",
       dynamicParticleCountCycles,
@@ -350,6 +351,13 @@ export default function ParticleSimulation({
           return;
         }
       }
+    }
+
+    if (dynamicParticleCountCycles === 0) {
+      setTimeout(() => {
+        setDynamicParticleCountCycles(1);
+      }, 500);
+      return;
     }
 
     state.settings.particleCount = Math.pow(2, dynamicParticleCountCycles);
