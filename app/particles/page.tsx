@@ -17,6 +17,7 @@ export default function Page() {
         particleCount={524288}
         showSettings
         logFps
+        targetFps={60}
       />
     </Layout>
   );

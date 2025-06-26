@@ -315,6 +315,7 @@ export default function Home() {
         className="fixed top-0 left-0 w-screen h-screen -z-1"
         id="background_sim"
         particleCount={524288}
+        targetFps={50}
       />
     </>
   );
