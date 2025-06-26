@@ -800,6 +800,8 @@ export default function ParticleSimulation({
                     }
                     if (doStatic) {
                       setIsStatic(false);
+                      staticCanvasRef.current?.classList.add("hidden");
+                      canvasRef.current?.classList.remove("hidden");
                     }
                   }}
                 >
