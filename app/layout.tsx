@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Martian_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const martianMono = Martian_Mono({
@@ -17,6 +18,7 @@ export default function Layout({
 }>) {
   return (
     <html lang="en">
+      <Analytics />
       <body
         className={`${martianMono.className} antialiased overflow-x-hidden`}
       >

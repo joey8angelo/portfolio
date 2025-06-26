@@ -386,8 +386,8 @@ export default function ParticleSimulation({
 
       // Check the test simulation after 15 frames
       if (state.frame == 15) {
-        if (dynamicParticleCountCycles === 0) {
-          setDynamicParticleCountCycles(1);
+        if (dynamicParticleCountCycles < 2) {
+          setDynamicParticleCountCycles(dynamicParticleCountCycles + 1);
         } else {
           const end = performance.now();
           const cfps = (1000 / (end - state.startTime)) * 15;
