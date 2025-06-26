@@ -134,7 +134,7 @@ export const Menu = forwardRef<MenuHandle, MenuProps>(
           </nav>
           {desc && (
             <div className="fixed bottom-0 w-full p-10">
-              <div className="border-t-1 border-(--secondary) text-center pt-5">
+              <div className="text-xs lg:text-lg border-t-1 border-(--secondary) text-center pt-5">
                 {desc}
               </div>
             </div>
