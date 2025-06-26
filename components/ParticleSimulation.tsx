@@ -356,7 +356,7 @@ export default function ParticleSimulation({
     if (dynamicParticleCountCycles === 0) {
       setTimeout(() => {
         setDynamicParticleCountCycles(1);
-      }, 500);
+      }, 1000);
       return;
     }
 
@@ -797,6 +797,9 @@ export default function ParticleSimulation({
                     });
                     if (dynamicParticleCount) {
                       setDynamicParticleCountCycles(0);
+                    }
+                    if (doStatic) {
+                      setIsStatic(false);
                     }
                   }}
                 >
