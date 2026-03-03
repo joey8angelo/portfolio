@@ -1,8 +1,4 @@
-import {
-  OrbitControls,
-  DeviceOrientationControls,
-  PerspectiveCamera,
-} from "@react-three/drei";
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { useLoader, useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
@@ -124,7 +120,7 @@ function SkyGrid({
     }
 
     return group;
-  }, [color, radius, gridOpacity]);
+  }, [color, radius, gridOpacity, highlightSegments]);
 
   return <primitive object={rings} rotation={rotation} />;
 }
@@ -175,14 +171,9 @@ export default function SkyScene() {
     <>
       <ambientLight intensity={1} />
       <PerspectiveCamera makeDefault position={[0, -0.001, 0]} fov={100} />
-      {/Android|iPhone|iPad/i.test(navigator.userAgent) ? (
-        <DeviceOrientationControls />
-      ) : (
-        <OrbitControls enablePan={false} />
-      )}
+      <OrbitControls enablePan={false} />
 
       {showAzimuthal && <SkyGrid color="#ffffff" rotation={[0, 0, 0]} />}
-
       <group rotation={[Math.PI / 2 - latRad, 0, 0]}>
         <group ref={uniGroup} rotation={[0, initialRotation, 0]}>
           <MilkyWay />
@@ -207,7 +198,6 @@ export default function SkyScene() {
           </mesh>
         </group>
       </group>
-
       {showAxes && <axesHelper args={[5]} />}
     </>
   );
