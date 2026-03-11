@@ -43,6 +43,7 @@ export default function StarField({
       uniforms: {
         uTime: { value: 0 },
         uTwinkleIntensity: { value: 0.12 },
+        uRadius: { value: radius * 3 },
       },
       transparent: true,
       blending: THREE.AdditiveBlending,
@@ -53,7 +54,7 @@ export default function StarField({
     });
 
     return material;
-  }, []);
+  }, [radius]);
 
   useFrame((state) => {
     if (materialRef.current) {

@@ -4,12 +4,12 @@ import { useControls } from "leva";
 
 export default function SkyGrid({
   color,
-  rotation = [0, 0, 0],
-  radius = 99,
+  radius,
+  lineWidth,
 }: {
   color: string;
-  rotation?: [number, number, number];
-  radius?: number;
+  radius: number;
+  lineWidth: number;
 }) {
   const { gridOpacity } = useControls({
     gridOpacity: {
@@ -35,7 +35,7 @@ export default function SkyGrid({
 
       const geometry = new THREE.TorusGeometry(
         ringRadius,
-        highlighted ? 0.1 : 0.07,
+        highlighted ? lineWidth : lineWidth * 0.7,
         16,
         100,
       );
@@ -57,7 +57,7 @@ export default function SkyGrid({
       const highlighted = i % highlightSegments === 0;
       const geometry = new THREE.TorusGeometry(
         radius,
-        highlighted ? 0.1 : 0.07,
+        highlighted ? lineWidth : lineWidth * 0.7,
         16,
         100,
       );
@@ -74,7 +74,7 @@ export default function SkyGrid({
     }
 
     return group;
-  }, [color, radius, gridOpacity, highlightSegments]);
+  }, [color, radius, gridOpacity, highlightSegments, lineWidth]);
 
-  return <primitive object={rings} rotation={rotation} />;
+  return <primitive object={rings} />;
 }
