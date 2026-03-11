@@ -4,7 +4,10 @@ import * as THREE from "three";
 import { useMemo } from "react";
 
 export default function MilkyWay({ radius }: { radius: number }) {
-  const originalTexture = useLoader(EXRLoader, "/milkyway_2020_4k.exr");
+  const originalTexture = useLoader(
+    EXRLoader,
+    "/textures/milkyway_2020_4k.exr",
+  );
   const texture = useMemo(() => {
     const t = originalTexture.clone();
     t.wrapS = THREE.RepeatWrapping;

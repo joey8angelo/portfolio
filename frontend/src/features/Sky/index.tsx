@@ -1,6 +1,5 @@
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
-import { OrbitControls, PerspectiveCamera, useHelper } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useControls } from "leva";
 import MilkyWay from "./MilkyWay";
@@ -52,7 +51,9 @@ function CelestialScene({
         {showEquatorial && (
           <SkyGrid color="cyan" radius={innerRadius} lineWidth={0.01} />
         )}
-        {showStars && <StarField url="/ybsc_parsed.csv" radius={innerRadius} />}
+        {showStars && (
+          <StarField url="/assets/ybsc_parsed.csv" radius={innerRadius} />
+        )}
         {showMilkyWay && <MilkyWay radius={radius} />}
         {/* <Satellites /> ???*/}
       </group>
@@ -66,44 +67,15 @@ function TerrestrialScene() {
 }
 
 export default function SkyScene() {
-  const cameraRef = useRef<THREE.PerspectiveCamera>(null!);
-
-  const { showAzimuthal, showAxes, useDebugCamera } = useControls({
+  const { showAzimuthal, showAxes } = useControls({
     showAzimuthal: false,
     showAxes: false,
-    useDebugCamera: false,
-    fov: {
-      value: 100,
-      min: 10,
-      max: 150,
-      step: 1,
-      onChange: (value) => {
-        if (cameraRef.current) {
-          cameraRef.current.fov = value;
-          cameraRef.current.updateProjectionMatrix();
-        }
-      },
-    },
   });
-
-  useHelper(useDebugCamera ? cameraRef : null, THREE.CameraHelper);
 
   return (
     <>
       {showAxes && <axesHelper args={[5]} />}
       <ambientLight intensity={1} />
-      <PerspectiveCamera
-        makeDefault={!useDebugCamera}
-        ref={cameraRef}
-        position={[0, -0.01, 0]}
-        fov={100}
-      />
-      <PerspectiveCamera
-        position={[5, -5, 0]}
-        fov={100}
-        makeDefault={useDebugCamera}
-      />
-      <OrbitControls enablePan={false} enabled={useDebugCamera} />
 
       {showAzimuthal && (
         <SkyGrid color="#ffffff" radius={9.9} lineWidth={0.01} />

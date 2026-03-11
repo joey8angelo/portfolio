@@ -3,8 +3,8 @@ import { useFrame, useLoader } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import { useControls } from "leva";
 import { bvToColor } from "./starUtils";
-import vertexShader from "./star_vertex.glsl?raw";
-import fragmentShader from "./star_fragment.glsl?raw";
+import vertexShader from "./shaders/star_vertex.glsl";
+import fragmentShader from "./shaders/star_fragment.glsl";
 
 export default function StarField({
   url,

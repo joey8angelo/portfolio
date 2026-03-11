@@ -1,0 +1,60 @@
+import SkyScene from "../Sky";
+import LoadingScene from "../Loading";
+
+import useSmoothProgress from "../../hooks/useSmoothProgress";
+import { Suspense } from "react";
+import { PerspectiveCamera } from "@react-three/drei/core/PerspectiveCamera";
+import { useHelper } from "@react-three/drei/core/Helper";
+import { useRef } from "react";
+import * as THREE from "three";
+import { useControls } from "leva";
+import { OrbitControls } from "@react-three/drei";
+
+export default function Scene() {
+  const progress = useSmoothProgress({ duration: 5 });
+  const isLoaded = progress === 100;
+
+  const cameraRef = useRef<THREE.PerspectiveCamera>(null!);
+
+  const { useDebugCamera } = useControls({
+    useDebugCamera: false,
+    fov: {
+      value: 100,
+      min: 10,
+      max: 150,
+      step: 1,
+      onChange: (value) => {
+        if (cameraRef.current) {
+          cameraRef.current.fov = value;
+          cameraRef.current.updateProjectionMatrix();
+        }
+      },
+    },
+  });
+
+  useHelper(useDebugCamera ? cameraRef : null, THREE.CameraHelper);
+
+  return (
+    <>
+      <color attach="background" args={["black"]} />
+      <PerspectiveCamera
+        makeDefault={!useDebugCamera}
+        ref={cameraRef}
+        position={[0, -0.01, 0]}
+        fov={100}
+      />
+      <PerspectiveCamera
+        position={[5, -5, 0]}
+        fov={100}
+        makeDefault={useDebugCamera}
+      />
+      <OrbitControls enablePan={false} enabled={useDebugCamera} />
+      <LoadingScene progress={progress} />
+      <Suspense fallback={null}>
+        <group visible={isLoaded}>
+          <SkyScene />
+        </group>
+      </Suspense>
+    </>
+  );
+}
