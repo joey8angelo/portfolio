@@ -64,7 +64,7 @@ export default function PulsarMap({
         <Line
           points={[
             [0, yPosition, 0],
-            [endTravelDistance, yPosition, 0],
+            [1 + travelDistance, yPosition, 0],
           ]}
           color="white"
           transparent
@@ -82,10 +82,10 @@ export default function PulsarMap({
                 [0, yPosition, 0],
                 [endPos.x, yPosition, endPos.z],
               ]}
-              color="white"
+              color={"white"}
               lineWidth={1}
               transparent
-              opacity={1 - t}
+              opacity={Math.max(0, 1 - t)}
             />
           );
         })}

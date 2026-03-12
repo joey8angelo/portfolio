@@ -1,8 +1,3 @@
-import SkyScene from "../Sky";
-import LoadingScene from "../Loading";
-
-import useSmoothProgress from "../../hooks/useSmoothProgress";
-import { Suspense } from "react";
 import { PerspectiveCamera } from "@react-three/drei/core/PerspectiveCamera";
 import { useHelper } from "@react-three/drei/core/Helper";
 import { useRef } from "react";
@@ -11,13 +6,15 @@ import { useControls } from "leva";
 import { OrbitControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 
-export default function Scene() {
-  const progress = useSmoothProgress({ duration: 10, ease: "power1.out" });
-  const isLoaded = progress === 100;
+import EarthWireframe from "../Loading/EarthWireframe";
+import { EffectComposer } from "@react-three/postprocessing";
+import { HalftoneEffect } from "../Effects/Halftone/HalftoneEffect";
+import { Bloom } from "@react-three/postprocessing";
 
+export default function Scene() {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null!);
 
-  const { useDebugCamera } = useControls({
+  const { useDebugCamera, testProgress } = useControls({
     useDebugCamera: false,
     fov: {
       value: 100,
@@ -30,6 +27,12 @@ export default function Scene() {
           cameraRef.current.updateProjectionMatrix();
         }
       },
+    },
+    testProgress: {
+      value: 0,
+      min: 0,
+      max: 100,
+      step: 1,
     },
   });
 
@@ -58,12 +61,23 @@ export default function Scene() {
         makeDefault={useDebugCamera}
       />
       <OrbitControls enablePan={false} enabled={useDebugCamera} />
-      <LoadingScene progress={progress} />
-      <Suspense fallback={null}>
-        <group visible={isLoaded}>
-          <SkyScene />
-        </group>
-      </Suspense>
+      <EarthWireframe
+        globalProgress={testProgress}
+        endRadius={1}
+        startProgress={30}
+        endProgress={100}
+      />
+      <EffectComposer>
+        <HalftoneEffect scale={4} rotation={0.8} frequency={100} />
+
+        <Bloom
+          intensity={1.5}
+          width={300}
+          height={300}
+          luminanceThreshold={0}
+          luminanceSmoothing={0.9}
+        />
+      </EffectComposer>
     </>
   );
 }

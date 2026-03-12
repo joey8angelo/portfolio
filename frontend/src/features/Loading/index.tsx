@@ -2,8 +2,8 @@ import { Html } from "@react-three/drei";
 import bootTxt from "../../assets/bootTxt";
 import { useEffect, useRef } from "react";
 import PulsarMap from "./PulsarMap";
-import SphereGrid from "./SphereGrid";
-import { EffectComposer } from "@react-three/postprocessing";
+import EarthWireframe from "./EarthWireframe";
+import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { HalftoneEffect } from "../Effects/Halftone/HalftoneEffect";
 
 const bootLines = bootTxt.split("\n");
@@ -56,9 +56,9 @@ export default function LoadingScene({ progress }: { progress: number }) {
         startProgress={30}
         endProgress={70}
       />
-      <SphereGrid
+      <EarthWireframe
         globalProgress={progress}
-        endRadius={3}
+        endRadius={1}
         startProgress={30}
         endProgress={100}
       />
@@ -68,18 +68,26 @@ export default function LoadingScene({ progress }: { progress: number }) {
             color: "white",
             fontSize: "15px",
             fontFamily: "StampRSPKOne-ExtraLight",
-            zIndex: 100,
+            zIndex: -1,
             width: "100vw",
             height: "100vh",
             display: "flex",
             flexDirection: "column",
             justifyContent: "end",
+            textShadow:
+              "0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.5)",
+            filter: "brightness(1.5)",
           }}
           ref={bootTxtContainerRef}
         ></div>
       </Html>
       <EffectComposer>
-        <HalftoneEffect scale={3} rotation={0.8} frequency={2} />
+        <HalftoneEffect scale={3} rotation={0.8} frequency={100} />
+        <Bloom
+          intensity={1.5}
+          luminanceThreshold={0}
+          luminanceSmoothing={0.9}
+        />
       </EffectComposer>
     </>
   );

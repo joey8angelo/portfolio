@@ -3,6 +3,8 @@ import "./App.css";
 import { Leva } from "leva";
 import Scene from "./features/Scene";
 
+// import Scene from "./features/Scene/testScene";
+
 function App() {
   const isProd = import.meta.env.VITE_PROD === "true";
 
