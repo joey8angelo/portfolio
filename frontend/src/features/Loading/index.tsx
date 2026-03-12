@@ -53,13 +53,13 @@ export default function LoadingScene({ progress }: { progress: number }) {
       <PulsarMap
         globalProgress={progress}
         endTravelDistance={3}
-        startProgress={20}
-        endProgress={60}
+        startProgress={30}
+        endProgress={70}
       />
       <SphereGrid
         globalProgress={progress}
         endRadius={3}
-        startProgress={20}
+        startProgress={30}
         endProgress={100}
       />
       <Html center>

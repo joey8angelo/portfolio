@@ -12,7 +12,7 @@ import { OrbitControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 
 export default function Scene() {
-  const progress = useSmoothProgress({ duration: 10, ease: "power2.out" });
+  const progress = useSmoothProgress({ duration: 5, ease: "power2.out" });
   const isLoaded = progress === 100;
 
   const cameraRef = useRef<THREE.PerspectiveCamera>(null!);

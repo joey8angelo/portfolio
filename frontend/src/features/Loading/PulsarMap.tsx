@@ -68,7 +68,7 @@ export default function PulsarMap({
           ]}
           color="white"
           transparent
-          lineWidth={2}
+          lineWidth={1}
           opacity={1 - t}
         />
 
@@ -83,7 +83,7 @@ export default function PulsarMap({
                 [endPos.x, yPosition, endPos.z],
               ]}
               color="white"
-              lineWidth={2}
+              lineWidth={1}
               transparent
               opacity={1 - t}
             />
