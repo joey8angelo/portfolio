@@ -1,21 +1,62 @@
-import { useLoader } from "@react-three/fiber";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader.js";
 import * as THREE from "three";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 
 export default function MilkyWay({ radius }: { radius: number }) {
-  const originalTexture = useLoader(
-    EXRLoader,
-    "/textures/milkyway_2020_4k.exr",
-  );
-  const texture = useMemo(() => {
-    const t = originalTexture.clone();
-    t.wrapS = THREE.RepeatWrapping;
-    t.repeat.x = -1;
+  const [texture, setTexture] = useState<THREE.Texture | null>(null);
+  const [loadFailed, setLoadFailed] = useState(false);
 
-    t.center.set(0.5, 0.5);
-    return t;
-  }, [originalTexture]);
+  useEffect(() => {
+    let isMounted = true;
+    let loadedTexture: THREE.Texture | null = null;
+
+    const loader = new EXRLoader();
+    loader.setDataType(THREE.HalfFloatType);
+
+    loader.load(
+      "/textures/milkyway_2020_4k.exr",
+      (nextTexture) => {
+        if (!isMounted) {
+          nextTexture.dispose();
+          return;
+        }
+
+        nextTexture.wrapS = THREE.RepeatWrapping;
+        nextTexture.repeat.x = -1;
+        nextTexture.center.set(0.5, 0.5);
+        nextTexture.needsUpdate = true;
+
+        loadedTexture = nextTexture;
+        setTexture(nextTexture);
+      },
+      undefined,
+      () => {
+        if (isMounted) {
+          setLoadFailed(true);
+        }
+      },
+    );
+
+    return () => {
+      isMounted = false;
+      if (loadedTexture) {
+        loadedTexture.dispose();
+      }
+    };
+  }, []);
+
+  if (loadFailed) {
+    return (
+      <mesh position={[0, 0, 0]}>
+        <sphereGeometry args={[radius, 32, 32]} />
+        <meshStandardMaterial side={THREE.BackSide} color="#ff0000" />
+      </mesh>
+    );
+  }
+
+  if (!texture) {
+    return null;
+  }
 
   return (
     <mesh position={[0, 0, 0]}>
