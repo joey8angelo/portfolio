@@ -1,6 +1,7 @@
 import { Html } from "@react-three/drei";
 import bootTxt from "../../assets/bootTxt";
 import { useEffect, useRef } from "react";
+import useResponsive from "../../hooks/useResponsive";
 
 const bootLines = bootTxt.split("\n");
 const bootLinesMarked = bootLines.map((line) => {
@@ -15,6 +16,8 @@ const bootLinesMarked = bootLines.map((line) => {
 export default function Boot({ progress }: { progress: number }) {
   const bootTxtContainerRef = useRef<HTMLDivElement>(null);
   const lastDisplayedIndexRef = useRef(-1);
+
+  const { isMobile } = useResponsive();
 
   useEffect(() => {
     if (progress === 0) {
@@ -54,7 +57,8 @@ export default function Boot({ progress }: { progress: number }) {
       <div
         style={{
           color: "white",
-          fontSize: "15px",
+          opacity: isMobile ? 0.5 : 1,
+          fontSize: isMobile ? "10px" : "16px",
           fontFamily: "StampRSPKOne-ExtraLight",
           zIndex: -1,
           width: "100vw",

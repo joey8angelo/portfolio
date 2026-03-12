@@ -4,8 +4,10 @@ import PulsarMap from "./PulsarMap";
 import EarthWireframe from "./EarthWireframe";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { HalftoneEffect } from "../Effects/Halftone/HalftoneEffect";
+import useResponsive from "../../hooks/useResponsive";
 
 export default function LoadingScene({ progress }: { progress: number }) {
+  const { isMobile } = useResponsive();
   if (progress === 100) return null;
   return (
     <>
@@ -18,6 +20,7 @@ export default function LoadingScene({ progress }: { progress: number }) {
           endTravelDistance={3}
           startProgress={0}
           endProgress={80}
+          yPosition={isMobile ? 2 : 1}
         />
         <EarthWireframe
           globalProgress={progress}
