@@ -55,7 +55,12 @@ export default function MilkyWay({ radius }: { radius: number }) {
   }
 
   if (!texture) {
-    return null;
+    return (
+      <mesh position={[0, 0, 0]}>
+        <sphereGeometry args={[radius, 32, 32]} />
+        <meshStandardMaterial side={THREE.BackSide} color="#00ff00" />
+      </mesh>
+    );
   }
 
   return (
