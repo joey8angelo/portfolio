@@ -20,7 +20,7 @@ export default function Boot({ progress }: { progress: number }) {
   const { isMobile } = useResponsive();
 
   useEffect(() => {
-    if (progress === 0) {
+    if (progress <= 0.01) {
       lastDisplayedIndexRef.current = -1;
       if (bootTxtContainerRef.current) {
         bootTxtContainerRef.current.innerHTML = "";

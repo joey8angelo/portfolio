@@ -13,7 +13,7 @@ import { useFrame } from "@react-three/fiber";
 
 export default function Scene() {
   const progress = useSmoothProgress({ duration: 7, ease: "power1.out" });
-  const isLoaded = progress === 100;
+  const isLoaded = progress >= 99.9;
 
   const cameraRef = useRef<THREE.PerspectiveCamera>(null!);
 

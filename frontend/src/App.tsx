@@ -10,7 +10,7 @@ function App() {
 
   return (
     <>
-      {isDev && <Leva />}
+      <Leva hidden={!isDev} />
       <div style={{ width: "100vw", height: "100vh" }}>
         <Canvas>
           <Scene />

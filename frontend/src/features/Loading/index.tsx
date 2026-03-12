@@ -8,7 +8,7 @@ import useResponsive from "../../hooks/useResponsive";
 
 export default function LoadingScene({ progress }: { progress: number }) {
   const { isMobile } = useResponsive();
-  if (progress === 100) return null;
+  if (progress >= 99.9) return null;
   return (
     <>
       <Suspense fallback={null}>
