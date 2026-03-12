@@ -2,9 +2,12 @@ with open("./boot.txt") as f:
     boot = f.read()
 
 lines = boot.splitlines()
+lines = [line.strip() for line in lines]
+lines = [line for i, line in enumerate(lines) if i % 2 == 0]
 
 emptyLines = [i for i, line in enumerate(lines) if line.startswith("[]")]
 numEmptyLines = len(emptyLines)
+
 
 for i, lineNum in enumerate(emptyLines):
     line = lines[lineNum]

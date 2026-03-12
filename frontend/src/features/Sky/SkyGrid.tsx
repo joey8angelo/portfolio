@@ -6,10 +6,12 @@ export default function SkyGrid({
   color,
   radius,
   lineWidth,
+  rotation = [0, 0, 0],
 }: {
   color: string;
   radius: number;
   lineWidth: number;
+  rotation?: [number, number, number];
 }) {
   const { gridOpacity } = useControls({
     gridOpacity: {
@@ -76,5 +78,5 @@ export default function SkyGrid({
     return group;
   }, [color, radius, gridOpacity, highlightSegments, lineWidth]);
 
-  return <primitive object={rings} />;
+  return <primitive object={rings} rotation={rotation} />;
 }

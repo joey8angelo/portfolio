@@ -9,9 +9,11 @@ import { useRef } from "react";
 import * as THREE from "three";
 import { useControls } from "leva";
 import { OrbitControls } from "@react-three/drei";
+import "../Materials/HalftoneMaterial";
+import { useFrame } from "@react-three/fiber";
 
 export default function Scene() {
-  const progress = useSmoothProgress({ duration: 5 });
+  const progress = useSmoothProgress({ duration: 10, ease: "power2.out" });
   const isLoaded = progress === 100;
 
   const cameraRef = useRef<THREE.PerspectiveCamera>(null!);
@@ -30,6 +32,14 @@ export default function Scene() {
         }
       },
     },
+  });
+
+  const torusRef = useRef<THREE.Mesh>(null!);
+  useFrame(() => {
+    if (torusRef.current) {
+      torusRef.current.rotation.x += 0.01;
+      torusRef.current.rotation.y += 0.01;
+    }
   });
 
   useHelper(useDebugCamera ? cameraRef : null, THREE.CameraHelper);
@@ -55,6 +65,10 @@ export default function Scene() {
           <SkyScene />
         </group>
       </Suspense>
+      {/* <mesh position={[0, 6, 0]} ref={torusRef}>
+        <torusKnotGeometry args={[1, 0.4, 128, 16]} />
+        <halftoneMaterialImpl uScale={1} uRotation={0.8} uFrequency={20} />
+      </mesh> */}
     </>
   );
 }

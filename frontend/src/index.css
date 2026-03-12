@@ -1,3 +1,32 @@
+@font-face {
+  font-family: "StampRSPKOne-Bold";
+  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Bold.otf") format("opentype");
+}
+@font-face {
+  font-family: "StampRSPKOne-ExtraLight";
+  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-ExtraLight.otf") format("opentype");
+}
+@font-face {
+  font-family: "StampRSPKOne-Heavy";
+  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Heavy.otf") format("opentype");
+}
+@font-face {
+  font-family: "StampRSPKOne-Light";
+  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Light.otf") format("opentype");
+}
+@font-face {
+  font-family: "StampRSPKOne-Medium";
+  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Medium.otf") format("opentype");
+}
+@font-face {
+  font-family: "StampRSPKOne-Regular";
+  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Regular.otf") format("opentype");
+}
+@font-face {
+  font-family: "StampRSPKOne-Thin";
+  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Thin.otf") format("opentype");
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
