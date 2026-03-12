@@ -9,7 +9,6 @@ import { useRef } from "react";
 import * as THREE from "three";
 import { useControls } from "leva";
 import { OrbitControls } from "@react-three/drei";
-import "../Materials/HalftoneMaterial";
 import { useFrame } from "@react-three/fiber";
 
 export default function Scene() {
@@ -65,10 +64,6 @@ export default function Scene() {
           <SkyScene />
         </group>
       </Suspense>
-      {/* <mesh position={[0, 6, 0]} ref={torusRef}>
-        <torusKnotGeometry args={[1, 0.4, 128, 16]} />
-        <halftoneMaterialImpl uScale={1} uRotation={0.8} uFrequency={20} />
-      </mesh> */}
     </>
   );
 }
