@@ -1,94 +1,39 @@
-import { Html } from "@react-three/drei";
-import bootTxt from "../../assets/bootTxt";
-import { useEffect, useRef } from "react";
+import { Suspense } from "react";
+import Boot from "./Boot";
 import PulsarMap from "./PulsarMap";
 import EarthWireframe from "./EarthWireframe";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { HalftoneEffect } from "../Effects/Halftone/HalftoneEffect";
 
-const bootLines = bootTxt.split("\n");
-const bootLinesMarked = bootLines.map((line) => {
-  const percentageMatch = line.match(/\[ (\d{3}%) \]/);
-  const percentage = percentageMatch ? parseInt(percentageMatch[1]) : 0;
-  return {
-    text: line,
-    percentage,
-  };
-});
-
 export default function LoadingScene({ progress }: { progress: number }) {
-  const bootTxtContainerRef = useRef<HTMLDivElement>(null);
-  const lastDisplayedIndexRef = useRef(-1);
-
-  useEffect(() => {
-    const container = bootTxtContainerRef.current;
-    if (!container) return;
-
-    const newLines = [];
-    let nextIndex = lastDisplayedIndexRef.current + 1;
-    while (
-      nextIndex < bootLinesMarked.length &&
-      bootLinesMarked[nextIndex].percentage <= progress
-    ) {
-      newLines.push(bootLinesMarked[nextIndex].text);
-      nextIndex++;
-    }
-
-    if (newLines.length > 0) {
-      newLines.forEach((line) => {
-        const lineElement = document.createElement("div");
-        lineElement.textContent = line;
-        container.appendChild(lineElement);
-      });
-
-      lastDisplayedIndexRef.current = nextIndex - 1;
-    }
-  }, [progress]);
-
   if (progress === 100) return null;
   return (
     <>
-      <ambientLight intensity={0.1} />
-      <directionalLight position={[5, 5, 5]} intensity={7} />
-      <PulsarMap
-        globalProgress={progress}
-        endTravelDistance={3}
-        startProgress={30}
-        endProgress={70}
-      />
-      <EarthWireframe
-        globalProgress={progress}
-        endRadius={1}
-        startProgress={30}
-        endProgress={100}
-      />
-      <Html center>
-        <div
-          style={{
-            color: "white",
-            fontSize: "15px",
-            fontFamily: "StampRSPKOne-ExtraLight",
-            zIndex: -1,
-            width: "100vw",
-            height: "100vh",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "end",
-            textShadow:
-              "0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.5)",
-            filter: "brightness(1.5)",
-          }}
-          ref={bootTxtContainerRef}
-        ></div>
-      </Html>
-      <EffectComposer>
-        <HalftoneEffect scale={3} rotation={0.8} frequency={100} />
-        <Bloom
-          intensity={1.5}
-          luminanceThreshold={0}
-          luminanceSmoothing={0.9}
+      <Suspense fallback={null}>
+        <ambientLight intensity={0.1} />
+        <directionalLight position={[5, 5, 5]} intensity={7} />
+        <Boot progress={progress} />
+        <PulsarMap
+          globalProgress={progress}
+          endTravelDistance={3}
+          startProgress={0}
+          endProgress={80}
         />
-      </EffectComposer>
+        <EarthWireframe
+          globalProgress={progress}
+          endRadius={2}
+          startProgress={30}
+          endProgress={100}
+        />
+        <EffectComposer>
+          <HalftoneEffect scale={3} rotation={0.8} frequency={100} />
+          <Bloom
+            intensity={1.5}
+            luminanceThreshold={0}
+            luminanceSmoothing={0.9}
+          />
+        </EffectComposer>
+      </Suspense>
     </>
   );
 }

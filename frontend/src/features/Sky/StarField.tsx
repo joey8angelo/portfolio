@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
-import { useControls } from "leva";
+import { useDebugControls } from "../../hooks/useDebugControls";
 import { bvToColor } from "./starUtils";
 import vertexShader from "./shaders/star_vertex.glsl";
 import fragmentShader from "./shaders/star_fragment.glsl";
@@ -18,32 +18,45 @@ export default function StarField({
 
   const starData = useLoader(THREE.FileLoader, url);
 
-  const { twinkleSpeed } = useControls({
-    twinkleSpeed: {
-      value: 0.6,
-      min: 0,
-      max: 2,
-      step: 0.01,
-    },
-    twinkleIntensity: {
-      value: 0.12,
-      min: 0,
-      max: 1,
-      step: 0.01,
-      onChange: (value) => {
-        if (materialRef.current) {
-          materialRef.current.uniforms.uTwinkleIntensity.value = value;
-        }
+  const { twinkleSpeed, twinkleIntensity, radiusMultiplier } = useDebugControls(
+    {
+      twinkleSpeed: {
+        value: 0.6,
+        min: 0,
+        max: 2,
+        step: 0.01,
+      },
+      twinkleIntensity: {
+        value: 0.12,
+        min: 0,
+        max: 1,
+        step: 0.01,
+        onChange: (value: number) => {
+          if (materialRef.current) {
+            materialRef.current.uniforms.uTwinkleIntensity.value = value;
+          }
+        },
+      },
+      radiusMultiplier: {
+        value: 3,
+        min: 0,
+        max: 10,
+        step: 0.1,
+        onChange: (value: number) => {
+          if (materialRef.current) {
+            materialRef.current.uniforms.uRadius.value = radius * value;
+          }
+        },
       },
     },
-  });
+  );
 
   const starShaderMaterial = useMemo(() => {
     const material = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
-        uTwinkleIntensity: { value: 0.12 },
-        uRadius: { value: radius * 3 },
+        uTwinkleIntensity: { value: twinkleIntensity },
+        uRadius: { value: radius * radiusMultiplier },
       },
       transparent: true,
       blending: THREE.AdditiveBlending,
@@ -54,7 +67,7 @@ export default function StarField({
     });
 
     return material;
-  }, [radius]);
+  }, [radius, radiusMultiplier, twinkleIntensity]);
 
   useFrame((state) => {
     if (materialRef.current) {

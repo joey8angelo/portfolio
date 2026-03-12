@@ -45,7 +45,14 @@ export default function PulsarMap({
     const easedProgress = gsap.parseEase(ease)(local);
     return easedProgress;
   }, [globalProgress, startProgress, endProgress, ease]);
-  const travelDistance = t * endTravelDistance;
+
+  const travelDistance = useMemo(() => {
+    if (t < 0.7) {
+      return 0;
+    } else {
+      return gsap.utils.mapRange(0.7, 1, 0, endTravelDistance, t);
+    }
+  }, [t, endTravelDistance]);
 
   const pulsarLines = useMemo(() => {
     return PULSAR_DATA.map((p) => {
@@ -55,6 +62,16 @@ export default function PulsarMap({
       return { ...p, dir: new THREE.Vector3(x, 0, z) };
     });
   }, []);
+
+  const opacity = useMemo(() => {
+    if (t < 0.3) {
+      return gsap.utils.mapRange(0, 0.3, 0, 1, t);
+    } else if (t < 0.8) {
+      return 1;
+    } else {
+      return gsap.utils.mapRange(0.8, 1, 1, 0, t);
+    }
+  }, [t]);
 
   if (t === 1) return null;
   return (
@@ -69,7 +86,7 @@ export default function PulsarMap({
           color="white"
           transparent
           lineWidth={1}
-          opacity={1 - t}
+          opacity={opacity}
         />
 
         {/* Pulsar lines */}
@@ -85,7 +102,7 @@ export default function PulsarMap({
               color={"white"}
               lineWidth={1}
               transparent
-              opacity={Math.max(0, 1 - t)}
+              opacity={opacity}
             />
           );
         })}

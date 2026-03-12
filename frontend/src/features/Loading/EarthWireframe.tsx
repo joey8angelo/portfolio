@@ -68,7 +68,7 @@ export default function EarthWireframe({
     } else if (t < 0.97) {
       return gsap.utils.mapRange(0.94, 0.97, 0.7, 1, t);
     } else if (t < 1) {
-      return gsap.utils.mapRange(0.97, 1, 1, 0.1, t);
+      return gsap.utils.mapRange(0.97, 1, 1, 0, t);
     }
     return 0;
   }, [t]);

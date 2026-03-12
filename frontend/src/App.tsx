@@ -1,16 +1,16 @@
 import { Canvas } from "@react-three/fiber";
-import "./App.css";
 import { Leva } from "leva";
+import "./App.css";
 import Scene from "./features/Scene";
 
 // import Scene from "./features/Scene/testScene";
 
 function App() {
-  const isProd = import.meta.env.VITE_PROD === "true";
+  const isDev = import.meta.env.DEV;
 
   return (
     <>
-      <Leva hidden={isProd} />
+      {isDev && <Leva />}
       <div style={{ width: "100vw", height: "100vh" }}>
         <Canvas>
           <Scene />

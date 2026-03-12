@@ -1,7 +1,7 @@
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import { useControls } from "leva";
+import { useDebugControls } from "../../hooks/useDebugControls";
 import MilkyWay from "./MilkyWay";
 import StarField from "./StarField";
 import SkyGrid from "./SkyGrid";
@@ -26,7 +26,7 @@ function CelestialScene({
   const RADS_PER_SECOND = (2 * Math.PI) / 86400;
 
   const { timeMultiplier, showEquatorial, showStars, showMilkyWay } =
-    useControls({
+    useDebugControls({
       timeMultiplier: {
         value: 1,
         min: 0,
@@ -66,8 +66,9 @@ function TerrestrialScene() {
   return null;
 }
 
+// View of the sky as seen from earth
 export default function SkyScene() {
-  const { showAzimuthal, showAxes } = useControls({
+  const { showAzimuthal, showAxes } = useDebugControls({
     showAzimuthal: false,
     showAxes: false,
   });
@@ -78,7 +79,7 @@ export default function SkyScene() {
       <ambientLight intensity={1} />
 
       {showAzimuthal && (
-        <SkyGrid color="#ffffff" radius={9.9} lineWidth={0.01} />
+        <SkyGrid color="#8a5137" radius={9.9} lineWidth={0.01} />
       )}
 
       <TerrestrialScene />

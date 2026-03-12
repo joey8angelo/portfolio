@@ -3,11 +3,14 @@ import { useProgress } from "@react-three/drei";
 
 import { gsap } from "gsap";
 
+const isDev = import.meta.env.DEV;
+
 interface UseSmoothProgressProps {
   duration?: number;
   ease?: string;
 }
-
+// Animates the progress value from useProgress to create
+// smooth loading progress.
 export default function useSmoothProgress({
   duration = 0.5,
   ease = "power2.out",
@@ -18,7 +21,9 @@ export default function useSmoothProgress({
   const progressProxy = useMemo(() => ({ value: 0 }), []);
 
   useEffect(() => {
-    console.log("Progress updated:", progress);
+    if (isDev) {
+      console.log("Real progress:", progress);
+    }
   }, [progress]);
 
   useEffect(() => {
