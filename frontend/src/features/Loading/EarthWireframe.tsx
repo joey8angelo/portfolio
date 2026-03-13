@@ -38,6 +38,9 @@ export default function EarthWireframe() {
     const plane = planeRef.current;
     const mat = plane.material as THREE.MeshBasicMaterial;
 
+    plane.position.set(0, yPos, 0);
+    plane.scale.set(0, 0, 0);
+
     const tl = gsap.timeline({ paused: true });
     tlRef.current = tl;
 
@@ -107,7 +110,7 @@ export default function EarthWireframe() {
       },
       "enter",
     );
-  }, []);
+  }, [yPos]);
 
   useEffect(() => {
     tlRef.current?.seek(progress);
@@ -145,11 +148,7 @@ export default function EarthWireframe() {
       </group>
 
       {/* Cheat the opacity of the lines with a fading plane */}
-      <mesh
-        ref={planeRef}
-        position={[0, yPos, 0]}
-        rotation={[Math.PI / 2, 0, 0]}
-      >
+      <mesh ref={planeRef} rotation={[Math.PI / 2, 0, 0]}>
         <planeGeometry args={[1, 1]} />
         <meshBasicMaterial color="black" transparent />
       </mesh>
