@@ -4,7 +4,7 @@ import PulsarMap from "./PulsarMap";
 import EarthWireframe from "./EarthWireframe";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { HalftoneEffect } from "../Effects/Halftone/HalftoneEffect";
-import useResponsive from "../../hooks/useResponsive";
+import { useResponsive } from "../../hooks";
 
 export default function LoadingScene({ progress }: { progress: number }) {
   const { isMobile } = useResponsive();

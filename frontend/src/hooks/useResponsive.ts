@@ -7,7 +7,7 @@ const breakpoints = {
   large: "(min-width: 1440px)",
 };
 
-export default function useResponsive() {
+export function useResponsive() {
   const [breakpoint, setBreakpoint] = useState("mobile");
 
   useEffect(() => {

@@ -11,7 +11,7 @@ interface UseSmoothProgressProps {
 }
 // Animates the progress value from useProgress to create
 // smooth loading progress.
-export default function useSmoothProgress({
+export function useSmoothProgress({
   duration = 0.5,
   ease = "power2.out",
 }: UseSmoothProgressProps = {}) {

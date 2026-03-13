@@ -1,15 +1,13 @@
 import SkyScene from "../Sky";
 import LoadingScene from "../Loading";
 
-import useSmoothProgress from "../../hooks/useSmoothProgress";
+import { useSmoothProgress, useDebugControls } from "../../hooks";
 import { Suspense } from "react";
 import { PerspectiveCamera } from "@react-three/drei/core/PerspectiveCamera";
 import { useHelper } from "@react-three/drei/core/Helper";
 import { useRef } from "react";
 import * as THREE from "three";
-import { useDebugControls } from "../../hooks/useDebugControls";
 import { OrbitControls } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
 
 export default function Scene() {
   const progress = useSmoothProgress({ duration: 5, ease: "power1.out" });
@@ -25,14 +23,6 @@ export default function Scene() {
       max: 150,
       step: 1,
     },
-  });
-
-  const torusRef = useRef<THREE.Mesh>(null!);
-  useFrame(() => {
-    if (torusRef.current) {
-      torusRef.current.rotation.x += 0.01;
-      torusRef.current.rotation.y += 0.01;
-    }
   });
 
   useHelper(useDebugCamera ? cameraRef : null, THREE.CameraHelper);

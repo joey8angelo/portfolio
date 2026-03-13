@@ -1,7 +1,7 @@
 import { Html } from "@react-three/drei";
 import bootTxt from "../../assets/bootTxt";
 import { useEffect, useRef } from "react";
-import useResponsive from "../../hooks/useResponsive";
+import { useResponsive } from "../../hooks";
 
 const bootLines = bootTxt.split("\n");
 const bootLinesMarked = bootLines.map((line) => {
