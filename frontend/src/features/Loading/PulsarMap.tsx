@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { gsap } from "gsap";
 import { useLoadingStore } from "../../store";
 import { useGSAP } from "@gsap/react";
+import { useResponsive } from "../../hooks";
 
 const PULSAR_DATA = [
   { id: 4, angle: 263.6, r: 0.45, label: "Vela" },
@@ -23,12 +24,12 @@ const PULSAR_DATA = [
   { id: 8, angle: 183.6, r: 0.55, label: "PSR B0525+21" },
 ];
 
-const yPosition = 1;
-
 export default function PulsarMap() {
   const progress = useLoadingStore((state) => state.progress);
   const groupRef = useRef<THREE.Group>(null);
   const tlRef = useRef<gsap.core.Timeline>(null);
+  const { isMobile } = useResponsive();
+  const yPosition = isMobile ? 3 : 1;
 
   const pulsarLines = useMemo(() => {
     return PULSAR_DATA.map((p) => {
@@ -80,47 +81,6 @@ export default function PulsarMap() {
       "grow",
     );
   }, []);
-
-  // useEffect(() => {
-  //   if (!groupRef.current) return;
-  //   const lines = groupRef.current.children as Line2[];
-  //   const materials = lines.map((line) => line.material);
-  //   const scales = lines.map((line) => line.scale);
-
-  //   // create animation timeline
-  //   tlRef.current = gsap
-  //     .timeline({ paused: true })
-  //     .fromTo(
-  //       // fade in from progress 0 to 10
-  //       materials,
-  //       { opacity: 0 },
-  //       {
-  //         opacity: 1,
-  //         duration: 10,
-  //         ease: "power2.out",
-  //       },
-  //       0,
-  //     )
-  //     .to(
-  //       // fade out from 60 to 80
-  //       materials,
-  //       {
-  //         opacity: 0,
-  //         duration: 20,
-  //       },
-  //       60,
-  //     )
-  //     .to(
-  //       // scale out from 40 to 80
-  //       scales,
-  //       {
-  //         x: 10,
-  //         z: 10,
-  //         duration: 40,
-  //       },
-  //       40,
-  //     );
-  // }, []);
 
   useEffect(() => {
     tlRef.current?.seek(progress);

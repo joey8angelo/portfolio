@@ -6,11 +6,11 @@ import { Line } from "@react-three/drei";
 import { useLoader } from "@react-three/fiber";
 import { useLoadingStore } from "../../store";
 import { useGSAP } from "@gsap/react";
+import { useResponsive } from "../../hooks";
 
 useLoader.preload(THREE.FileLoader, "/assets/ne_110m_coastline.json");
 
 const endSize = 2;
-const yPos = 5;
 
 const convertCoords = (lon: number, lat: number, radius: number) => {
   const phi = (lat * Math.PI) / 180;
@@ -28,6 +28,8 @@ export default function EarthWireframe() {
   const groupRef = useRef<THREE.Mesh>(null);
   const planeRef = useRef<THREE.Mesh>(null);
   const tlRef = useRef<gsap.core.Timeline>(null);
+  const { isMobile } = useResponsive();
+  const yPos = isMobile ? 8 : 5;
 
   useGSAP(() => {
     if (!groupRef.current || !planeRef.current) return;
