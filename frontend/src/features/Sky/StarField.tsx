@@ -132,7 +132,7 @@ export default function StarField({
   }, [starData, radius]);
 
   return (
-    <points ref={pointsRef} geometry={geometry}>
+    <points ref={pointsRef} geometry={geometry} renderOrder={1}>
       <primitive
         object={starShaderMaterial}
         attach="material"

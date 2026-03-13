@@ -38,13 +38,14 @@ export default function MilkyWay({ radius }: { radius: number }) {
     );
 
   return (
-    <mesh position={[0, 0, 0]} ref={meshRef}>
+    <mesh position={[0, 0, 0]} ref={meshRef} renderOrder={0}>
       <sphereGeometry args={[radius, 32, 32]} />
       <meshStandardMaterial
         map={configuredTexture}
         side={THREE.BackSide}
         opacity={0}
         transparent
+        depthWrite={false}
       />
     </mesh>
   );
