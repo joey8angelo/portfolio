@@ -3,15 +3,21 @@ import { Leva } from "leva";
 import "./App.css";
 import Scene from "./features/Scene";
 
-// import Scene from "./features/Scene/testScene";
-
 function App() {
   const isDev = import.meta.env.DEV;
 
   return (
     <>
       {isDev && <Leva />}
-      <div style={{ width: "100vw", height: "100vh" }}>
+      <div
+        style={{
+          width: "100%",
+          height: "100dvh",
+          position: "fixed",
+          top: 0,
+          left: 0,
+        }}
+      >
         <Canvas>
           <Scene />
         </Canvas>
