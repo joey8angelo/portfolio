@@ -1,19 +1,18 @@
 import SkyScene from "../Sky";
 import LoadingScene from "../Loading";
 
-import { useSmoothProgress, useDebugControls } from "../../hooks";
+import { useDebugControls } from "../../hooks";
 import { Suspense } from "react";
 import { PerspectiveCamera } from "@react-three/drei/core/PerspectiveCamera";
 import { useHelper } from "@react-three/drei/core/Helper";
 import { useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
+import { LoadingStoreSync, useLoadingStore } from "../../store/";
 
 export default function Scene() {
-  const progress = useSmoothProgress({ duration: 5, ease: "power1.out" });
-  const isLoaded = progress === 100;
-
   const cameraRef = useRef<THREE.PerspectiveCamera>(null!);
+  const isLoaded = useLoadingStore((state) => state.isLoaded);
 
   const { useDebugCamera, fov } = useDebugControls({
     useDebugCamera: false,
@@ -29,6 +28,7 @@ export default function Scene() {
 
   return (
     <>
+      <LoadingStoreSync duration={5} ease={"power1.out"} />
       <color attach="background" args={["black"]} />
       {/* main camera */}
       <PerspectiveCamera
@@ -47,7 +47,7 @@ export default function Scene() {
       <OrbitControls enablePan={false} enabled={useDebugCamera} />
 
       {/* loading overlay */}
-      <LoadingScene progress={progress} />
+      <LoadingScene />
 
       {/* main scene */}
       <Suspense fallback={null}>

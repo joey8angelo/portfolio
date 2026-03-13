@@ -2,6 +2,7 @@ import { Html } from "@react-three/drei";
 import bootTxt from "../../assets/bootTxt";
 import { useEffect, useRef } from "react";
 import { useResponsive } from "../../hooks";
+import { useLoadingStore } from "../../store";
 
 const bootLines = bootTxt.split("\n");
 const bootLinesMarked = bootLines.map((line) => {
@@ -13,7 +14,8 @@ const bootLinesMarked = bootLines.map((line) => {
   };
 });
 
-export default function Boot({ progress }: { progress: number }) {
+export default function Boot() {
+  const progress = useLoadingStore((state) => state.progress);
   const bootTxtContainerRef = useRef<HTMLDivElement>(null);
   const lastDisplayedIndexRef = useRef(-1);
 

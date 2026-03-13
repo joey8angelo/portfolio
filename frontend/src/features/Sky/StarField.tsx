@@ -1,10 +1,14 @@
 import * as THREE from "three";
 import { useFrame, useLoader } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useDebugControls } from "../../hooks/useDebugControls";
 import { bvToColor } from "./starUtils";
 import vertexShader from "./shaders/star_vertex.glsl";
 import fragmentShader from "./shaders/star_fragment.glsl";
+import { useLoadingStore } from "../../store";
+import { gsap } from "gsap";
+
+useLoader.preload(THREE.FileLoader, "/assets/ybsc_parsed.csv");
 
 export default function StarField({
   url,
@@ -13,6 +17,7 @@ export default function StarField({
   url: string;
   radius: number;
 }) {
+  // const isLoaded = useLoadingStore((state) => state.isLoaded);
   const pointsRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
 
@@ -31,22 +36,12 @@ export default function StarField({
         min: 0,
         max: 1,
         step: 0.01,
-        onChange: (value: number) => {
-          if (materialRef.current) {
-            materialRef.current.uniforms.uTwinkleIntensity.value = value;
-          }
-        },
       },
       radiusMultiplier: {
         value: 3,
         min: 0,
         max: 10,
         step: 0.1,
-        onChange: (value: number) => {
-          if (materialRef.current) {
-            materialRef.current.uniforms.uRadius.value = radius * value;
-          }
-        },
       },
     },
   );
@@ -55,8 +50,8 @@ export default function StarField({
     const material = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
-        uTwinkleIntensity: { value: twinkleIntensity },
-        uRadius: { value: radius * radiusMultiplier },
+        uTwinkleIntensity: { value: 0 },
+        uRadius: { value: 0 },
       },
       transparent: true,
       blending: THREE.AdditiveBlending,
@@ -67,7 +62,25 @@ export default function StarField({
     });
 
     return material;
-  }, [radius, radiusMultiplier, twinkleIntensity]);
+  }, []);
+
+  useEffect(() => {
+    if (materialRef.current) {
+      materialRef.current.uniforms.uTwinkleIntensity.value = twinkleIntensity;
+    }
+  }, [twinkleIntensity]);
+
+  const isLoaded = useLoadingStore((state) => state.isLoaded);
+
+  useEffect(() => {
+    if (isLoaded && materialRef.current) {
+      gsap.fromTo(
+        materialRef.current.uniforms.uRadius,
+        { value: 0 },
+        { value: radius * radiusMultiplier, duration: 5, ease: "power2.out" },
+      );
+    }
+  }, [isLoaded, radius, radiusMultiplier]);
 
   useFrame((state) => {
     if (materialRef.current) {
