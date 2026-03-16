@@ -3,10 +3,9 @@ import { useFrame, useLoader } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import { useDebugControls } from "../../hooks/useDebugControls";
 import { bvToColor } from "./starUtils";
-import vertexShader from "./shaders/star_vertex.glsl";
-import fragmentShader from "./shaders/star_fragment.glsl";
 import { useLoadingStore } from "../../store";
 import { gsap } from "gsap";
+import { GlowingPointMaterial } from "../Materials/GlowingPointMaterial";
 
 useLoader.preload(THREE.FileLoader, "/assets/ybsc_parsed.csv");
 
@@ -17,11 +16,13 @@ export default function StarField({
   url: string;
   radius: number;
 }) {
-  // const isLoaded = useLoadingStore((state) => state.isLoaded);
+  const isLoaded = useLoadingStore((state) => state.isLoaded);
   const pointsRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
 
   const starData = useLoader(THREE.FileLoader, url);
+
+  const starMaterial = useMemo(() => new GlowingPointMaterial(), []);
 
   const { twinkleSpeed, twinkleIntensity, radiusMultiplier } = useDebugControls(
     {
@@ -45,32 +46,6 @@ export default function StarField({
       },
     },
   );
-
-  const starShaderMaterial = useMemo(() => {
-    const material = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: { value: 0 },
-        uTwinkleIntensity: { value: 0 },
-        uRadius: { value: 0 },
-      },
-      transparent: true,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-      vertexShader: vertexShader,
-      fragmentShader: fragmentShader,
-      vertexColors: true,
-    });
-
-    return material;
-  }, []);
-
-  useEffect(() => {
-    if (materialRef.current) {
-      materialRef.current.uniforms.uTwinkleIntensity.value = twinkleIntensity;
-    }
-  }, [twinkleIntensity]);
-
-  const isLoaded = useLoadingStore((state) => state.isLoaded);
 
   useEffect(() => {
     if (isLoaded && materialRef.current) {
@@ -134,9 +109,10 @@ export default function StarField({
   return (
     <points ref={pointsRef} geometry={geometry} renderOrder={1}>
       <primitive
-        object={starShaderMaterial}
+        object={starMaterial}
         attach="material"
         ref={materialRef}
+        uTwinkleIntensity={twinkleIntensity}
       />
     </points>
   );
