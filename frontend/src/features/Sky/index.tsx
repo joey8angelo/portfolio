@@ -5,19 +5,14 @@ import { useDebugControls } from "../../hooks/useDebugControls";
 import MilkyWay from "./MilkyWay";
 import StarField from "./StarField";
 import SkyGrid from "./SkyGrid";
-import { getLocalSiderealTime } from "./starUtils";
+import { getLocalSiderealTime } from "./skyUtils";
+import Planets from "./Planets";
 
 const lat = Number(import.meta.env.VITE_LAT);
 const lon = Number(import.meta.env.VITE_LON);
 
 // Objects that appear to rotate with the sky
-function CelestialScene({
-  radius,
-  innerRadius,
-}: {
-  radius: number;
-  innerRadius: number;
-}) {
+function CelestialScene({ radius, gridR }: { radius: number; gridR: number }) {
   const uniGroup = useRef<THREE.Group>(null);
   const initialRotation = useMemo(() => getLocalSiderealTime(lon), []);
 
@@ -25,22 +20,17 @@ function CelestialScene({
   const latRad = useMemo(() => (lat * Math.PI) / 180, []);
   const RADS_PER_SECOND = (2 * Math.PI) / 86400;
 
-  const { timeMultiplier, showEquatorial, showStars, showMilkyWay } =
+  const { showEquatorial, showStars, showMilkyWay, showPlanets } =
     useDebugControls({
-      timeMultiplier: {
-        value: 1,
-        min: 0,
-        max: 10000,
-        step: 0.1,
-      },
       showEquatorial: false,
       showStars: true,
       showMilkyWay: true,
+      showPlanets: true,
     });
 
   useFrame((_, delta) => {
     if (uniGroup.current) {
-      currentRotationRef.current -= RADS_PER_SECOND * delta * timeMultiplier;
+      currentRotationRef.current -= RADS_PER_SECOND * delta;
 
       uniGroup.current.rotation.y = currentRotationRef.current;
     }
@@ -48,13 +38,14 @@ function CelestialScene({
   return (
     <group rotation={[Math.PI / 2 - latRad, 0, 0]}>
       <group ref={uniGroup} rotation={[0, initialRotation, 0]}>
-        {showEquatorial && (
-          <SkyGrid color="cyan" radius={innerRadius} lineWidth={0.01} />
-        )}
-        {showStars && (
-          <StarField url="/assets/ybsc_parsed.csv" radius={innerRadius} />
-        )}
         {showMilkyWay && <MilkyWay radius={radius} />}
+        {showStars && (
+          <StarField url="/assets/ybsc_parsed.csv" radius={radius} />
+        )}
+        {showPlanets && <Planets radius={radius} />}
+        {showEquatorial && (
+          <SkyGrid color="cyan" radius={gridR} lineWidth={0.01} />
+        )}
         {/* <Satellites /> ???*/}
       </group>
     </group>
@@ -84,7 +75,7 @@ export default function SkyScene() {
 
       <TerrestrialScene />
 
-      <CelestialScene radius={10} innerRadius={9.9} />
+      <CelestialScene radius={10} gridR={9.9} />
     </>
   );
 }

@@ -8,6 +8,8 @@ export const GlowingPointMaterial = shaderMaterial(
     uTime: 0,
     uTwinkleIntensity: 0,
     uRadius: 0,
+    uInnerRadius: 0,
+    uGlowIntensity: 1,
   },
   vertexShader,
   fragmentShader,

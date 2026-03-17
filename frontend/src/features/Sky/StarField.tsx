@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { useFrame, useLoader } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import { useDebugControls } from "../../hooks/useDebugControls";
-import { bvToColor } from "./starUtils";
+import { bvToColor } from "./skyUtils";
 import { useLoadingStore } from "../../store";
 import { gsap } from "gsap";
 import { GlowingPointMaterial } from "../Materials/GlowingPointMaterial";
@@ -27,28 +27,46 @@ export default function StarField({
 
   const starMaterial = useMemo(() => new GlowingPointMaterial(), []);
 
-  const { twinkleSpeed, twinkleIntensity, radiusMultiplier, showMarkerStars } =
-    useDebugControls({
-      twinkleSpeed: {
-        value: 0.6,
-        min: 0,
-        max: 2,
-        step: 0.01,
-      },
-      twinkleIntensity: {
-        value: 0.12,
-        min: 0,
-        max: 1,
-        step: 0.01,
-      },
-      radiusMultiplier: {
-        value: 3,
-        min: 0,
-        max: 10,
-        step: 0.1,
-      },
-      showMarkerStars: false,
-    });
+  const {
+    twinkleSpeed,
+    twinkleIntensity,
+    radiusMultiplier,
+    showMarkerStars,
+    starInnerRadius,
+    glowIntensity,
+  } = useDebugControls({
+    twinkleSpeed: {
+      value: 0.6,
+      min: 0,
+      max: 2,
+      step: 0.01,
+    },
+    twinkleIntensity: {
+      value: 0.12,
+      min: 0,
+      max: 1,
+      step: 0.01,
+    },
+    radiusMultiplier: {
+      value: 3,
+      min: 0,
+      max: 10,
+      step: 0.1,
+    },
+    showMarkerStars: false,
+    starInnerRadius: {
+      value: 0,
+      min: 0,
+      max: 1,
+      step: 0.01,
+    },
+    glowIntensity: {
+      value: 1,
+      min: 0,
+      max: 1,
+      step: 0.01,
+    },
+  });
 
   useEffect(() => {
     if (isLoaded && materialRef.current) {
@@ -131,6 +149,8 @@ export default function StarField({
           attach="material"
           ref={materialRef}
           uTwinkleIntensity={twinkleIntensity}
+          uInnerRadius={starInnerRadius}
+          uGlowIntensity={glowIntensity}
         />
       </points>
       {showMarkerStars &&
