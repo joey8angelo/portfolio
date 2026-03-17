@@ -17,7 +17,7 @@ export default function Scene() {
   const { useDebugCamera, fov } = useDebugControls({
     useDebugCamera: false,
     fov: {
-      value: 100,
+      value: 80,
       min: 10,
       max: 150,
       step: 1,

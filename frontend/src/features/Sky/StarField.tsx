@@ -6,8 +6,11 @@ import { bvToColor } from "./starUtils";
 import { useLoadingStore } from "../../store";
 import { gsap } from "gsap";
 import { GlowingPointMaterial } from "../Materials/GlowingPointMaterial";
+import { Html } from "@react-three/drei/web/Html";
 
 useLoader.preload(THREE.FileLoader, "/assets/ybsc_parsed.csv");
+
+const markerHRNums = [2491, 2326, 5460, 2061, 5340, 7001];
 
 export default function StarField({
   url,
@@ -24,8 +27,8 @@ export default function StarField({
 
   const starMaterial = useMemo(() => new GlowingPointMaterial(), []);
 
-  const { twinkleSpeed, twinkleIntensity, radiusMultiplier } = useDebugControls(
-    {
+  const { twinkleSpeed, twinkleIntensity, radiusMultiplier, showMarkerStars } =
+    useDebugControls({
       twinkleSpeed: {
         value: 0.6,
         min: 0,
@@ -44,8 +47,8 @@ export default function StarField({
         max: 10,
         step: 0.1,
       },
-    },
-  );
+      showMarkerStars: false,
+    });
 
   useEffect(() => {
     if (isLoaded && materialRef.current) {
@@ -64,16 +67,22 @@ export default function StarField({
     }
   });
 
-  const geometry = useMemo(() => {
+  const { geometry, markerStars } = useMemo(() => {
     const lines = (starData as string).split("\n").slice(1);
     const positions = new Float32Array(lines.length * 3);
     const colors = new Float32Array(lines.length * 3);
     const sizes = new Float32Array(lines.length);
     const seeds = new Float32Array(lines.length);
+    const markerStars: {
+      hr: number;
+      position: THREE.Vector3;
+      name: string;
+    }[] = [];
 
     lines.forEach((line, i) => {
       if (!line.trim()) return;
-      const [, , bv, vmag, x, y, z] = line.split(",");
+      const [hr, name, bv, vmag, x, y, z] = line.split(",");
+      const hrI = parseInt(hr);
       const bvVal = parseFloat(bv);
       const magVal = parseFloat(vmag);
 
@@ -84,6 +93,14 @@ export default function StarField({
       positions[i * 3] = xV * radius;
       positions[i * 3 + 1] = yV * radius;
       positions[i * 3 + 2] = zV * radius;
+
+      if (markerHRNums.includes(hrI)) {
+        markerStars.push({
+          hr: hrI,
+          position: new THREE.Vector3(xV, yV, zV).multiplyScalar(radius),
+          name: name.trim(),
+        });
+      }
 
       const color = bvToColor(bvVal);
       colors[i * 3] = color.r;
@@ -103,17 +120,34 @@ export default function StarField({
     geo.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
     geo.setAttribute("seed", new THREE.BufferAttribute(seeds, 1));
 
-    return geo;
+    return { geometry: geo, markerStars: markerStars };
   }, [starData, radius]);
 
   return (
-    <points ref={pointsRef} geometry={geometry} renderOrder={1}>
-      <primitive
-        object={starMaterial}
-        attach="material"
-        ref={materialRef}
-        uTwinkleIntensity={twinkleIntensity}
-      />
-    </points>
+    <>
+      <points ref={pointsRef} geometry={geometry} renderOrder={1}>
+        <primitive
+          object={starMaterial}
+          attach="material"
+          ref={materialRef}
+          uTwinkleIntensity={twinkleIntensity}
+        />
+      </points>
+      {showMarkerStars &&
+        markerStars.map((star) => (
+          <Html
+            key={star.hr}
+            position={star.position}
+            distanceFactor={10}
+            style={{
+              color: "white",
+              fontSize: "2em",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {star.name}, {star.hr}
+          </Html>
+        ))}
+    </>
   );
 }
