@@ -7,6 +7,9 @@ import StarField from "./StarField";
 import SkyGrid from "./SkyGrid";
 import { getLocalSiderealTime } from "./skyUtils";
 import Planets from "./Planets";
+import { EffectComposer, ToneMapping } from "@react-three/postprocessing";
+import { HueSaturation } from "@react-three/postprocessing";
+import { useLoadingStore } from "../../store";
 
 const lat = Number(import.meta.env.VITE_LAT);
 const lon = Number(import.meta.env.VITE_LON);
@@ -59,6 +62,7 @@ function TerrestrialScene() {
 
 // View of the sky as seen from earth
 export default function SkyScene() {
+  const isLoaded = useLoadingStore((state) => state.isLoaded);
   const { showAzimuthal, showAxes } = useDebugControls({
     showAzimuthal: false,
     showAxes: false,
@@ -67,7 +71,6 @@ export default function SkyScene() {
   return (
     <>
       {showAxes && <axesHelper args={[5]} />}
-      <ambientLight intensity={1} />
 
       {showAzimuthal && (
         <SkyGrid color="#8a5137" radius={9.9} lineWidth={0.01} />
@@ -76,6 +79,12 @@ export default function SkyScene() {
       <TerrestrialScene />
 
       <CelestialScene radius={10} gridR={9.9} />
+      {isLoaded && (
+        <EffectComposer multisampling={0} frameBufferType={THREE.HalfFloatType}>
+          <HueSaturation saturation={-0.5} hue={0} />
+          <ToneMapping mode={THREE.ReinhardToneMapping} exposure={1.2} />
+        </EffectComposer>
+      )}
     </>
   );
 }

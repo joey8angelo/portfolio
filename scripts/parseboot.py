@@ -3,7 +3,7 @@ with open("./boot.txt") as f:
 
 lines = boot.splitlines()
 lines = [line.strip() for line in lines]
-lines = [line for i, line in enumerate(lines) if i % 2 == 0]
+lines = [line for i, line in enumerate(lines) if i % 3 == 0]
 
 emptyLines = [i for i, line in enumerate(lines) if line.startswith("[]")]
 numEmptyLines = len(emptyLines)

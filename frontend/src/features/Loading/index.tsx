@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Boot from "./Boot";
 import PulsarMap from "./PulsarMap";
-import EarthWireframe from "./EarthWireframe";
+// import EarthWireframe from "./EarthWireframe";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { HalftoneEffect } from "../Effects/Halftone/HalftoneEffect";
 import { useLoadingStore } from "../../store";
@@ -17,7 +17,7 @@ export default function LoadingScene() {
         <directionalLight position={[5, 5, 5]} intensity={7} />
         <Boot />
         <PulsarMap />
-        <EarthWireframe />
+        {/* <EarthWireframe /> */}
         <EffectComposer>
           <HalftoneEffect scale={3} rotation={0.8} frequency={100} />
           <Bloom

@@ -49,23 +49,23 @@ export default function PulsarMap() {
     const tl = gsap.timeline({ paused: true });
     tlRef.current = tl;
 
-    tl.addLabel("enter", 0).addLabel("grow", 40).addLabel("fadeOut", 60);
+    tl.addLabel("enter", 10).addLabel("grow", 70).addLabel("fadeOut", 70);
 
     // fade in/out
     tl.to(
       materials,
       {
         opacity: 1,
-        duration: 20,
+        duration: 40,
         ease: "power2.out",
-        stagger: 0.6,
+        stagger: 1,
       },
       "enter",
     ).to(
       materials,
       {
         opacity: 0,
-        duration: 20,
+        duration: 30,
       },
       "fadeOut",
     );

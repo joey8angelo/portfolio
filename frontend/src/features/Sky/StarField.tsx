@@ -10,7 +10,7 @@ import { Html } from "@react-three/drei/web/Html";
 
 useLoader.preload(THREE.FileLoader, "/assets/ybsc_parsed.csv");
 
-const markerHRNums = [2491, 2326, 5460, 2061, 5340, 7001];
+const markerHRNums = [2491, 2326, 5460, 2061, 5340, 7001, 2943, 1708];
 
 export default function StarField({
   url,

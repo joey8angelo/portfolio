@@ -13,6 +13,8 @@ export default function MilkyWay({ radius }: { radius: number }) {
     const nextTexture = texture.clone();
     nextTexture.repeat.x = -1;
     nextTexture.center.set(0.5, 0.5);
+    nextTexture.colorSpace = THREE.NoColorSpace;
+    nextTexture.mapping = THREE.EquirectangularReflectionMapping;
     return nextTexture;
   }, [texture]);
 
@@ -40,7 +42,7 @@ export default function MilkyWay({ radius }: { radius: number }) {
   return (
     <mesh position={[0, 0, 0]} ref={meshRef} renderOrder={0}>
       <sphereGeometry args={[radius, 32, 32]} />
-      <meshStandardMaterial
+      <meshBasicMaterial
         map={configuredTexture}
         side={THREE.BackSide}
         opacity={0}

@@ -3,6 +3,8 @@ import { useEffect, useMemo, useRef } from "react";
 import { bvToColor, getCelestialPoint } from "./skyUtils";
 import { GlowingPointMaterial } from "../Materials/GlowingPointMaterial";
 import * as THREE from "three";
+import { useLoadingStore } from "../../store";
+import { gsap } from "gsap";
 
 const lat = Number(import.meta.env.VITE_LAT);
 const lon = Number(import.meta.env.VITE_LON);
@@ -20,7 +22,9 @@ const planets = [
 export default function Planets({ radius }: { radius: number }) {
   const pointsRef = useRef<THREE.Points>(null);
   const planetMaterial = useMemo(() => new GlowingPointMaterial(), []);
+  const materialRef = useRef<THREE.ShaderMaterial>(null);
   const observer = useMemo(() => new Observer(lat, lon, 0), []);
+  const isLoaded = useLoadingStore((state) => state.isLoaded);
 
   const geometry = useMemo(() => {
     const positions = new Float32Array(planets.length * 3);
@@ -75,15 +79,26 @@ export default function Planets({ radius }: { radius: number }) {
     return () => clearInterval(interval);
   }, [observer, radius]);
 
+  useEffect(() => {
+    if (isLoaded && materialRef.current) {
+      gsap.fromTo(
+        materialRef.current.uniforms.uRadius,
+        { value: 0 },
+        { value: radius, duration: 5, ease: "power2.out" },
+      );
+    }
+  }, [isLoaded, radius]);
+
   return (
     <points geometry={geometry} renderOrder={1} ref={pointsRef}>
       <primitive
         object={planetMaterial}
         attach="material"
-        uInnerRadius={0.1}
+        uInnerRadius={0.07}
         uGlowIntensity={0.2}
         uTwinkleIntensity={0.0}
         uRadius={radius}
+        ref={materialRef}
       />
     </points>
   );

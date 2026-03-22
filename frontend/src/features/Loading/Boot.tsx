@@ -1,5 +1,5 @@
 import { Html } from "@react-three/drei";
-import bootTxt from "../../assets/bootTxt";
+import bootTxt from "../../assets/boot.txt?raw";
 import { useEffect, useRef } from "react";
 import { useResponsive } from "../../hooks";
 import { useLoadingStore } from "../../store";

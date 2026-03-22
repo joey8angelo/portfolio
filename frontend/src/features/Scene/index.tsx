@@ -44,7 +44,7 @@ export default function Scene() {
         fov={90}
         makeDefault={useDebugCamera}
       />
-      <OrbitControls enablePan={false} enabled={useDebugCamera} />
+      <OrbitControls enabled={useDebugCamera} />
 
       {/* loading overlay */}
       <LoadingScene />

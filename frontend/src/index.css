@@ -1,3 +1,7 @@
+@import "tailwindcss";
+
+
+
 @font-face {
   font-family: "StampRSPKOne-Bold";
   src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Bold.otf") format("opentype");
@@ -26,9 +30,17 @@
   font-family: "StampRSPKOne-Thin";
   src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Thin.otf") format("opentype");
 }
+@font-face {
+  font-family: "LedLight";
+  src: url("/fonts/Ledlight-qXZx.otf") format("opentype");
+}
+@font-face {
+  font-family: "BlueScreen";
+  src: url("/fonts/blue_screen.ttf") format("truetype");
+}
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
