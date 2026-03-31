@@ -1,8 +1,36 @@
 import parseStarName from "./parseStarName";
 
-const cache = new Map<number, Awaited<ReturnType<typeof getWikiStarEntry>>>();
+type WikiPageEntry = {
+  canonicalurl: string;
+  categories: { ns: number; title: string }[];
+  contentmodel: string;
+  editurl: string;
+  extract: string;
+  fullurl: string;
+  index: number;
+  lastrevid: number;
+  length: number;
+  ns: number;
+  pageid: number;
+  pagelanguage: string;
+  pagelanguagedir: string;
+  pagelanguagehtmlcode: string;
+  title: string;
+  touched: string;
+};
 
-export async function getWikiStarEntry(hr: number, name: string) {
+type WikiStarEntry = {
+  title: string;
+  extract: string;
+  url: string;
+} | null;
+
+const cache = new Map<number, WikiStarEntry>();
+
+export async function getWikiStarEntry(
+  hr: number,
+  name: string,
+): Promise<WikiStarEntry> {
   if (cache.has(hr)) {
     console.log(`Cache hit for HR ${hr}`);
     return cache.get(hr)!;
@@ -10,10 +38,8 @@ export async function getWikiStarEntry(hr: number, name: string) {
   const { flamsteed, bayer, constellation } = parseStarName(name);
 
   const searchTitle = `"HR ${hr}" ${flamsteed || ""} ${bayer || ""} ${constellation || ""}`;
-  console.log("Searching Wikipedia for:", searchTitle);
 
   const url = new URL("https://en.wikipedia.org/w/api.php");
-
   const params = {
     action: "query",
     generator: "search",
@@ -23,13 +49,11 @@ export async function getWikiStarEntry(hr: number, name: string) {
     prop: "extracts|info|categories",
     exintro: "1",
     explaintext: "1",
-    // exsentences: "3",
-    exchars: "1500",
+    exchars: "3000",
     inprop: "url",
     format: "json",
     origin: "*",
   };
-
   url.search = new URLSearchParams(params).toString();
 
   try {
@@ -42,10 +66,11 @@ export async function getWikiStarEntry(hr: number, name: string) {
     }
 
     const pages = Object.values(data.query.pages);
-    const page = pages[0] as any;
+    const page = pages[0] as WikiPageEntry;
 
     const categories: string[] =
-      page.categories?.map((c: any) => c.title.toLowerCase()) || [];
+      page.categories?.map((c: { title: string }) => c.title.toLowerCase()) ||
+      [];
 
     const isInStarCategory = categories.some(
       (c) =>
@@ -74,5 +99,6 @@ export async function getWikiStarEntry(hr: number, name: string) {
     return res;
   } catch (err) {
     console.error("Fetch error:", err);
+    return null;
   }
 }
