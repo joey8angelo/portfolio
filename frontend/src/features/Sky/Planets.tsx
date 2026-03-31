@@ -5,6 +5,7 @@ import { GlowingPointMaterial } from "../Materials/GlowingPointMaterial";
 import * as THREE from "three";
 import { useLoadingStore } from "../../store";
 import { gsap } from "gsap";
+import type { ThreeEvent } from "@react-three/fiber/dist/declarations/src/core/events";
 
 const lat = Number(import.meta.env.VITE_LAT);
 const lon = Number(import.meta.env.VITE_LON);
@@ -89,8 +90,21 @@ export default function Planets({ radius }: { radius: number }) {
     }
   }, [isLoaded, radius]);
 
+  const handlePointerDown = (event: ThreeEvent<PointerEvent>) => {
+    event.stopPropagation();
+
+    if (event.index === undefined) return;
+
+    console.log("Clicked planet:", planets[event.index].planet);
+  };
+
   return (
-    <points geometry={geometry} renderOrder={1} ref={pointsRef}>
+    <points
+      geometry={geometry}
+      renderOrder={1}
+      ref={pointsRef}
+      onPointerDown={handlePointerDown}
+    >
       <primitive
         object={planetMaterial}
         attach="material"

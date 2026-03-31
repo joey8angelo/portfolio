@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { useFrame, useLoader } from "@react-three/fiber";
+import { useFrame, useLoader, type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import { useDebugControls } from "../../hooks/useDebugControls";
 import { bvToColor } from "./skyUtils";
@@ -7,6 +7,7 @@ import { useLoadingStore } from "../../store";
 import { gsap } from "gsap";
 import { GlowingPointMaterial } from "../Materials/GlowingPointMaterial";
 import { Html } from "@react-three/drei/web/Html";
+import { useSceneSelectionStore } from "../../store";
 
 useLoader.preload(THREE.FileLoader, "/assets/ybsc_parsed.csv");
 
@@ -22,8 +23,35 @@ export default function StarField({
   const isLoaded = useLoadingStore((state) => state.isLoaded);
   const pointsRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
+  const { select, deselect, selection } = useSceneSelectionStore();
 
   const starData = useLoader(THREE.FileLoader, url);
+  const parsedStars = useMemo(() => {
+    if (!starData) return null;
+    const lines = (starData as string)
+      .split("\n")
+      .slice(1)
+      .filter((l) => l.trim() !== "")
+      .map((line) => {
+        const [hr, name, bv, vmag, x, y, z] = line.split(",");
+        return {
+          hr: parseInt(hr),
+          name,
+          bv: parseFloat(bv),
+          vmag: parseFloat(vmag),
+          x: parseFloat(x),
+          y: parseFloat(y),
+          z: parseFloat(z),
+        };
+      })
+      .sort((a, b) => {
+        if (a.name && !b.name) return 1;
+        if (!a.name && b.name) return -1;
+        return a.vmag < b.vmag ? -1 : 1;
+      });
+    console.log(`Loaded ${lines.length} stars`);
+    return lines;
+  }, [starData]);
 
   const starMaterial = useMemo(() => new GlowingPointMaterial(), []);
 
@@ -86,48 +114,40 @@ export default function StarField({
   });
 
   const { geometry, markerStars } = useMemo(() => {
-    const lines = (starData as string).split("\n").slice(1);
-    const positions = new Float32Array(lines.length * 3);
-    const colors = new Float32Array(lines.length * 3);
-    const sizes = new Float32Array(lines.length);
-    const seeds = new Float32Array(lines.length);
+    if (!parsedStars) return { geometry: null, markerStars: [] };
+    const positions = new Float32Array(parsedStars.length * 3);
+    const colors = new Float32Array(parsedStars.length * 3);
+    const sizes = new Float32Array(parsedStars.length);
+    const seeds = new Float32Array(parsedStars.length);
     const markerStars: {
       hr: number;
       position: THREE.Vector3;
       name: string;
     }[] = [];
 
-    lines.forEach((line, i) => {
-      if (!line.trim()) return;
-      const [hr, name, bv, vmag, x, y, z] = line.split(",");
-      const hrI = parseInt(hr);
-      const bvVal = parseFloat(bv);
-      const magVal = parseFloat(vmag);
+    parsedStars.forEach((star, i) => {
+      const { hr, name, bv, vmag, x, y, z } = star;
 
-      const xV = parseFloat(x);
-      const yV = parseFloat(y);
-      const zV = parseFloat(z);
+      positions[i * 3] = x * radius;
+      positions[i * 3 + 1] = y * radius;
+      positions[i * 3 + 2] = z * radius;
 
-      positions[i * 3] = xV * radius;
-      positions[i * 3 + 1] = yV * radius;
-      positions[i * 3 + 2] = zV * radius;
-
-      if (markerHRNums.includes(hrI)) {
+      if (markerHRNums.includes(hr)) {
         markerStars.push({
-          hr: hrI,
-          position: new THREE.Vector3(xV, yV, zV).multiplyScalar(radius),
+          hr: hr,
+          position: new THREE.Vector3(x, y, z).multiplyScalar(radius),
           name: name.trim(),
         });
       }
 
-      const color = bvToColor(bvVal);
+      const color = bvToColor(bv);
       colors[i * 3] = color.r;
       colors[i * 3 + 1] = color.g;
       colors[i * 3 + 2] = color.b;
 
-      sizes[i] = Math.max(0.1, (7.0 - magVal) * 0.5);
+      sizes[i] = Math.max(0.1, (7.0 - vmag) * 0.5);
 
-      const dot = xV * 12.9898 + yV * 78.233 + zV * 437.164;
+      const dot = x * 12.9898 + y * 78.233 + z * 437.164;
       const hash = Math.sin(dot) * 43758.5453;
       seeds[i] = hash - Math.floor(hash);
     });
@@ -139,21 +159,77 @@ export default function StarField({
     geo.setAttribute("seed", new THREE.BufferAttribute(seeds, 1));
 
     return { geometry: geo, markerStars: markerStars };
-  }, [starData, radius]);
+  }, [parsedStars, radius]);
+
+  const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
+    e.stopPropagation();
+
+    if (!parsedStars || e.index === undefined) return;
+
+    console.log("Selected star:", parsedStars[e.index]);
+
+    select("star", parsedStars[e.index].hr, parsedStars[e.index].name, {
+      x: parsedStars[e.index].x * radius,
+      y: parsedStars[e.index].y * radius,
+      z: parsedStars[e.index].z * radius,
+    });
+  };
 
   return (
     <>
-      <points ref={pointsRef} geometry={geometry} renderOrder={1}>
-        <primitive
-          object={starMaterial}
-          attach="material"
-          ref={materialRef}
-          uTwinkleIntensity={twinkleIntensity}
-          uInnerRadius={starInnerRadius}
-          uGlowIntensity={glowIntensity}
-        />
-      </points>
+      {selection && selection.type === "star" && parsedStars && (
+        <Html
+          position={
+            new THREE.Vector3(
+              selection.position.x,
+              selection.position.y,
+              selection.position.z,
+            )
+          }
+          style={{
+            color: "white",
+            fontSize: "2em",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 40 40"
+            style={{ transform: "translate(-50%, -50%)" }}
+            onClick={() => deselect()}
+          >
+            <circle
+              cx="20"
+              cy="20"
+              r="18"
+              fill="none"
+              stroke="#00ffff"
+              strokeWidth="2"
+              strokeDasharray="4 2"
+            />
+          </svg>
+        </Html>
+      )}
+      {geometry && (
+        <points
+          ref={pointsRef}
+          geometry={geometry}
+          renderOrder={1}
+          onPointerDown={handlePointerDown}
+        >
+          <primitive
+            object={starMaterial}
+            attach="material"
+            ref={materialRef}
+            uTwinkleIntensity={twinkleIntensity}
+            uInnerRadius={starInnerRadius}
+            uGlowIntensity={glowIntensity}
+          />
+        </points>
+      )}
       {showMarkerStars &&
+        geometry &&
         markerStars.map((star) => (
           <Html
             key={star.hr}

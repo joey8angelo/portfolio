@@ -14,8 +14,13 @@ import { useLoadingStore } from "../../store";
 const lat = Number(import.meta.env.VITE_LAT);
 const lon = Number(import.meta.env.VITE_LON);
 
+const milkyWayR = 10;
+const starsR = 9.9;
+const planetsR = 9.8;
+const gridR = 9.7;
+
 // Objects that appear to rotate with the sky
-function CelestialScene({ radius, gridR }: { radius: number; gridR: number }) {
+function CelestialScene() {
   const uniGroup = useRef<THREE.Group>(null);
   const initialRotation = useMemo(() => getLocalSiderealTime(lon), []);
 
@@ -41,11 +46,11 @@ function CelestialScene({ radius, gridR }: { radius: number; gridR: number }) {
   return (
     <group rotation={[Math.PI / 2 - latRad, 0, 0]}>
       <group ref={uniGroup} rotation={[0, initialRotation, 0]}>
-        {showMilkyWay && <MilkyWay radius={radius} />}
+        {showMilkyWay && <MilkyWay radius={milkyWayR} />}
         {showStars && (
-          <StarField url="/assets/ybsc_parsed.csv" radius={radius} />
+          <StarField url="/assets/ybsc_parsed.csv" radius={starsR} />
         )}
-        {showPlanets && <Planets radius={radius} />}
+        {showPlanets && <Planets radius={planetsR} />}
         {showEquatorial && (
           <SkyGrid color="cyan" radius={gridR} lineWidth={0.01} />
         )}
@@ -73,16 +78,16 @@ export default function SkyScene() {
       {showAxes && <axesHelper args={[5]} />}
 
       {showAzimuthal && (
-        <SkyGrid color="#8a5137" radius={9.9} lineWidth={0.01} />
+        <SkyGrid color="#8a5137" radius={gridR} lineWidth={0.01} />
       )}
 
       <TerrestrialScene />
 
-      <CelestialScene radius={10} gridR={9.9} />
+      <CelestialScene />
       {isLoaded && (
         <EffectComposer multisampling={0} frameBufferType={THREE.HalfFloatType}>
-          <HueSaturation saturation={-0.5} hue={0} />
-          <ToneMapping mode={THREE.ReinhardToneMapping} exposure={1.2} />
+          <HueSaturation saturation={0.2} hue={0} />
+          <ToneMapping mode={THREE.ReinhardToneMapping} />
         </EffectComposer>
       )}
     </>

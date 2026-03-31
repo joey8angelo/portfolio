@@ -1,21 +1,53 @@
-import { EffectComposer } from "@react-three/postprocessing";
-import { HalftoneEffect } from "./HalftoneEffect";
-import { OrbitControls } from "@react-three/drei";
+import { forwardRef, useLayoutEffect, useMemo } from "react";
+import * as THREE from "three";
+import { Effect } from "postprocessing";
+import fragmentShader from "./shaders/halftone_fragment.glsl";
 
-export default function HalftoneScene() {
-  return (
-    <>
-      <color attach="background" args={["black"]} />
-      <ambientLight intensity={0.1} />
-      <directionalLight position={[5, 5, 5]} intensity={7} />
-      <OrbitControls />
-      {/* <mesh position={[0, 0, 0]}>
-        <torusKnotGeometry args={[1, 0.4, 128, 16]} />
-        <meshLambertMaterial color="white" />
-      </mesh> */}
-      <EffectComposer>
-        <HalftoneEffect scale={1} rotation={0.8} frequency={100.0} />
-      </EffectComposer>
-    </>
-  );
+interface HalftoneParams {
+  scale?: number;
+  rotation?: number;
+  frequency?: number;
 }
+
+class HalftoneEffectImpl extends Effect {
+  constructor({
+    scale = 1.0,
+    rotation = 0.785,
+    frequency = 40.0,
+  }: HalftoneParams = {}) {
+    super("HalftoneEffect", fragmentShader, {
+      uniforms: new Map<string, THREE.Uniform>([
+        ["uScale", new THREE.Uniform(scale)],
+        ["uRotation", new THREE.Uniform(rotation)],
+        ["uFrequency", new THREE.Uniform(frequency)],
+      ]),
+    });
+  }
+
+  updateUniforms(scale: number, rotation: number, frequency: number) {
+    this.uniforms.get("uScale")!.value = scale;
+    this.uniforms.get("uRotation")!.value = rotation;
+    this.uniforms.get("uFrequency")!.value = frequency;
+  }
+}
+
+interface HalftoneProps {
+  scale?: number;
+  rotation?: number;
+  frequency?: number;
+}
+
+export const HalftoneEffect = forwardRef<HalftoneEffectImpl, HalftoneProps>(
+  ({ scale = 1.0, rotation = 0.785, frequency = 40.0 }, ref) => {
+    const effect = useMemo(
+      () => new HalftoneEffectImpl({ scale, rotation, frequency }),
+      [scale, rotation, frequency],
+    );
+
+    useLayoutEffect(() => {
+      effect.updateUniforms(scale, rotation, frequency);
+    }, [effect, scale, rotation, frequency]);
+
+    return <primitive ref={ref} object={effect} dispose={null} />;
+  },
+);

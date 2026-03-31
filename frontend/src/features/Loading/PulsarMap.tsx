@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Line } from "@react-three/drei";
 import { Line2 } from "three-stdlib";
 import * as THREE from "three";
@@ -24,21 +24,31 @@ const PULSAR_DATA = [
   { id: 8, angle: 183.6, r: 0.55, label: "PSR B0525+21" },
 ];
 
+const pulsarLines = PULSAR_DATA.map((p) => {
+  const rad = (p.angle * Math.PI) / 180;
+  const x = Math.cos(rad);
+  const z = Math.sin(rad);
+  return { ...p, dir: new THREE.Vector3(x, 0, z) };
+});
+
+const fadeIn = 10;
+const fadeInDuration = 40;
+const fadeInStagger = 1;
+const fadeInEase = "power2.out";
+
+const fadeOut = 70;
+const fadeOutDuration = 30;
+const fadeOutEase = "power2.in";
+
+const scaleOut = 70;
+const scaleDuration = 30;
+
 export default function PulsarMap() {
   const progress = useLoadingStore((state) => state.progress);
   const groupRef = useRef<THREE.Group>(null);
   const tlRef = useRef<gsap.core.Timeline>(null);
   const { isMobile } = useResponsive();
   const yPosition = isMobile ? 3 : 1;
-
-  const pulsarLines = useMemo(() => {
-    return PULSAR_DATA.map((p) => {
-      const rad = (p.angle * Math.PI) / 180;
-      const x = Math.cos(rad);
-      const z = Math.sin(rad);
-      return { ...p, dir: new THREE.Vector3(x, 0, z) };
-    });
-  }, []);
 
   useGSAP(() => {
     if (!groupRef.current) return;
@@ -49,25 +59,24 @@ export default function PulsarMap() {
     const tl = gsap.timeline({ paused: true });
     tlRef.current = tl;
 
-    tl.addLabel("enter", 10).addLabel("grow", 70).addLabel("fadeOut", 70);
-
     // fade in/out
     tl.to(
       materials,
       {
         opacity: 1,
-        duration: 40,
-        ease: "power2.out",
-        stagger: 1,
+        duration: fadeInDuration,
+        stagger: fadeInStagger,
+        ease: fadeInEase,
       },
-      "enter",
+      fadeIn,
     ).to(
       materials,
       {
         opacity: 0,
-        duration: 30,
+        duration: fadeOutDuration,
+        ease: fadeOutEase,
       },
-      "fadeOut",
+      fadeOut,
     );
 
     // scale lines
@@ -76,9 +85,9 @@ export default function PulsarMap() {
       {
         x: 10,
         z: 10,
-        duration: 40,
+        duration: scaleDuration,
       },
-      "grow",
+      scaleOut,
     );
   }, []);
 

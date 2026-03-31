@@ -1,9 +1,10 @@
-import { useLoader } from "@react-three/fiber";
+import { useLoader, type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader.js";
 import * as THREE from "three";
 import { useLoadingStore } from "../../store";
 import { gsap } from "gsap";
+import { useSceneSelectionStore } from "../../store/";
 
 useLoader.preload(EXRLoader, "/textures/milkyway_2020_4k.exr");
 
@@ -13,13 +14,13 @@ export default function MilkyWay({ radius }: { radius: number }) {
     const nextTexture = texture.clone();
     nextTexture.repeat.x = -1;
     nextTexture.center.set(0.5, 0.5);
-    nextTexture.colorSpace = THREE.NoColorSpace;
-    nextTexture.mapping = THREE.EquirectangularReflectionMapping;
     return nextTexture;
   }, [texture]);
 
   const meshRef = useRef<THREE.Mesh>(null);
   const isLoaded = useLoadingStore((state) => state.isLoaded);
+
+  const { deselect } = useSceneSelectionStore();
 
   useEffect(() => {
     if (isLoaded && meshRef.current) {
@@ -31,6 +32,12 @@ export default function MilkyWay({ radius }: { radius: number }) {
     }
   }, [isLoaded]);
 
+  const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
+    e.stopPropagation();
+    console.log(e);
+    deselect();
+  };
+
   if (!texture)
     return (
       <mesh position={[0, 0, 0]}>
@@ -40,7 +47,12 @@ export default function MilkyWay({ radius }: { radius: number }) {
     );
 
   return (
-    <mesh position={[0, 0, 0]} ref={meshRef} renderOrder={0}>
+    <mesh
+      position={[0, 0, 0]}
+      ref={meshRef}
+      renderOrder={0}
+      onPointerDown={handlePointerDown}
+    >
       <sphereGeometry args={[radius, 32, 32]} />
       <meshBasicMaterial
         map={configuredTexture}
@@ -48,6 +60,8 @@ export default function MilkyWay({ radius }: { radius: number }) {
         opacity={0}
         transparent
         depthWrite={false}
+        toneMapped={false}
+        color={[1, 1, 1]}
       />
     </mesh>
   );

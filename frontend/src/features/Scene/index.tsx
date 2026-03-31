@@ -9,6 +9,10 @@ import { useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
 import { LoadingStoreSync, useLoadingStore } from "../../store/";
+import { useLoader } from "@react-three/fiber";
+import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
+
+const loadingDuration = 5;
 
 export default function Scene() {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null!);
@@ -28,7 +32,7 @@ export default function Scene() {
 
   return (
     <>
-      <LoadingStoreSync duration={5} ease={"power1.out"} />
+      <LoadingStoreSync duration={loadingDuration} ease={"power1.out"} />
       <color attach="background" args={["black"]} />
       {/* main camera */}
       <PerspectiveCamera
@@ -52,6 +56,7 @@ export default function Scene() {
       {/* main scene */}
       <Suspense fallback={null}>
         <group visible={isLoaded}>
+          return <primitive object={useLoader(OBJLoader, "/assets/guy.obj")} />;
           <SkyScene />
         </group>
       </Suspense>
