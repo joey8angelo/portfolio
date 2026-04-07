@@ -116,6 +116,10 @@ const CON_GENITIVE: Record<string, string> = {
   Vul: "Vulpeculae",
 };
 
+/*
+ * Parses the Name field from the YBSC star catalog to extract the
+ * Flamsteed number, Bayer designation, and constellation name.
+ */
 export default function parseStarName(name: string) {
   const match = name.trim().match(/^(\d+)([A-Za-z]+)?\s+([A-Za-z]+)$/);
   if (!match) return {};

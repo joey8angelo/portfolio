@@ -191,13 +191,40 @@ xs = np.cos(theta) * np.cos(phi)
 ys = np.sin(theta)
 zs = np.cos(theta) * np.sin(phi)
 
+HDs = np.where(stars_data[3] != None, stars_data[3], "")
+SAOs = np.where(stars_data[4] != None, stars_data[4], "")
 bvs = np.where(stars_data[31] != None, stars_data[31], spec_type_to_bv(stars_data[37]))
 
 mags = np.where(stars_data[28] != None, stars_data[28], 6.0)
 
-data = np.array([stars_data[0], stars_data[1], bvs, mags, xs, ys, zs]).T
+
+data = np.array(
+    [
+        stars_data[0],
+        stars_data[1],
+        HDs,
+        SAOs,
+        bvs,
+        mags,
+        xs,
+        ys,
+        zs,
+        stars_data[19],
+        stars_data[20],
+        stars_data[21],
+        stars_data[22],
+        stars_data[23],
+        stars_data[24],
+        stars_data[25],
+        stars_data[37],
+        stars_data[39],
+        stars_data[40],
+    ]
+).T
 
 with open("ybsc_parsed.csv", "w") as f:
-    f.write("HR,Name,B-V,Vmag,x,y,z\n")
+    f.write(
+        "HR,Name,DM,SAO,B-V,Vmag,x,y,z,RAh,RAm,RAs,DEsn,DEd,DEm,DEs,SpType,pmRA,pmDE\n"
+    )
     for row in data:
         f.write(",".join(map(str, row)) + "\n")

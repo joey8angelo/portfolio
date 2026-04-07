@@ -1,7 +1,7 @@
 import { forwardRef, useLayoutEffect, useMemo } from "react";
 import * as THREE from "three";
 import { Effect } from "postprocessing";
-import fragmentShader from "./shaders/halftone_fragment.glsl";
+import fragmentShader from "./Halftone/shaders/frag.glsl";
 
 interface HalftoneParams {
   scale?: number;

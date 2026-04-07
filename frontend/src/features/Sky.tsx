@@ -1,15 +1,15 @@
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import { useDebugControls } from "../../hooks/useDebugControls";
-import MilkyWay from "./MilkyWay";
-import StarField from "./StarField";
-import SkyGrid from "./SkyGrid";
-import { getLocalSiderealTime } from "./skyUtils";
-import Planets from "./Planets";
+import { useDebugControls } from "../hooks/useDebugControls";
+import MilkyWay from "./Sky/MilkyWay";
+import StarField from "./Sky/StarField";
+import SkyGrid from "./Sky/SkyGrid";
+import { getLocalSiderealTime } from "./Sky/skyUtils";
+import Planets from "./Sky/Planets";
 import { EffectComposer, ToneMapping } from "@react-three/postprocessing";
 import { HueSaturation } from "@react-three/postprocessing";
-import { useLoadingStore } from "../../store";
+import { useLoadingStore } from "../store";
 
 const lat = Number(import.meta.env.VITE_LAT);
 const lon = Number(import.meta.env.VITE_LON);

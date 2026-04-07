@@ -1,14 +1,14 @@
-import SkyScene from "../Sky";
-import LoadingScene from "../Loading";
+import SkyScene from "./Sky";
+import LoadingScene from "./Loading";
 
-import { useDebugControls } from "../../hooks";
+import { useDebugControls } from "../hooks";
 import { Suspense } from "react";
 import { PerspectiveCamera } from "@react-three/drei/core/PerspectiveCamera";
 import { useHelper } from "@react-three/drei/core/Helper";
 import { useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
-import { LoadingStoreSync, useLoadingStore } from "../../store/";
+import { LoadingStoreSync, useLoadingStore } from "../store/";
 import { useLoader } from "@react-three/fiber";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 

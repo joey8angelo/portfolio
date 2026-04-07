@@ -4,21 +4,31 @@ import "./App.css";
 import Scene from "./features/Scene";
 
 import { Stats } from "@react-three/drei";
-import { LoadingStoreSync } from "./store";
-import Cursor from "./components/Cursor";
+import { LoadingStoreSync, useLoadingStore, useNavigationStore } from "./store";
+import { useEffect } from "react";
 
-const loadingDuration = 1;
+const loadingDuration = 10;
 
 function App() {
   const isDev = import.meta.env.DEV;
+
+  const { setActiveTab } = useNavigationStore();
+  const { isLoaded } = useLoadingStore();
+
+  useEffect(() => {
+    if (isLoaded) {
+      setTimeout(() => {
+        setActiveTab("home");
+      }, 800);
+    }
+  }, [isLoaded, setActiveTab]);
 
   return (
     <>
       {isDev && <Leva />}
       <div className="w-[100dvw] h-[100dvh] grid grid-cols-1 grid-rows-1">
-        <Cursor />
-
         <Canvas
+          className="scene"
           style={{ zIndex: 0 }}
           raycaster={{
             params: {

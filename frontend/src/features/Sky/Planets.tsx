@@ -1,11 +1,12 @@
 import { Body, Equator, Illumination, Observer } from "astronomy-engine";
 import { useEffect, useMemo, useRef } from "react";
 import { bvToColor, getCelestialPoint } from "./skyUtils";
-import { GlowingPointMaterial } from "../Materials/GlowingPointMaterial";
+import { GlowingPointMaterial } from "../Materials/GlowingPoint";
 import * as THREE from "three";
-import { useLoadingStore } from "../../store";
+import { useLoadingStore, useNavigationStore } from "../../store";
 import { gsap } from "gsap";
 import type { ThreeEvent } from "@react-three/fiber/dist/declarations/src/core/events";
+import { Html } from "@react-three/drei";
 
 const lat = Number(import.meta.env.VITE_LAT);
 const lon = Number(import.meta.env.VITE_LON);
@@ -26,6 +27,13 @@ export default function Planets({ radius }: { radius: number }) {
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const observer = useMemo(() => new Observer(lat, lon, 0), []);
   const isLoaded = useLoadingStore((state) => state.isLoaded);
+  const {
+    skySelection,
+    skySelectionPosition,
+    selectSkyObject,
+    clearSkySelection,
+    updateSkySelectionPosition,
+  } = useNavigationStore();
 
   const geometry = useMemo(() => {
     const positions = new Float32Array(planets.length * 3);
@@ -66,6 +74,14 @@ export default function Planets({ radius }: { radius: number }) {
         const eq = Equator(planet, date, observer, true, false);
         const pos = getCelestialPoint(eq.ra, 0, 0, eq.dec, 0, 0, radius);
 
+        if (skySelection?.type === "planet" && skySelection?.id === i) {
+          updateSkySelectionPosition({
+            x: pos.x,
+            y: pos.y,
+            z: pos.z,
+          });
+        }
+
         pointsRef.current?.geometry.attributes.position.setXYZ(
           i,
           pos.x,
@@ -78,7 +94,7 @@ export default function Planets({ radius }: { radius: number }) {
 
     const interval = setInterval(updatePlanets, 1000);
     return () => clearInterval(interval);
-  }, [observer, radius]);
+  }, [observer, radius, skySelection, updateSkySelectionPosition]);
 
   useEffect(() => {
     if (isLoaded && materialRef.current) {
@@ -96,24 +112,80 @@ export default function Planets({ radius }: { radius: number }) {
     if (event.index === undefined) return;
 
     console.log("Clicked planet:", planets[event.index].planet);
+    const pos = pointsRef.current?.geometry.attributes.position;
+    if (!pos) return;
+
+    const planetPos = new THREE.Vector3(
+      pos.getX(event.index),
+      pos.getY(event.index),
+      pos.getZ(event.index),
+    );
+    selectSkyObject(
+      {
+        type: "planet",
+        id: event.index,
+        name: Body[planets[event.index].planet],
+      },
+      {
+        x: planetPos.x,
+        y: planetPos.y,
+        z: planetPos.z,
+      },
+    );
   };
 
   return (
-    <points
-      geometry={geometry}
-      renderOrder={1}
-      ref={pointsRef}
-      onPointerDown={handlePointerDown}
-    >
-      <primitive
-        object={planetMaterial}
-        attach="material"
-        uInnerRadius={0.07}
-        uGlowIntensity={0.2}
-        uTwinkleIntensity={0.0}
-        uRadius={radius}
-        ref={materialRef}
-      />
-    </points>
+    <>
+      {skySelection && skySelection.type === "planet" && (
+        <Html
+          position={
+            new THREE.Vector3(
+              skySelectionPosition.x,
+              skySelectionPosition.y,
+              skySelectionPosition.z,
+            )
+          }
+          style={{
+            color: "white",
+            fontSize: "2em",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 40 40"
+            style={{ transform: "translate(-50%, -50%)" }}
+            onClick={() => clearSkySelection()}
+          >
+            <circle
+              cx="20"
+              cy="20"
+              r="18"
+              fill="none"
+              stroke="#ff00ff"
+              strokeWidth="2"
+              strokeDasharray="4 2"
+            />
+          </svg>
+        </Html>
+      )}
+      <points
+        geometry={geometry}
+        renderOrder={1}
+        ref={pointsRef}
+        onPointerDown={handlePointerDown}
+      >
+        <primitive
+          object={planetMaterial}
+          attach="material"
+          uInnerRadius={0.07}
+          uGlowIntensity={0.2}
+          uTwinkleIntensity={0.0}
+          uRadius={radius}
+          ref={materialRef}
+        />
+      </points>
+    </>
   );
 }

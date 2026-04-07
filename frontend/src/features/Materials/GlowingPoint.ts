@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { shaderMaterial } from "@react-three/drei";
-import vertexShader from "./shaders/vert.glsl";
-import fragmentShader from "./shaders/frag.glsl";
+import vertexShader from "./GlowingPoint/shaders/vert.glsl";
+import fragmentShader from "./GlowingPoint/shaders/frag.glsl";
 
 export const GlowingPointMaterial = shaderMaterial(
   {

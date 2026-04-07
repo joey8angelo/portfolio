@@ -5,13 +5,66 @@ import { useDebugControls } from "../../hooks/useDebugControls";
 import { bvToColor } from "./skyUtils";
 import { useLoadingStore } from "../../store";
 import { gsap } from "gsap";
-import { GlowingPointMaterial } from "../Materials/GlowingPointMaterial";
+import { GlowingPointMaterial } from "../Materials/GlowingPoint";
 import { Html } from "@react-three/drei/web/Html";
-import { useSceneSelectionStore } from "../../store";
+import { useNavigationStore } from "../../store";
 
 useLoader.preload(THREE.FileLoader, "/assets/ybsc_parsed.csv");
 
 const markerHRNums = [2491, 2326, 5460, 2061, 5340, 7001, 2943, 1708];
+
+type StarData = {
+  hr: number;
+  name: string;
+  dm: string;
+  sao: string;
+  bv: number;
+  vmag: number;
+  x: number;
+  y: number;
+  z: number;
+  rah: number;
+  ram: number;
+  ras: number;
+  desn: string;
+  ded: number;
+  dem: number;
+  des: number;
+  sptype: string;
+  pmra: string;
+  pmde: string;
+};
+
+function formatTextPath(starData: StarData) {
+  const {
+    hr,
+    name,
+    dm,
+    sao,
+    bv,
+    vmag,
+    rah,
+    ram,
+    ras,
+    desn,
+    ded,
+    dem,
+    des,
+    sptype,
+  } = starData;
+
+  return `
+    ${name ? name + " ◦ " : ""}
+    SpecType ${sptype} ◦ 
+    ${`HR ${hr}`} ◦ 
+    B-V ${bv} ◦ 
+    SAO ${sao || "N/A"} ◦ 
+    Visual Mag ${vmag} ◦ 
+    DM ${dm || "N/A"} ◦ 
+    RA ${rah}h ${ram}m ${ras}s ◦ 
+    DEC ${desn}${ded}° ${dem}' ${des}" ◦ 
+  `;
+}
 
 export default function StarField({
   url,
@@ -23,7 +76,13 @@ export default function StarField({
   const isLoaded = useLoadingStore((state) => state.isLoaded);
   const pointsRef = useRef<THREE.Points>(null);
   const materialRef = useRef<THREE.ShaderMaterial>(null);
-  const { select, deselect, selection } = useSceneSelectionStore();
+  const {
+    setTextPath,
+    selectSkyObject,
+    clearSkySelection,
+    skySelection,
+    skySelectionPosition,
+  } = useNavigationStore();
 
   const starData = useLoader(THREE.FileLoader, url);
   const parsedStars = useMemo(() => {
@@ -33,16 +92,48 @@ export default function StarField({
       .slice(1)
       .filter((l) => l.trim() !== "")
       .map((line) => {
-        const [hr, name, bv, vmag, x, y, z] = line.split(",");
-        return {
-          hr: parseInt(hr),
+        const [
+          hr,
           name,
-          bv: parseFloat(bv),
-          vmag: parseFloat(vmag),
-          x: parseFloat(x),
-          y: parseFloat(y),
-          z: parseFloat(z),
-        };
+          dm,
+          sao,
+          bv,
+          vmag,
+          x,
+          y,
+          z,
+          rah,
+          ram,
+          ras,
+          desn,
+          ded,
+          dem,
+          des,
+          sptype,
+          pmra,
+          pmde,
+        ] = line.split(",");
+        return {
+          hr: Number(hr),
+          name: name.trim(),
+          dm: dm.trim(),
+          sao: sao.trim(),
+          bv: Number(bv),
+          vmag: Number(vmag),
+          x: Number(x),
+          y: Number(y),
+          z: Number(z),
+          rah: Number(rah),
+          ram: Number(ram),
+          ras: Number(ras),
+          desn: desn.trim(),
+          ded: Number(ded),
+          dem: Number(dem),
+          des: Number(des),
+          sptype: sptype.trim(),
+          pmra: pmra.trim(),
+          pmde: pmde.trim(),
+        } as StarData;
       })
       .sort((a, b) => {
         if (a.name && !b.name) return 1;
@@ -168,22 +259,30 @@ export default function StarField({
 
     console.log("Selected star:", parsedStars[e.index]);
 
-    select("star", parsedStars[e.index].hr, parsedStars[e.index].name, {
-      x: parsedStars[e.index].x * radius,
-      y: parsedStars[e.index].y * radius,
-      z: parsedStars[e.index].z * radius,
-    });
+    setTextPath(0.99, formatTextPath(parsedStars[e.index]));
+    selectSkyObject(
+      {
+        type: "star",
+        id: parsedStars[e.index].hr,
+        name: parsedStars[e.index].name,
+      },
+      {
+        x: parsedStars[e.index].x * radius,
+        y: parsedStars[e.index].y * radius,
+        z: parsedStars[e.index].z * radius,
+      },
+    );
   };
 
   return (
     <>
-      {selection && selection.type === "star" && parsedStars && (
+      {skySelection && skySelection.type === "star" && parsedStars && (
         <Html
           position={
             new THREE.Vector3(
-              selection.position.x,
-              selection.position.y,
-              selection.position.z,
+              skySelectionPosition.x,
+              skySelectionPosition.y,
+              skySelectionPosition.z,
             )
           }
           style={{
@@ -197,7 +296,7 @@ export default function StarField({
             height="20"
             viewBox="0 0 40 40"
             style={{ transform: "translate(-50%, -50%)" }}
-            onClick={() => deselect()}
+            onClick={() => clearSkySelection()}
           >
             <circle
               cx="20"

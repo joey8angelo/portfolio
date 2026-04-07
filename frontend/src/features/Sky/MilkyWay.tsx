@@ -4,7 +4,7 @@ import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader.js";
 import * as THREE from "three";
 import { useLoadingStore } from "../../store";
 import { gsap } from "gsap";
-import { useSceneSelectionStore } from "../../store/";
+import { useNavigationStore } from "../../store";
 
 useLoader.preload(EXRLoader, "/textures/milkyway_2020_4k.exr");
 
@@ -20,7 +20,7 @@ export default function MilkyWay({ radius }: { radius: number }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const isLoaded = useLoadingStore((state) => state.isLoaded);
 
-  const { deselect } = useSceneSelectionStore();
+  const { clearSkySelection } = useNavigationStore();
 
   useEffect(() => {
     if (isLoaded && meshRef.current) {
@@ -35,7 +35,7 @@ export default function MilkyWay({ radius }: { radius: number }) {
   const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     console.log(e);
-    deselect();
+    clearSkySelection();
   };
 
   if (!texture)
@@ -60,8 +60,7 @@ export default function MilkyWay({ radius }: { radius: number }) {
         opacity={0}
         transparent
         depthWrite={false}
-        toneMapped={false}
-        color={[1, 1, 1]}
+        color={[1.5, 1.5, 1.5]}
       />
     </mesh>
   );
