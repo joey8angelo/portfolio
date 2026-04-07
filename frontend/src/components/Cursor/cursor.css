@@ -1,0 +1,58 @@
+/* --- pointer intent --- */
+.cursor-default,       [style*="cursor: default"],       .default       { --cursor-type: default; }
+.cursor-pointer,       [style*="cursor: pointer"],       .pointer       { --cursor-type: pointer; }
+.cursor-context-menu,  [style*="cursor: context-menu"],  .context-menu  { --cursor-type: context-menu; }
+.cursor-help,          [style*="cursor: help"],          .help          { --cursor-type: help; }
+.cursor-auto,          [style*="cursor: auto"],          .auto          { --cursor-type: auto; }
+ 
+/* --- text --- */
+.cursor-text,          [style*="cursor: text"],          .text          { --cursor-type: text; }
+ 
+/* --- progress / wait --- */
+.cursor-progress,      [style*="cursor: progress"],      .progress      { --cursor-type: progress; }
+.cursor-wait,          [style*="cursor: wait"],          .wait          { --cursor-type: wait; }
+ 
+/* --- selection --- */
+.cursor-cell,          [style*="cursor: cell"],          .cell          { --cursor-type: cell; }
+.cursor-crosshair,     [style*="cursor: crosshair"],     .crosshair     { --cursor-type: crosshair; }
+ 
+/* --- drag --- */
+.cursor-copy,          [style*="cursor: copy"],          .copy          { --cursor-type: copy; }
+.cursor-move,          [style*="cursor: move"],          .move          { --cursor-type: move; }
+.cursor-alias,         [style*="cursor: alias"],         .alias         { --cursor-type: alias; }
+.cursor-no-drop,       [style*="cursor: no-drop"],       .no-drop       { --cursor-type: no-drop; }
+.cursor-not-allowed,   [style*="cursor: not-allowed"],   .not-allowed   { --cursor-type: not-allowed; }
+.cursor-grab,          [style*="cursor: grab"],          .grab          { --cursor-type: grab; }
+.cursor-grabbing,      [style*="cursor: grabbing"],      .grabbing      { --cursor-type: grabbing; }
+.cursor-all-scroll,    [style*="cursor: all-scroll"],    .all-scroll    { --cursor-type: all-scroll; }
+ 
+/* --- resize: axis --- */
+.cursor-col-resize,    [style*="cursor: col-resize"],    .col-resize    { --cursor-type: col-resize; }
+.cursor-row-resize,    [style*="cursor: row-resize"],    .row-resize    { --cursor-type: row-resize; }
+.cursor-ns-resize,     [style*="cursor: ns-resize"],     .ns-resize     { --cursor-type: ns-resize; }
+.cursor-ew-resize,     [style*="cursor: ew-resize"],     .ew-resize     { --cursor-type: ew-resize; }
+ 
+/* --- resize: cardinal --- */
+.cursor-n-resize,      [style*="cursor: n-resize"],      .n-resize      { --cursor-type: n-resize; }
+.cursor-e-resize,      [style*="cursor: e-resize"],      .e-resize      { --cursor-type: e-resize; }
+.cursor-s-resize,      [style*="cursor: s-resize"],      .s-resize      { --cursor-type: s-resize; }
+.cursor-w-resize,      [style*="cursor: w-resize"],      .w-resize      { --cursor-type: w-resize; }
+ 
+/* --- resize: diagonal --- */
+.cursor-ne-resize,     [style*="cursor: ne-resize"],     .ne-resize     { --cursor-type: ne-resize; }
+.cursor-nw-resize,     [style*="cursor: nw-resize"],     .nw-resize     { --cursor-type: nw-resize; }
+.cursor-se-resize,     [style*="cursor: se-resize"],     .se-resize     { --cursor-type: se-resize; }
+.cursor-sw-resize,     [style*="cursor: sw-resize"],     .sw-resize     { --cursor-type: sw-resize; }
+.cursor-nesw-resize,   [style*="cursor: nesw-resize"],   .nesw-resize   { --cursor-type: nesw-resize; }
+.cursor-nwse-resize,   [style*="cursor: nwse-resize"],   .nwse-resize   { --cursor-type: nwse-resize; }
+ 
+/* --- zoom --- */
+.cursor-zoom-in,       [style*="cursor: zoom-in"],       .zoom-in       { --cursor-type: zoom-in; }
+.cursor-zoom-out,      [style*="cursor: zoom-out"],      .zoom-out      { --cursor-type: zoom-out; }
+ 
+/* --- misc --- */
+.cursor-none,          [style*="cursor: none"],          .none          { --cursor-type: none; }
+.cursor-url,           [style*="cursor: url"],           .url           { --cursor-type: url; }
+
+/* --- custom --- */
+.cursor-scene,                                           .scene         { --cursor-type: scene; }
