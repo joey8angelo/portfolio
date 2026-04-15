@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useProgress } from "@react-three/drei";
-import { useLoadingStore } from "./useLoadingStore";
+import useLoadingStore from "./useLoadingStore";
 
 interface LoadingStoreSyncProps {
   duration?: number;
@@ -8,7 +8,7 @@ interface LoadingStoreSyncProps {
 }
 
 // syncs the loading progress from useProgress to the Zustand store.
-export function LoadingStoreSync({
+export default function LoadingStoreSync({
   duration = 0.5,
   ease = "power2.out",
 }: LoadingStoreSyncProps = {}) {

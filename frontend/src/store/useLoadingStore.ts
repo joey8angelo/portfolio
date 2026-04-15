@@ -10,13 +10,14 @@ interface LoadingState {
 
 // global store for the loading state
 // animates the progress to the target value
-export const useLoadingStore = create<LoadingState>((set, get) => ({
+const useLoadingStore = create<LoadingState>((set, get) => ({
   progress: 0,
   isLoaded: false,
   _proxy: { value: 0 },
   updateProgress: (target, duration = 0.5, ease = "power2.out") => {
     const { _proxy } = get();
 
+    gsap.killTweensOf(_proxy);
     gsap.to(_proxy, {
       value: target,
       duration: duration,
@@ -31,3 +32,5 @@ export const useLoadingStore = create<LoadingState>((set, get) => ({
     });
   },
 }));
+
+export default useLoadingStore;

@@ -1,67 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200..900&display=swap');
 @import "tailwindcss";
 
-@font-face {
-  font-family: "StampRSPKOne-Bold";
-  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Bold.otf") format("opentype");
+@utility text-glow-sm {
+  text-shadow: 
+    0 0 2px color-mix(in srgb, currentColor 30%, transparent), 
+    0 0 8px color-mix(in srgb, currentColor 50%, transparent);
 }
-@font-face {
-  font-family: "StampRSPKOne-ExtraLight";
-  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-ExtraLight.otf") format("opentype");
+@utility text-glow-md {
+  text-shadow: 
+    0 0 5px color-mix(in srgb, currentColor 40%, transparent), 
+    0 0 20px color-mix(in srgb, currentColor 55%, transparent);
 }
-@font-face {
-  font-family: "StampRSPKOne-Heavy";
-  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Heavy.otf") format("opentype");
+@utility text-glow-lg {
+  text-shadow: 
+    0 0 5px color-mix(in srgb, currentColor 60%, transparent), 
+    0 0 25px color-mix(in srgb, currentColor 80%, transparent);
 }
-@font-face {
-  font-family: "StampRSPKOne-Light";
-  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Light.otf") format("opentype");
+@utility text-glow-xl {
+  text-shadow: 
+    0 0 8px color-mix(in srgb, currentColor 70%, transparent), 
+    0 0 30px color-mix(in srgb, currentColor 90%, transparent);
 }
+
+/* REMEMBER TO REMOVE UNUSED FONTS */
 @font-face {
-  font-family: "StampRSPKOne-Medium";
-  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Medium.otf") format("opentype");
-}
-@font-face {
-  font-family: "StampRSPKOne-Regular";
-  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Regular.otf") format("opentype");
-}
-@font-face {
-  font-family: "StampRSPKOne-Thin";
+  font-family: "StampRSPKOne";
   src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Thin.otf") format("opentype");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: "StampRSPKOne";
+  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-ExtraLight.otf") format("opentype");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: "StampRSPKOne";
+  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "StampRSPKOne";
+  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "StampRSPKOne";
+  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "StampRSPKOne";
+  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "StampRSPKOne";
+  src: url("/fonts/Stamp_RSPK/One/StampRSPKOne-Heavy.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: "FixedsysExcelsior";
+  src: url("/fonts/FSEX302.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "ProggyVector";
+  src: url("/fonts/proggyfonts/ProggyVector/ProggyVector-Regular.woff2") format("woff2"),
+       url("/fonts/proggyfonts/ProggyVector/ProggyVector-Regular.woff") format("woff"),
+       url("/fonts/proggyfonts/ProggyVector/ProggyVector-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "ProggyVectorDotted";
+  src: url("/fonts/proggyfonts/ProggyVector/ProggyVector-Dotted.ttf") format("truetype");
+}
+@font-face {
+  font-family: "ProggySquareSZ";
+  src: url("/fonts/proggyfonts/ProggyOriginal/ProggySquareSZ.ttf") format("truetype");
+}
+@font-face {
+  font-family: "ProggyTiny";
+  src: url("/fonts/proggyfonts/ProggyOriginal/ProggyTiny.ttf") format("truetype");
+}
+@font-face {
+  font-family: "ProggySquare";
+  src: url("/fonts/proggyfonts/ProggyOriginal/ProggySquare.ttf") format("truetype");
+}
+@font-face {
+  font-family: "ProggyTinySZ";
+  src: url("/fonts/proggyfonts/ProggyOriginal/ProggyTinySZ.ttf") format("truetype");
+}
+@font-face {
+  font-family: "ProggyCleanSZBP";
+  src: url("/fonts/proggyfonts/ProggyOriginal/ProggyCleanSZBP.ttf") format("truetype");
+}
+@font-face {
+  font-family: "ProggyCleanSZ";
+  src: url("/fonts/proggyfonts/ProggyOriginal/ProggyCleanSZ.ttf") format("truetype");
+}
+@font-face {
+  font-family: "ProggySmall";
+  src: url("/fonts/proggyfonts/ProggyOriginal/ProggySmall.ttf") format("truetype");
+}
+@font-face {
+  font-family: "ProggyCleanCE";
+  src: url("/fonts/proggyfonts/ProggyOriginal/ProggyCleanCE.ttf") format("truetype");
+}
+@font-face {
+  font-family: "ProggyClean";
+  src: url("/fonts/proggyfonts/ProggyOriginal/ProggyClean.ttf") format("truetype");
+}
+@font-face {
+  font-family: "ProggyMatrix";
+  src: url("/fonts/proggyfonts/ProggyMatrix/ProggyMatrix.ttf") format("truetype");
+}
+@font-face {
+  font-family: "ProggyDotted";
+  src: url("/fonts/proggyfonts/ProggyDotted/ProggyDotted%20Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "ProggyCrossed";
+  src: url("/fonts/proggyfonts/ProggyCrossed/ProggyCrossed%20Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Terminus";
+  src: url("/fonts/terminus-ttf-4.49.3/TerminusTTF-4.49.3.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Terminus";
+  src: url("/fonts/terminus-ttf-4.49.3/TerminusTTF-Bold-4.49.3.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Terminus";
+  src: url("/fonts/terminus-ttf-4.49.3/TerminusTTF-Italic-4.49.3.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: "Terminus";
+  src: url("/fonts/terminus-ttf-4.49.3/TerminusTTF-Bold-Italic-4.49.3.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
 }
 
 :root {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #000000;
-
+  color: white;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+:root[data-theme="default"] {
+  --color-text-primary: #ffffff;
+  --color-text-muted: #878787;
+  --color-background-default: #222222;
+  --color-background-loading: #000000;
+  --color-danger: #ff4d4d;
+  --color-accent: #4d94ff;
+  --color-success: #4dff88;
 }

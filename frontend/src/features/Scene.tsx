@@ -1,38 +1,36 @@
-import SkyScene from "./Sky";
-import LoadingScene from "./Loading";
-
-import { useDebugControls } from "../hooks";
+import SkyScene from "./Sky/Sky";
+import LoadingScene from "./Loading/Loading";
+import { useControls } from "leva";
 import { Suspense } from "react";
 import { PerspectiveCamera } from "@react-three/drei/core/PerspectiveCamera";
 import { useHelper } from "@react-three/drei/core/Helper";
 import { useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
-import { LoadingStoreSync, useLoadingStore } from "../store/";
+import useLoadingStore from "../store/useLoadingStore";
 import { useLoader } from "@react-three/fiber";
 import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 
-const loadingDuration = 5;
+const sceneControlsSchema = {
+  useDebugCamera: false,
+  fov: {
+    value: 80,
+    min: 10,
+    max: 150,
+    step: 1,
+  },
+};
 
 export default function Scene() {
   const cameraRef = useRef<THREE.PerspectiveCamera>(null!);
   const isLoaded = useLoadingStore((state) => state.isLoaded);
 
-  const { useDebugCamera, fov } = useDebugControls({
-    useDebugCamera: false,
-    fov: {
-      value: 80,
-      min: 10,
-      max: 150,
-      step: 1,
-    },
-  });
+  const { useDebugCamera, fov } = useControls("Scene", sceneControlsSchema);
 
   useHelper(useDebugCamera ? cameraRef : null, THREE.CameraHelper);
 
   return (
     <>
-      <LoadingStoreSync duration={loadingDuration} ease={"power1.out"} />
       <color attach="background" args={["black"]} />
       {/* main camera */}
       <PerspectiveCamera
@@ -56,7 +54,7 @@ export default function Scene() {
       {/* main scene */}
       <Suspense fallback={null}>
         <group visible={isLoaded}>
-          return <primitive object={useLoader(OBJLoader, "/assets/guy.obj")} />;
+          <primitive object={useLoader(OBJLoader, "/assets/guy.obj")} />
           <SkyScene />
         </group>
       </Suspense>

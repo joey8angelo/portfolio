@@ -10,7 +10,7 @@ const breakpoints = {
 
 type Breakpoint = keyof typeof breakpoints;
 
-export function useResponsive() {
+export default function useResponsive() {
   const [breakpoint, setBreakpoint] = useState<Breakpoint>("laptop");
 
   useEffect(() => {

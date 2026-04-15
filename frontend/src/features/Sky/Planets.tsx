@@ -1,51 +1,79 @@
 import { Body, Equator, Illumination, Observer } from "astronomy-engine";
 import { useEffect, useMemo, useRef } from "react";
-import { bvToColor, getCelestialPoint } from "./skyUtils";
-import { GlowingPointMaterial } from "../Materials/GlowingPoint";
+import { bvToColor, getCelestialPoint } from "../../lib/skyUtils";
 import * as THREE from "three";
-import { useLoadingStore, useNavigationStore } from "../../store";
-import { gsap } from "gsap";
 import type { ThreeEvent } from "@react-three/fiber/dist/declarations/src/core/events";
-import { Html } from "@react-three/drei";
+import {
+  bodies,
+  getFormattedPlanetInfo,
+  getPlanetInfo,
+} from "../../lib/planetData";
+import useSkySelectionStore from "../../store/useSkySelectionStore";
+import useNavigationStore from "../../store/useNavigationStore";
+import type { CelestialHandles } from "./CelestialPoints";
+import CelestialPoints from "./CelestialPoints";
+import SelectionMarker from "./SelectionMarker";
 
 const lat = Number(import.meta.env.VITE_LAT);
 const lon = Number(import.meta.env.VITE_LON);
 
-const planets = [
-  { planet: Body.Mercury, bv: 0.64 },
-  { planet: Body.Venus, bv: 0.82 },
-  { planet: Body.Mars, bv: 1.36 },
-  { planet: Body.Jupiter, bv: 0.85 },
-  { planet: Body.Saturn, bv: 1.04 },
-  // { planet: Body.Uranus, bv: -0.11 },
-  // { planet: Body.Neptune, bv: -0.03 },
-];
+const planetControls = {
+  twinkleSpeed: {
+    value: 0,
+    min: 0,
+    max: 2,
+    step: 0.01,
+  },
+  twinkleIntensity: {
+    value: 0.0,
+    min: 0,
+    max: 1,
+    step: 0.01,
+  },
+  innerRadius: {
+    value: 0.07,
+    min: 0,
+    max: 1,
+    step: 0.01,
+  },
+  glowIntensity: {
+    value: 0.2,
+    min: 0,
+    max: 1,
+    step: 0.01,
+  },
+  radiusMultiplier: {
+    value: 8,
+    min: 0.1,
+    max: 20,
+    step: 0.1,
+  },
+};
 
 export default function Planets({ radius }: { radius: number }) {
-  const pointsRef = useRef<THREE.Points>(null);
-  const planetMaterial = useMemo(() => new GlowingPointMaterial(), []);
-  const materialRef = useRef<THREE.ShaderMaterial>(null);
+  const pointsApi = useRef<CelestialHandles>(null);
   const observer = useMemo(() => new Observer(lat, lon, 0), []);
-  const isLoaded = useLoadingStore((state) => state.isLoaded);
-  const {
-    skySelection,
-    skySelectionPosition,
-    selectSkyObject,
-    clearSkySelection,
-    updateSkySelectionPosition,
-  } = useNavigationStore();
+  const skySelection = useSkySelectionStore((state) => state.selection);
+  const selectSkyObject = useSkySelectionStore(
+    (state) => state.selectSkyObject,
+  );
+  const markerRef = useRef<THREE.Group>(null);
+  const setActiveTab = useNavigationStore((state) => state.setActiveTab);
 
-  const geometry = useMemo(() => {
-    const positions = new Float32Array(planets.length * 3);
-    const colors = new Float32Array(planets.length * 3);
-    const sizes = new Float32Array(planets.length);
+  const { positions, colors, sizes, seeds } = useMemo(() => {
+    const positions = new Float32Array(bodies.length * 3);
+    const colors = new Float32Array(bodies.length * 3);
+    const sizes = new Float32Array(bodies.length);
+    const seeds = new Float32Array(bodies.length);
 
-    planets.forEach(({ planet, bv }, i) => {
+    bodies.forEach((body, i) => {
+      const info = getPlanetInfo(i);
+      if (!info) return;
       const date = new Date();
-      const eq = Equator(planet, date, observer, true, false);
+      const eq = Equator(body, date, observer, true, false);
       const pos = getCelestialPoint(eq.ra, 0, 0, eq.dec, 0, 0, radius);
-      const mag = Illumination(planet, date).mag;
-      const color = bvToColor(bv);
+      const mag = Illumination(body, date).mag;
+      const color = bvToColor(info.bv);
 
       positions[i * 3] = pos.x;
       positions[i * 3 + 1] = pos.y;
@@ -55,137 +83,88 @@ export default function Planets({ radius }: { radius: number }) {
       colors[i * 3 + 1] = color.g;
       colors[i * 3 + 2] = color.b;
 
-      sizes[i] = Math.max(0.1, (7.0 - mag) * 0.5) * 8;
+      sizes[i] = Math.max(0.1, (7.0 - mag) * 0.5);
+
+      const dot = pos.x * 12.9898 + pos.y * 78.233 + pos.z * 437.164;
+      const hash = Math.sin(dot) * 43758.5453;
+      seeds[i] = hash - Math.floor(hash);
     });
 
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    geo.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-    geo.setAttribute("size", new THREE.BufferAttribute(sizes, 1));
-
-    return geo;
+    return { positions, colors, sizes, seeds };
   }, [radius, observer]);
 
   useEffect(() => {
-    if (!pointsRef.current) return;
-    const updatePlanets = () => {
+    if (!pointsApi.current) return;
+    if (!pointsApi.current.points) return;
+
+    const updatePositions = () => {
       const date = new Date();
-      planets.forEach(({ planet }, i) => {
-        const eq = Equator(planet, date, observer, true, false);
+
+      const points = pointsApi.current?.points;
+      if (!points) return;
+      bodies.forEach((body, i) => {
+        const info = getPlanetInfo(i);
+        if (!info) return;
+        const eq = Equator(body, date, observer, true, false);
         const pos = getCelestialPoint(eq.ra, 0, 0, eq.dec, 0, 0, radius);
 
         if (skySelection?.type === "planet" && skySelection?.id === i) {
-          updateSkySelectionPosition({
-            x: pos.x,
-            y: pos.y,
-            z: pos.z,
-          });
+          markerRef.current?.position.set(pos.x, pos.y, pos.z);
         }
 
-        pointsRef.current?.geometry.attributes.position.setXYZ(
-          i,
-          pos.x,
-          pos.y,
-          pos.z,
-        );
+        points.geometry.attributes.position.setXYZ(i, pos.x, pos.y, pos.z);
       });
-      pointsRef.current!.geometry.attributes.position.needsUpdate = true;
+      points.geometry.attributes.position.needsUpdate = true;
     };
-
-    const interval = setInterval(updatePlanets, 1000);
+    const interval = setInterval(updatePositions, 10000);
     return () => clearInterval(interval);
-  }, [observer, radius, skySelection, updateSkySelectionPosition]);
+  }, [observer, radius, skySelection]);
 
-  useEffect(() => {
-    if (isLoaded && materialRef.current) {
-      gsap.fromTo(
-        materialRef.current.uniforms.uRadius,
-        { value: 0 },
-        { value: radius, duration: 5, ease: "power2.out" },
+  const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
+    if (e.button === 0) {
+      e.stopPropagation();
+
+      if (e.index === undefined) return;
+
+      const points = pointsApi.current?.points;
+      const pos = points?.geometry.attributes.position;
+      if (!pos) return;
+
+      const planetPos = new THREE.Vector3(
+        pos.getX(e.index),
+        pos.getY(e.index),
+        pos.getZ(e.index),
       );
-    }
-  }, [isLoaded, radius]);
-
-  const handlePointerDown = (event: ThreeEvent<PointerEvent>) => {
-    event.stopPropagation();
-
-    if (event.index === undefined) return;
-
-    console.log("Clicked planet:", planets[event.index].planet);
-    const pos = pointsRef.current?.geometry.attributes.position;
-    if (!pos) return;
-
-    const planetPos = new THREE.Vector3(
-      pos.getX(event.index),
-      pos.getY(event.index),
-      pos.getZ(event.index),
-    );
-    selectSkyObject(
-      {
+      selectSkyObject({
         type: "planet",
-        id: event.index,
-        name: Body[planets[event.index].planet],
-      },
-      {
-        x: planetPos.x,
-        y: planetPos.y,
-        z: planetPos.z,
-      },
-    );
+        id: e.index,
+        name: Body[bodies[e.index]],
+        info: getFormattedPlanetInfo(e.index),
+      });
+      console.log("markerRef", markerRef.current);
+      markerRef.current?.position.set(planetPos.x, planetPos.y, planetPos.z);
+
+      setActiveTab("sky");
+    }
   };
 
   return (
     <>
-      {skySelection && skySelection.type === "planet" && (
-        <Html
-          position={
-            new THREE.Vector3(
-              skySelectionPosition.x,
-              skySelectionPosition.y,
-              skySelectionPosition.z,
-            )
-          }
-          style={{
-            color: "white",
-            fontSize: "2em",
-            whiteSpace: "nowrap",
-          }}
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 40 40"
-            style={{ transform: "translate(-50%, -50%)" }}
-            onClick={() => clearSkySelection()}
-          >
-            <circle
-              cx="20"
-              cy="20"
-              r="18"
-              fill="none"
-              stroke="#ff00ff"
-              strokeWidth="2"
-              strokeDasharray="4 2"
-            />
-          </svg>
-        </Html>
-      )}
-      <points
-        geometry={geometry}
-        renderOrder={1}
-        ref={pointsRef}
-        onPointerDown={handlePointerDown}
-      >
-        <primitive
-          object={planetMaterial}
-          attach="material"
-          uInnerRadius={0.07}
-          uGlowIntensity={0.2}
-          uTwinkleIntensity={0.0}
-          uRadius={radius}
-          ref={materialRef}
-        />
-      </points>
+      <SelectionMarker
+        ref={markerRef}
+        visible={skySelection?.type === "planet"}
+      />
+      <CelestialPoints
+        ref={pointsApi}
+        namespace="Sky.Planets"
+        positions={positions}
+        colors={colors}
+        sizes={sizes}
+        seeds={seeds}
+        handlePointerDown={handlePointerDown}
+        radius={radius}
+        controls={planetControls}
+      />
     </>
   );
 }

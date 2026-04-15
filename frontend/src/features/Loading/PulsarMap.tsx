@@ -3,9 +3,9 @@ import { Line } from "@react-three/drei";
 import { Line2 } from "three-stdlib";
 import * as THREE from "three";
 import { gsap } from "gsap";
-import { useLoadingStore } from "../../store";
+import useLoadingStore from "../../store/useLoadingStore";
 import { useGSAP } from "@gsap/react";
-import { useResponsive } from "../../hooks";
+import useResponsive from "../../hooks/useResponsive";
 
 const PULSAR_DATA = [
   { id: 4, angle: 263.6, r: 0.45, label: "Vela" },
