@@ -140,6 +140,12 @@ export function LiveSkyVisualizerDescription() {
         delay={-9000}
         className="text-[var(--color-text-muted)] italic text-sm"
       />
+      <span>
+        <GlitchText text="see more about this project " delay={500} />
+        <a href="/" className="underline text-[var(--color-accent)] text-glow-xl">
+          <GlitchText text="here" />
+        </a>
+      </span>
     </ProjectDescription>
   );
 }
@@ -217,6 +223,12 @@ export function CellularAutomatonDescription() {
             />
           </li>
         </ul>
+        <span>
+          <GlitchText text="see more about this project " delay={500} />
+          <a href="#" className="underline text-[var(--color-accent)] text-glow-xl">
+            <GlitchText text="here" />
+          </a>
+        </span>
       </div>
     </ProjectDescription>
   );
@@ -272,6 +284,12 @@ export function CLIRaytracerDescription() {
             />
           </li>
         </ul>
+        <span>
+          <GlitchText text="see more about this project " delay={500} />
+          <a href="#" className="underline text-[var(--color-accent)] text-glow-xl">
+            <GlitchText text="here" />
+          </a>
+        </span>
       </div>
     </ProjectDescription>
   );
@@ -317,6 +335,12 @@ export function RegularExpressionEngineDescription() {
             text=" which reduces the size NFA to a single state per character/symbol."
             delay={20}
           />
+        </span>
+        <span>
+          <GlitchText text="see more about this project " delay={500} />
+          <a href="#" className="underline text-[var(--color-accent)] text-glow-xl">
+            <GlitchText text="here" />
+          </a>
         </span>
       </div>
     </ProjectDescription>
@@ -393,6 +417,12 @@ export function FourierApproximationDescription() {
         "
           delay={500}
         />
+        <span>
+          <GlitchText text="see more about this project " delay={500} />
+          <a href="/fourier" className="underline text-[var(--color-accent)] text-glow-xl">
+            <GlitchText text="here" />
+          </a>
+        </span>
       </div>
     </ProjectDescription>
   );
@@ -430,6 +460,12 @@ export function NeuralNetworkVisualizerDescription() {
           text="The online demo visualizes the trained network for the MNIST dataset, allowing the user to draw numbers to predict."
           delay={500}
         />
+        <span>
+          <GlitchText text="see more about this project " delay={500} />
+          <a href="/neural-net" className="underline text-[var(--color-accent)] text-glow-xl">
+            <GlitchText text="here" />
+          </a>
+        </span>
       </div>
     </ProjectDescription>
   );
@@ -475,6 +511,12 @@ export function ParticleSimulationDescription() {
             />
           </li>
         </ul>
+        <span>
+          <GlitchText text="see more about this project " delay={500} />
+          <a href="/particles" className="underline text-[var(--color-accent)] text-glow-xl">
+            <GlitchText text="here" />
+          </a>
+        </span>
       </div>
     </ProjectDescription>
   );
