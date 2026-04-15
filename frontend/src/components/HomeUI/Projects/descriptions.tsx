@@ -474,13 +474,6 @@ export function ParticleSimulationDescription() {
               className="text-[var(--color-text-muted)]"
             />
           </li>
-          <li>
-            <GlitchText
-              text="- Static rendering fallback for low-end devices"
-              delay={20}
-              className="text-[var(--color-text-muted)]"
-            />
-          </li>
         </ul>
       </div>
     </ProjectDescription>

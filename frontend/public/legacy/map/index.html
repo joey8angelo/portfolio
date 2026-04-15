@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Map</title>
+    <link rel="stylesheet" href="/legacy/map/map.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    style="font-family: &quot;Martian Mono&quot;, monospace; color: white"
+    onload="q_unordered_map.display(); c_unordered_map.display()"
+  >
+    <div>
+      <div class="map-inputs">
+        <div>
+          <select id="map-selection">
+            <option value="0">Chaining</option>
+            <option value="1">Quadratic Probing</option>
+            <option value="2">Both</option>
+          </select>
+        </div>
+        <div style="display: flex; flex-direction: column">
+          <label>Key</label>
+          <input id="key-input" type="text" on />
+          <label>Value</label>
+          <input id="value-input" type="text" />
+          <button onclick="insertFromHTML()">Insert</button>
+          <button onclick="randomString()">Insert Random</button>
+          <button onclick="flashBox('green')">Find Key</button>
+          <button onclick="eraseKey()">Remove Key</button>
+          <button onclick="removeAll()">Empty Map</button>
+        </div>
+      </div>
+      <div class="centered" style="width: 75vw">
+        <div class="centered">
+          <h2>Chaining</h2>
+        </div>
+        <div class="c-unordered-map-label">
+          <div style="display: flex; flex-direction: column">
+            <label>Load Factor</label>
+            <input id="c-load-factor-view" style="width: 55px" readonly value />
+            <label>Max Load Factor</label>
+            <input
+              type="number"
+              id="c-set-load-factor"
+              style="width: 55px"
+              value="75"
+              min="1"
+              max="100"
+              step="1"
+              onblur="update_load_factor()"
+              onclick="update_load_factor()"
+            />
+          </div>
+          <div style="display: flex; flex-direction: column">
+            <label>Custom Javascript Hash Function</label>
+            <textarea
+              id="c-set-hash"
+              rows="4"
+              cols="29"
+              placeholder="function myhash(input){&#10;  return input.charCodeAt(0);&#10;}"
+              style="text-align: left"
+              onblur="setHash()"
+            ></textarea>
+          </div>
+        </div>
+        <div id="c-unordered-map-container"></div>
+        <div class="centered">
+          <h2>Quadratic Probing</h2>
+        </div>
+        <div class="q-unordered-map-label">
+          <div style="display: flex; flex-direction: column">
+            <label>Load Factor</label>
+            <input id="q-load-factor-view" style="width: 55px" readonly value />
+            <label>Max Load Factor</label>
+            <input
+              type="number"
+              id="q-set-load-factor"
+              style="width: 55px"
+              value="75"
+              min="1"
+              max="100"
+              step="1"
+              onblur="update_load_factor()"
+              onclick="update_load_factor()"
+            />
+          </div>
+          <div style="display: flex; flex-direction: column">
+            <label>Custom Javascript Hash Function</label>
+            <textarea
+              id="q-set-hash"
+              rows="4"
+              cols="29"
+              placeholder="function myhash(input){&#10;  return input.charCodeAt(0);&#10;}"
+              style="text-align: left"
+              onblur="setHash()"
+            ></textarea>
+          </div>
+        </div>
+        <div id="q-unordered-map-container"></div>
+      </div>
+    </div>
+    <script src="/legacy/map/map.js"></script>
+  </body>
+</html>
+

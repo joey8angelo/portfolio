@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LL(1) Parser Generator</title>
+    <link rel="stylesheet" href="/legacy/LL1/LL1.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@300;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    onload="getGrammar()"
+    style="font-family: &quot;Martian Mono&quot;, monospace; color: white"
+  >
+    <header class="centered">
+      <h1>LL(1) Parser Generator</h1>
+    </header>
+
+    <main>
+      <section>
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 20px;
+          "
+        >
+          <div style="display: flex; flex-direction: column">
+            <h3>Grammar Input</h3>
+            <textarea
+              id="grammarIn"
+              placeholder="Input Grammar"
+              rows="17"
+              cols="20"
+            >
+S := EXPR
+EXPR := TERM EXPR'
+EXPR' := + TERM EXPR'
+EXPR' := - TERM EXPR'
+EXPR' := %
+TERM := FACTOR TERM'
+TERM' := * FACTOR TERM'
+TERM' := / FACTOR TERM'
+TERM' := %
+FACTOR := ( EXPR )
+FACTOR := num
+FACTOR := ident
+          </textarea
+            >
+            <button style="max-width: fit-content" onclick="getGrammar()">
+              Generate Tables
+            </button>
+          </div>
+          <div>
+            <h3>Grammar Rules</h3>
+            <ul>
+              <li>Epsilon is denoted with %</li>
+              <li>Grammar must have S as the start symbol</li>
+              <li>
+                Rules are in form nonterminal > terminals/nonterminals ('>' can
+                be used as a token)
+              </li>
+              <li>Each token in a rule must be separated by a space</li>
+              <li>$ is reserved as EOF</li>
+            </ul>
+
+            <h3>Usage Notes</h3>
+            <ul>
+              <li>
+                Any conflicts in the grammar will show up red on the table
+              </li>
+              <li>Click 'Set' to start/reset parsing</li>
+              <li>
+                The 'Next step' button will build the next production in the
+                parse tree
+              </li>
+              <li>
+                The center button on the Dpad will extend the view port
+                downwards for the tree
+              </li>
+              <li>
+                The rest of the buttons move the tree around in the view port
+              </li>
+              <li>Nodes in the tree can be collapsed when clicked</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="tables">
+          <table>
+            <caption>
+              First and Follow Sets
+            </caption>
+            <thead>
+              <tr>
+                <th>NonTerminals</th>
+                <th>First</th>
+                <th>Follow</th>
+              </tr>
+            </thead>
+            <tbody id="table1body"></tbody>
+          </table>
+
+          <table>
+            <caption>
+              Parse Table
+            </caption>
+            <thead id="table2head"></thead>
+            <tbody id="table2body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="centered">
+        <h3>Parse Input</h3>
+        <textarea id="inputIn" placeholder="Input to parse" rows="5" cols="40">
+num + num</textarea
+        >
+
+        <div style="margin-bottom: 10px">
+          <button onclick="parseNext()">Next step</button>
+          <button onclick="setParse()">Set</button>
+        </div>
+
+        <div>
+          <div>
+            <label>Stack</label>
+            <input class="setsBox" id="stack" type="text" readonly />
+          </div>
+          <div>
+            <label>Rest of input</label>
+            <input class="setsBox" id="reinput" type="text" readonly />
+          </div>
+          <div>
+            <label>Rule used</label>
+            <input class="setsBox" id="rule" type="text" readonly />
+          </div>
+        </div>
+
+        <div class="centered">
+          <div class="dpad centered">
+            <button id="upB" onclick="moveUp()">
+              <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5z" /></svg>
+            </button>
+            <div>
+              <button id="leftB" onclick="moveLeft()">
+                <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5z" /></svg>
+              </button>
+              <button id="centerB" onclick="extendDownwards()">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /></svg>
+              </button>
+              <button id="rightB" onclick="moveRight()">
+                <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5z" /></svg>
+              </button>
+            </div>
+            <button id="downB" onclick="moveDown()">
+              <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z" /></svg>
+            </button>
+          </div>
+        </div>
+
+        <div id="container"></div>
+      </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+    <script src="/legacy/Queue.js"></script>
+    <script src="/legacy/LL1/LL1ParserGenerator.js"></script>
+  </body>
+</html>

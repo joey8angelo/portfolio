@@ -94,14 +94,62 @@ const projects = [
   {
     details: FourierApproximationDetails,
     description: <FourierApproximationDescription />,
+    imgs: [
+      {
+        src: "images/fourier_square.webm",
+        title: "Square Wave",
+        alt: "Fourier Approximation Square Wave",
+        w: 290,
+        h: 584,
+      },
+      {
+        src: "images/fourier_user.webm",
+        title: "User-drawn Function",
+        alt: "Fourier Approximation User-drawn Function",
+        w: 490,
+        h: 362,
+      },
+      {
+        src: "images/fourier_heart.png",
+        title: "Heart",
+        alt: "Fourier Approximation Heart",
+        w: 437,
+        h: 458,
+      },
+    ],
   },
   {
     details: NeuralNetworkVisualizerDetails,
     description: <NeuralNetworkVisualizerDescription />,
+    imgs: [
+      {
+        src: "images/neural_demo.webm",
+        title: "Demo",
+        alt: "Neural Network Visualizer Demo",
+        w: 520,
+        h: 326,
+      },
+    ],
   },
   {
     details: ParticleSimulationDetails,
     description: <ParticleSimulationDescription />,
+    imgs: [
+      {
+        src: "images/particle_ghost.webm",
+        title: "Low Alpha",
+        alt: "Particle Simulation",
+        w: 637,
+        h: 350,
+      },
+      {
+        src: "images/particle_ss.png",
+        title: "Particles",
+        alt: "Particle Simulation Screenshot",
+        w: 597,
+        h: 353,
+      },
+    ],
   },
 ];
 

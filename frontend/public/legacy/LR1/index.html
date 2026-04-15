@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="/legacy/LR1/LR1.css" />
+    <link
+      rel="stylesheet"
+      href="https://www.jqueryscript.net/demo/Lightweight-jQuery-Tooltip-Enhancement-Plugin-tipsy-js/css/jquery.tipsy.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://www.jqueryscript.net/css/jquerysctipttop.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@800&display=swap"
+      rel="stylesheet"
+    />
+    <title>LR(1)/LALR(1) Parser Generator</title>
+  </head>
+  <body
+    style="font-family: &quot;Martian Mono&quot;, monospace; color: white"
+    onload="getGrammar();createStateMachine('LR', LRsm, LRg, LRinner, LRrender, LRtableError, LRtable);createStateMachine('LALR', LALRsm, LALRg, LALRinner, LALRrender, LALRtableError, LALRtable)"
+  >
+    <div class="centered" style="flex-direction: column">
+      <h3>LR(1) Parser</h3>
+
+      <div style="display: flex; flex-direction: row">
+        <div style="display: flex; flex-direction: column">
+          <textarea
+            id="grammarInput"
+            placeholder="Input Grammar Here"
+            rows="15"
+            cols="15"
+          >
+S > A A
+    A > a A
+    A > b</textarea
+          >
+          <button onclick="getGrammar()">Input Grammar</button>
+        </div>
+        <div>
+          <ul>
+            <li>Epsilon is denoted with %</li>
+            <li>Start symbol is the first nonterminal</li>
+            <li>Start symbol will be augmented with a new start, start'</li>
+            <li>
+              Rules can be inputted with any production symbol (> , -> , ::= ,
+              ... any non space separated token)
+            </li>
+            <li>Each token in a rule must be separated by a space</li>
+            <li>$ is reserved as EOF</li>
+          </ul>
+          <ul>
+            <li>
+              Any conflicts in the grammar will show up red on the parse table
+            </li>
+            <li>
+              The Input Grammar button will build the grammar and construct the
+              FIRST sets
+            </li>
+            <li>
+              The Build State Machine button will build the finite automaton
+            </li>
+            <li>Click the top right box in the parse tables to remove them</li>
+            <li>Click 'Set' to start/reset parsing</li>
+            <li>
+              The 'Next step' button will parse the next input and highlight the
+              current states in the stack
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="FIRSTContainer"></div>
+
+      <div>
+        <button
+          onclick="createStateMachine('LR', LRsm, LRg, LRinner, LRrender, LRtableError, LRtable)"
+        >
+          Build State Machine
+        </button>
+      </div>
+
+      <div class="svgContainer centered">
+        <svg id="LRsvgSM"><g /></svg>
+      </div>
+
+      <label>LR Parse Table</label>
+      <div id="LRtableContainer"></div>
+
+      <div>
+        <textarea
+          id="LRparseInput"
+          cols="40"
+          rows="5"
+          placeholder="Input to parse"
+        >
+a a b b</textarea
+        >
+      </div>
+      <div>
+        <button
+          onclick="setParse('LR', LRtableError, LRsm, LRparseError, LRq, LRstack, LRg, LRinner, LRrender)"
+        >
+          Set/Reset
+        </button>
+        <button
+          onclick="parseNext('LR', LRstack, LRg, LRinner, LRparseError, LRq, LRrender, LRtable, LRsm)"
+        >
+          Next Step
+        </button>
+      </div>
+
+      <div style="flex-direction: column; margin-top: 20px">
+        <div>
+          <label>Stack</label>
+          <input class="setsBox" id="LRstack" type="text" readonly value />
+        </div>
+        <div>
+          <label>Rest of input</label>
+          <input class="setsBox" id="LRreinput" type="text" readonly value />
+        </div>
+        <div>
+          <label>Action</label>
+          <input class="setsBox" id="LRaction" type="text" readonly value />
+        </div>
+      </div>
+
+      <h3 style="margin-top: 40px">LALR(1) Parser</h3>
+
+      <button
+        onclick="createStateMachine('LALR', LALRsm, LALRg, LALRinner, LALRrender, LALRtableError, LALRtable)"
+      >
+        Make LALR Parser
+      </button>
+
+      <div class="svgContainer centered">
+        <svg id="LALRsvgSM"><g /></svg>
+      </div>
+
+      <label id="LALRparseTable">LALR Parse Table</label>
+      <div id="LALRtableContainer"></div>
+
+      <div>
+        <textarea
+          id="LALRparseInput"
+          cols="40"
+          rows="5"
+          placeholder="Input to parse"
+        >
+a a b b</textarea
+        >
+      </div>
+      <div>
+        <button
+          onclick="setParse('LALR', LALRtableError, LALRsm, LALRparseError, LALRq, LALRstack, LALRg, LALRinner, LALRrender)"
+        >
+          Set/Reset
+        </button>
+        <button
+          onclick="parseNext('LALR', LALRstack, LALRg, LALRinner, LALRparseError, LALRq, LALRrender, LALRtable, LALRsm)"
+        >
+          Next Step
+        </button>
+      </div>
+
+      <div class="sets">
+        <div>
+          <label>Stack</label>
+          <input class="setsBox" id="LALRstack" type="text" readonly value />
+        </div>
+        <div>
+          <label>Rest of input</label>
+          <input class="setsBox" id="LALRreinput" type="text" readonly value />
+        </div>
+        <div>
+          <label>Action</label>
+          <input class="setsBox" id="LALRaction" type="text" readonly value />
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://www.jqueryscript.net/demo/Lightweight-jQuery-Tooltip-Enhancement-Plugin-tipsy-js/js/jquery.tipsy.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dagre-d3/0.6.1/dagre-d3.min.js"></script>
+    <script src="/legacy/LR1/LR1.js"></script>
+  </body>
+</html>
+

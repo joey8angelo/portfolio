@@ -141,7 +141,6 @@ export default function Planets({ radius }: { radius: number }) {
         name: Body[bodies[e.index]],
         info: getFormattedPlanetInfo(e.index),
       });
-      console.log("markerRef", markerRef.current);
       markerRef.current?.position.set(planetPos.x, planetPos.y, planetPos.z);
 
       setActiveTab("sky");

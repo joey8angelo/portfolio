@@ -1,0 +1,118 @@
+table {
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 200px;
+  text-align: center;
+}
+
+h3 {
+  margin: 0px;
+}
+
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.tables {
+  margin-right: 15px;
+}
+
+.tables th,
+.tables td {
+  border: 1px solid gray;
+  text-align: left;
+  font-size: large;
+}
+
+.err {
+  background-color: darkred;
+}
+
+.setsBox {
+  min-width: 50px !important;
+  max-width: 1000px;
+  transition: width 0.5s;
+  text-align: center;
+  margin-bottom: 10px;
+  overflow-wrap: normal;
+  overflow: hidden;
+}
+
+.grammarinput {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dpad {
+  width: 120px;
+  height: 120px;
+  font-size: 0;
+  margin-bottom: 10px;
+}
+
+#leftB,
+#rightB,
+#upB,
+#downB,
+#centerB {
+  margin: 0;
+  padding: 0;
+  height: 40px;
+  width: 40px;
+  border: none;
+}
+
+#leftB:hover svg path,
+#rightB:hover svg path,
+#upB:hover svg path,
+#downB:hover svg path,
+#centerB:hover svg circle {
+  fill: #363030;
+}
+
+#leftB {
+  transform: rotate(180deg);
+}
+#downB {
+  transform: rotate(180deg);
+}
+#upB {
+  transform: rotate(-90deg);
+}
+
+/*Styles for LL1 Tree*/
+.node {
+  cursor: pointer;
+}
+
+.node text {
+  font-size: larger;
+  font-family: monospace;
+}
+
+.link {
+  fill: none;
+  stroke: gray;
+  stroke-width: 2px;
+}
+
+.svg-container {
+  position: relative;
+  width: 100%;
+  text-align: center;
+}
+.svg-content {
+  text-align: center;
+}
+
+#container {
+  height: auto;
+  min-height: 500px;
+  min-width: 500px;
+  width: 95%;
+}
