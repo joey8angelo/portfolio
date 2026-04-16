@@ -39,7 +39,7 @@ export function ProjectDescription({
   selGlitchConf?: Conf;
 }) {
   const [hasSelected] = useState(() => {
-    if (typeof window === "undefined") return false; // SSR safety
+    if (typeof window === "undefined") return false;
 
     const storedValue = localStorage.getItem(name);
     if (!storedValue) return false;
@@ -138,14 +138,8 @@ export function LiveSkyVisualizerDescription() {
       <GlitchText
         text="*Without atmospheric effects, because who wants to see that?"
         delay={-9000}
-        className="text-[var(--color-text-muted)] italic text-sm"
+        className="text-[var(--color-text-muted)] italic text-xs md:text-xs lg:text-sm"
       />
-      <span>
-        <GlitchText text="see more about this project " delay={500} />
-        <a href="/" className="underline text-[var(--color-accent)] text-glow-xl">
-          <GlitchText text="here" />
-        </a>
-      </span>
     </ProjectDescription>
   );
 }

@@ -11,6 +11,7 @@ import { useGSAP } from "@gsap/react";
 import steppedEase from "../../lib/steppedEase";
 import useLoadingStore from "../../store/useLoadingStore";
 import useNavigationStore from "../../store/useNavigationStore";
+import useResponsive from "../../hooks/useResponsive";
 
 interface MainUIProps {
   className?: string;
@@ -20,6 +21,7 @@ export default function HomeUI({ className }: MainUIProps) {
   const isLoaded = useLoadingStore((state) => state.isLoaded);
   const activeTab = useNavigationStore((state) => state.activeTab);
   const arrowRef = useRef<SVGSVGElement>(null);
+  const { is } = useResponsive();
 
   const uiRef = useRef<HTMLDivElement>(null);
   const [side, setSide] = useState<"left" | "right">("left");
@@ -53,10 +55,10 @@ export default function HomeUI({ className }: MainUIProps) {
   if (!isLoaded) return null;
   return (
     <div
-      className={`pointer-events-none ${className} flex flex-row font-[Terminus] font-[700] @container text-glow-md`}
+      className={`pointer-events-none ${className} flex flex-row text-sm md:text-sm lg:text-md xl:text-md 2xl:text-lg font-[Terminus] font-[700] @container sm:text-glow-sm md:text-glow-sm text-glow-md`}
     >
       <div
-        className={`pointer-events-auto w-[35vw] h-full absolute flex flex-col max-h-full backdrop-blur-[4px] p-4 gap-0`}
+        className={`pointer-events-auto w-[100%] md:w-[50%] lg:w-[50%] xl:w-[35%] h-full absolute flex flex-col max-h-full backdrop-blur-[4px] p-4 gap-0`}
         style={{
           maskImage: `linear-gradient(${side === "left" ? "to right" : "to left"}, black 0%, black calc(100% - 1rem), transparent 100%)`,
           WebkitMaskImage: `linear-gradient(${side === "left" ? "to right" : "to left"}, black 0%, black calc(100% - 1rem), transparent 100%)`,
@@ -64,7 +66,7 @@ export default function HomeUI({ className }: MainUIProps) {
         ref={uiRef}
       >
         {/* INFO SECTION */}
-        <LabeledBox label={<Label text="Info" />} className="m-4">
+        <LabeledBox label={<Label text="Info" />} className="mx-4">
           <InfoBox />
         </LabeledBox>
 
@@ -74,11 +76,12 @@ export default function HomeUI({ className }: MainUIProps) {
         {activeTab === "about" && <AboutContent />}
 
         {/* NAVIGATION SECTION */}
-        <LabeledBox label={<Label text="Navigation" />} className="m-4">
+        <LabeledBox label={<Label text="Navigation" />} className="mx-4">
           <NavBar />
         </LabeledBox>
 
         {/* TOGGLE SIDE BUTTON */}
+        {is(">=md") && (
         <button
           className={`${side === "right" ? "left-2 rotate-90" : "right-2 -rotate-90"} pointer-events-auto absolute top-1/2 translate-y-1/2  flex items-center justify-center text-white cursor-pointer`}
           onClick={handleClick}
@@ -98,6 +101,7 @@ export default function HomeUI({ className }: MainUIProps) {
             <path fill="none" d="m6 9l6 6l6-6" />
           </svg>
         </button>
+        )}
       </div>
     </div>
   );

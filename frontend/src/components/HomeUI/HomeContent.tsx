@@ -3,6 +3,7 @@ import LabeledBox from "../LabeledBox";
 import Label from "./Label";
 import { useRef, useState } from "react";
 import { gsap } from "gsap";
+import useResponsive from "../../hooks/useResponsive";
 import steppedEase from "../../lib/steppedEase";
 import {
   LiveSkyVisualizerDescription,
@@ -135,19 +136,20 @@ const projects = [
     details: ParticleSimulationDetails,
     description: <ParticleSimulationDescription />,
     imgs: [
-      {
-        src: "images/particle_ghost.webm",
-        title: "Low Alpha",
-        alt: "Particle Simulation",
-        w: 637,
-        h: 350,
-      },
+
       {
         src: "images/particle_ss.png",
         title: "Particles",
         alt: "Particle Simulation Screenshot",
         w: 597,
         h: 353,
+      },
+      {
+        src: "images/particle_ghost.webm",
+        title: "Low Alpha",
+        alt: "Particle Simulation",
+        w: 637,
+        h: 350,
       },
     ],
   },
@@ -157,6 +159,9 @@ export default function HomeContent() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const lineRef = useRef<HTMLDivElement>(null);
+  const { is } = useResponsive();
+
+  const scaleFactor = is("<=md") ? 0.5 : is("lg") ? 0.6 : is("xl") ? 0.7 : 1.0;
   const handleMouseEnter = (index: number) => {
     setHoveredIndex(index);
   };
@@ -209,7 +214,7 @@ export default function HomeContent() {
         label={<Label text="Projects" />}
         className="m-4 flex-1 overflow-y-scroll"
       >
-        <div className="w-full h-full text-xl p-8 flex flex-col gap-8 items-center">
+        <div className="w-full h-full p-2 md:p-2 lg:p-2 xl:p-4 flex flex-col gap-2 md:gap-2 lg:gap-2 xl:gap-2 items-center">
           <ul className="w-full">
             {projects.map((project, index) => (
               <li
@@ -244,8 +249,8 @@ export default function HomeContent() {
               title={img.title}
               imgSrc={img.src}
               imgAlt={img.alt}
-              width={img.w}
-              height={img.h}
+              width={img.w * scaleFactor}
+              height={img.h * scaleFactor}
               x={imagePositions[idx].x}
               y={imagePositions[idx].y}
               delay={idx * 0.2}

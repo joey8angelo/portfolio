@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { EffectComposer } from "@react-three/postprocessing";
 import { DitherEffect } from "../../features/Effects/Dither/Dither";
 import { Bloom } from "@react-three/postprocessing";
+import useResponsive from "../../hooks/useResponsive";
 
 export default function WireframeSphereIcon({
   selected,
@@ -16,6 +17,7 @@ export default function WireframeSphereIcon({
 }) {
   const sphereRef = useRef<THREE.Group>(null);
   const groupRef = useRef<THREE.Mesh>(null);
+  const { is } = useResponsive();
 
   useFrame(() => {
     if (!sphereRef.current || !selected) return;
@@ -85,6 +87,10 @@ export default function WireframeSphereIcon({
     return group;
   }, [material]);
 
+
+  const luminanceThreshold = is(">xl") ? 0.70 : is(">=md") ? 0.80 : 0.90;
+  const pixelSize = is(">xl") ? 2 : 1;
+
   return (
     <>
       <group ref={groupRef} scale={0.85}>
@@ -105,9 +111,9 @@ export default function WireframeSphereIcon({
       </group>
 
       <EffectComposer>
-        <DitherEffect colorNum={3} />
+        <DitherEffect colorNum={3} pixelSize={pixelSize}/>
 
-        <Bloom luminanceThreshold={0.7} luminanceSmoothing={0.9} />
+        <Bloom luminanceThreshold={luminanceThreshold} luminanceSmoothing={0.9} />
       </EffectComposer>
     </>
   );

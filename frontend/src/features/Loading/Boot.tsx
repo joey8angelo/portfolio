@@ -19,7 +19,7 @@ export default function Boot() {
   const bootTxtContainerRef = useRef<HTMLDivElement>(null);
   const lastDisplayedIndexRef = useRef(-1);
 
-  const { isMobile } = useResponsive();
+  const { breakpoint } = useResponsive();
 
   useEffect(() => {
     if (progress === 0) {
@@ -58,8 +58,8 @@ export default function Boot() {
     <Html center>
       <div
         style={{
-          opacity: isMobile ? 0.5 : 1,
-          fontSize: isMobile ? "10px" : "16px",
+          opacity: breakpoint === "sm" ? 0.5 : 1,
+          fontSize: breakpoint === "sm" ? "10px" : "16px",
           fontFamily: "ProggyTinySZ",
           fontWeight: 200,
           zIndex: -1,

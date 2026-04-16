@@ -1,47 +1,80 @@
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 
-const breakpoints = {
-  mobile: "(max-width: 640px)",
-  tablet: "(min-width: 641px) and (max-width: 768px)",
-  laptop: "(min-width: 769px) and (max-width: 1024px)",
-  desktop: "(min-width: 1025px) and (max-width: 1280px)",
-  large: "(min-width: 1281px)",
+export const breakpoints = {
+  sm: 640,
+  md: 768,
+  lg: 1024,
+  xl: 1280,
+  "2xl": 1536,
 } as const;
 
-type Breakpoint = keyof typeof breakpoints;
+export type Breakpoint = keyof typeof breakpoints;
+
+const breakpointOrder: Breakpoint[] = ["sm", "md", "lg", "xl", "2xl"];
+
+function getBreakpoint(width: number): Breakpoint {
+  let current: Breakpoint = "sm";
+  for (const bp of breakpointOrder) {
+    if (width >= breakpoints[bp]) {
+      current = bp;
+    }
+  }
+  return current;
+}
+
+const subscribe = (callback: () => void) => {
+  window.addEventListener("resize", callback);
+  return () => window.removeEventListener("resize", callback);
+};
+
+function getServerSnapshot(): Breakpoint {
+  return "lg";
+}
+
+function getSnapshot(): Breakpoint {
+  return getBreakpoint(
+    typeof window !== "undefined" ? window.innerWidth : 1024,
+  );
+}
+
+function getWidthSnapshot(): number {
+  return typeof window !== "undefined" ? window.innerWidth : 1024;
+}
+
+function parseCondition(condition: string | Breakpoint): {
+  operator: ">" | ">=" | "<" | "<=" | "=";
+  bp: Breakpoint;
+} {
+  const match = String(condition).match(/^(>=|>|<|<=|=)?(.+)$/);
+  const operator = (match?.[1] || "=") as ">" | ">=" | "<" | "<=" | "=";
+  const bp = match?.[2] as Breakpoint;
+  return { operator, bp };
+}
 
 export default function useResponsive() {
-  const [breakpoint, setBreakpoint] = useState<Breakpoint>("laptop");
+  const breakpoint = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const width = useSyncExternalStore(subscribe, getWidthSnapshot, getWidthSnapshot);
 
-  useEffect(() => {
-    const handlers = Object.entries(breakpoints).map(([name, query]) => {
-      const mql = window.matchMedia(query);
+  const currentIndex = breakpointOrder.indexOf(breakpoint);
 
-      const key = name as Breakpoint;
+  const is = (condition: string | Breakpoint) => {
+    const { operator, bp } = parseCondition(condition);
+    const bpIndex = breakpointOrder.indexOf(bp);
 
-      const onChange = (e: MediaQueryListEvent | MediaQueryList) => {
-        if (e.matches) setBreakpoint(key);
-      };
-
-      if (mql.matches) setBreakpoint(key);
-
-      mql.addEventListener("change", onChange);
-      return { mql, onChange };
-    });
-
-    return () => {
-      handlers.forEach(({ mql, onChange }) =>
-        mql.removeEventListener("change", onChange),
-      );
-    };
-  }, []);
-
-  return {
-    breakpoint,
-    isMobile: breakpoint === "mobile",
-    isTablet: breakpoint === "tablet",
-    isLaptop: breakpoint === "laptop",
-    isDesktop: breakpoint === "desktop",
-    isLargeDesktop: breakpoint === "large",
+    switch (operator) {
+      case ">":
+        return currentIndex > bpIndex;
+      case ">=":
+        return currentIndex >= bpIndex;
+      case "<":
+        return currentIndex < bpIndex;
+      case "<=":
+        return currentIndex <= bpIndex;
+      case "=":
+      default:
+        return breakpoint === bp;
+    }
   };
+
+  return { breakpoint, width, is };
 }

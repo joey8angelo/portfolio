@@ -5,7 +5,8 @@ export default function AboutContent() {
   return (
     <LabeledBox
       label={<Label text="About Me" />}
-      className="m-4 flex-1"
-    ></LabeledBox>
+      className="m-4 flex-1 overflow-y-scroll"
+    >
+    </LabeledBox>
   );
 }

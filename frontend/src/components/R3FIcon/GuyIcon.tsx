@@ -6,6 +6,7 @@ import { gsap } from "gsap";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { useGLTF } from "@react-three/drei";
 import { DitherEffect } from "../../features/Effects/Dither/Dither";
+import  useResponsive  from "../../hooks/useResponsive";
 
 useGLTF.preload("/assets/guy.glb");
 
@@ -18,6 +19,7 @@ export default function GuyIcon({
 }) {
   const { scene } = useGLTF("/assets/guy.glb");
   const guyRef = useRef<THREE.Group>(null);
+  const { is } = useResponsive();
 
   const [material] = useState<THREE.MeshBasicMaterial>(
     new THREE.MeshBasicMaterial({
@@ -64,6 +66,9 @@ export default function GuyIcon({
     guyRef.current.rotation.y += 0.002;
   });
 
+  const luminanceThreshold = is(">xl") ? 0.75 : is(">=md") ? 0.85 : 0.95;
+  const pixelSize = is(">xl") ? 2 : 1;
+
   return (
     <>
       <group
@@ -78,8 +83,8 @@ export default function GuyIcon({
       </group>
 
       <EffectComposer>
-        <DitherEffect colorNum={3} />
-        <Bloom luminanceThreshold={0.75} luminanceSmoothing={0.9} />
+        <DitherEffect colorNum={3} pixelSize={pixelSize} />
+        <Bloom luminanceThreshold={luminanceThreshold} luminanceSmoothing={0.9} />
       </EffectComposer>
     </>
   );

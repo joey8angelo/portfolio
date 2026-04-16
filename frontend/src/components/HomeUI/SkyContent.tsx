@@ -69,7 +69,7 @@ export default function SkyContent() {
           flickerProbability={[0.2, 0.6]}
           stepDuration={[15, 30]}
           stepProbability={[0.1, 0.2]}
-          className="w-full pt-2 text-sm text-[var(--color-text-muted)] text-center text-balance text-glow-lg"
+          className="w-full pt-2 text-xs 2xl:text-sm text-[var(--color-text-muted)] text-center text-balance text-glow-lg"
         />
       </div>
     </LabeledBox>

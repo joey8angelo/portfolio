@@ -5,6 +5,7 @@ import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { Svg } from "@react-three/drei";
 import * as THREE from "three";
 import { DitherEffect } from "../../features/Effects/Dither/Dither";
+import useResponsive from "../../hooks/useResponsive";
 
 export default function PulsarIcon({
   selected,
@@ -14,6 +15,7 @@ export default function PulsarIcon({
   duration: number;
 }) {
   const groupRef = useRef<THREE.Group>(null);
+  const { is } = useResponsive();
 
   useGSAP(() => {
     if (!groupRef.current) return;
@@ -26,6 +28,9 @@ export default function PulsarIcon({
       ease: "power2.out",
     });
   }, [selected]);
+
+  const luminanceThreshold = is(">xl") ? 0.45 : is(">=md") ? 0.55 : 0.65;
+  const pixelSize = is(">xl") ? 2 : 1;
 
   return (
     <>
@@ -40,8 +45,8 @@ export default function PulsarIcon({
       </group>
 
       <EffectComposer>
-        <DitherEffect colorNum={3} />
-        <Bloom luminanceThreshold={0.65} luminanceSmoothing={0.9} />
+        <DitherEffect colorNum={3} pixelSize={pixelSize}/>
+        <Bloom luminanceThreshold={luminanceThreshold} luminanceSmoothing={0.9} />
       </EffectComposer>
     </>
   );

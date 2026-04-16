@@ -13,7 +13,7 @@ export default function NavBar() {
   const duration = 300;
 
   return (
-    <header className="w-full h-[100px]">
+    <header className="w-full h-[50px] md:h-[50px] lg:h-[50px] xl:h-[70px] 2xl:h-[100px]">
       <nav className="h-full">
         <ul className="flex flex-row gap-2 text-white min-w-0 h-full">
           <li className="flex-grow min-w-0 h-full">

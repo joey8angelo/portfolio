@@ -69,7 +69,7 @@ export default function InfoBox() {
   });
 
   return (
-    <div className="flex flex-col gap-0 p-4 font-[FixedsysExcelsior] text-xl/5 w-full text-glow-sm">
+    <div className="flex flex-col gap-0 p-4 font-[FixedsysExcelsior] leading-none w-full text-glow-sm">
       <InfoEntry label="ACTIVE_VIEW">
         <GlitchWrapper text={activeViewNames[activeTab]} />
       </InfoEntry>

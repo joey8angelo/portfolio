@@ -47,8 +47,8 @@ export default function PulsarMap() {
   const progress = useLoadingStore((state) => state.progress);
   const groupRef = useRef<THREE.Group>(null);
   const tlRef = useRef<gsap.core.Timeline>(null);
-  const { isMobile } = useResponsive();
-  const yPosition = isMobile ? 3 : 1;
+  const { breakpoint } = useResponsive();
+  const yPosition = breakpoint === "sm" ? 3 : 1;
 
   useGSAP(() => {
     if (!groupRef.current) return;
