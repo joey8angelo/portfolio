@@ -90,11 +90,11 @@ export default function AboutContent() {
                   className="text-[var(--color-text-muted)]"
                 />
                 <a
-                  href="https://www.linkedin.com/in/joseph-dangelo/"
+                  href="https://www.linkedin.com/in/joseph-d-angelo-13736a223/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <GlitchText text="linkedin.com/in/joseph-dangelo" />
+                  <GlitchText text="linkedin.com/in/joseph-d-angelo-13736a223/" />
                 </a>
               </span>
             </div>
