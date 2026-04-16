@@ -3,6 +3,7 @@ import { useRef, useEffect, forwardRef } from "react";
 import { Html } from "@react-three/drei/web/Html";
 import { gsap } from "gsap";
 import steppedEase from "../../lib/steppedEase";
+import useNavigationStore from "../../store/useNavigationStore";
 
 const steps = 4;
 const duration = 1.5;
@@ -17,6 +18,7 @@ const SelectionMarker = forwardRef<THREE.Group, SelectionMarkerProps>(
     const tlR = useRef<SVGPathElement>(null);
     const brR = useRef<SVGPathElement>(null);
     const tlRef = useRef<gsap.core.Timeline | null>(null);
+    const { activeTab } = useNavigationStore();
 
     useEffect(() => {
       if (!visible) {
@@ -82,39 +84,41 @@ const SelectionMarker = forwardRef<THREE.Group, SelectionMarkerProps>(
           tlRef.current = null;
         }
       };
-    }, [visible]);
+    }, [visible, activeTab]);
 
     return (
       <group position={position} ref={ref}>
-        {visible && (
+        {activeTab === "sky" && visible && (
           <Html center zIndexRange={[200, 0]}>
-            <svg
-              width="30"
-              height="30"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              style={{
-                shapeRendering: "geometricPrecision",
-                willChange: "transform",
-              }}
-            >
-              <path
-                ref={tlR}
-                d="M4 10V4H10"
-                stroke="#878787"
-                strokeWidth="1"
-                strokeLinecap="square"
-              />
+            <div>
+              <svg
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{
+                  shapeRendering: "geometricPrecision",
+                  willChange: "transform",
+                }}
+              >
+                <path
+                  ref={tlR}
+                  d="M4 10V4H10"
+                  stroke="#878787"
+                  strokeWidth="1"
+                  strokeLinecap="square"
+                />
 
-              <path
-                ref={brR}
-                d="M14 20H20V14"
-                stroke="#878787"
-                strokeWidth="1"
-                strokeLinecap="square"
-              />
-            </svg>
+                <path
+                  ref={brR}
+                  d="M14 20H20V14"
+                  stroke="#878787"
+                  strokeWidth="1"
+                  strokeLinecap="square"
+                />
+              </svg>
+            </div>
           </Html>
         )}
       </group>

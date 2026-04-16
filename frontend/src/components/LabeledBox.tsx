@@ -2,17 +2,16 @@ export default function LabeledBox({
   label,
   children,
   className,
+  pointerEvents = true,
 }: {
   label?: React.ReactNode;
   children?: React.ReactNode;
   className?: string;
+  pointerEvents?: boolean;
 }) {
   return (
     <fieldset
-      className={className}
-      style={{
-        border: "1px solid #878787",
-      }}
+      className={`${className} border-[1px] border-[var(--color-border)] ${pointerEvents ? "pointer-events-auto" : "pointer-events-none"}`}
     >
       {/* take a bite out of the border with the label */}
       {label && (
@@ -25,7 +24,7 @@ export default function LabeledBox({
           {label}
         </legend>
       )}
-      <div className="mt-[-8px] w-full h-full">{children}</div>
+      <div className="w-full h-full">{children}</div>
     </fieldset>
   );
 }

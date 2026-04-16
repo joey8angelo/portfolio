@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import GlitchText from "../GlitchText";
 import useNavigationStore from "../../store/useNavigationStore";
+import LabeledBox from "../LabeledBox";
+import Label from "./Label";
 
 const activeViewNames: Record<string, string> = {
   home: "ROOT/",
@@ -69,24 +71,26 @@ export default function InfoBox() {
   });
 
   return (
-    <div className="flex flex-col gap-0 p-4 font-[FixedsysExcelsior] leading-none w-full text-glow-sm">
-      <InfoEntry label="ACTIVE_VIEW">
-        <GlitchWrapper text={activeViewNames[activeTab]} />
-      </InfoEntry>
-      <InfoEntry label="SYSTEM_NOW">
-        <GlitchText
-          text={datestr}
-          delay={0}
-          flickerProbability={[0.1, 0.2]}
-          stepDuration={[100, 150]}
-          stepProbability={[0.1, 0.2]}
-          charAppearRandomness={[0, 0.3, 0.5, 0.7]}
-        />
-      </InfoEntry>
-      <InfoEntry label="SOURCE">LOS ANGELES, CA, USA</InfoEntry>
-      <InfoEntry label="SESSION_ID">
-        <GlitchWrapper text={`0x${session_id}`} />
-      </InfoEntry>
-    </div>
+    <LabeledBox label={<Label text="Info" />}>
+      <div className="flex flex-col gap-0 px-2 xl:px-4 pb-2 font-[FixedsysExcelsior] leading-none w-full text-glow-sm">
+        <InfoEntry label="ACTIVE_VIEW">
+          <GlitchWrapper text={activeViewNames[activeTab]} />
+        </InfoEntry>
+        <InfoEntry label="SYSTEM_NOW">
+          <GlitchText
+            text={datestr}
+            delay={0}
+            flickerProbability={[0.1, 0.2]}
+            stepDuration={[100, 150]}
+            stepProbability={[0.1, 0.2]}
+            charAppearRandomness={[0, 0.3, 0.5, 0.7]}
+          />
+        </InfoEntry>
+        <InfoEntry label="SOURCE">LOS ANGELES, CA, USA</InfoEntry>
+        <InfoEntry label="SESSION_ID">
+          <GlitchWrapper text={`0x${session_id}`} />
+        </InfoEntry>
+      </div>
+    </LabeledBox>
   );
 }

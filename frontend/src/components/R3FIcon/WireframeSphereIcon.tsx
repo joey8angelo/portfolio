@@ -87,8 +87,7 @@ export default function WireframeSphereIcon({
     return group;
   }, [material]);
 
-
-  const luminanceThreshold = is(">xl") ? 0.70 : is(">=md") ? 0.80 : 0.90;
+  const luminanceThreshold = 0.8;
   const pixelSize = is(">xl") ? 2 : 1;
 
   return (
@@ -111,9 +110,12 @@ export default function WireframeSphereIcon({
       </group>
 
       <EffectComposer>
-        <DitherEffect colorNum={3} pixelSize={pixelSize}/>
+        <DitherEffect colorNum={3} pixelSize={pixelSize} />
 
-        <Bloom luminanceThreshold={luminanceThreshold} luminanceSmoothing={0.9} />
+        <Bloom
+          luminanceThreshold={luminanceThreshold}
+          luminanceSmoothing={0.9}
+        />
       </EffectComposer>
     </>
   );

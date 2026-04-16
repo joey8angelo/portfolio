@@ -6,7 +6,7 @@ import { gsap } from "gsap";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { useGLTF } from "@react-three/drei";
 import { DitherEffect } from "../../features/Effects/Dither/Dither";
-import  useResponsive  from "../../hooks/useResponsive";
+import useResponsive from "../../hooks/useResponsive";
 
 useGLTF.preload("/assets/guy.glb");
 
@@ -66,7 +66,7 @@ export default function GuyIcon({
     guyRef.current.rotation.y += 0.002;
   });
 
-  const luminanceThreshold = is(">xl") ? 0.75 : is(">=md") ? 0.85 : 0.95;
+  const luminanceThreshold = 0.8;
   const pixelSize = is(">xl") ? 2 : 1;
 
   return (
@@ -84,7 +84,10 @@ export default function GuyIcon({
 
       <EffectComposer>
         <DitherEffect colorNum={3} pixelSize={pixelSize} />
-        <Bloom luminanceThreshold={luminanceThreshold} luminanceSmoothing={0.9} />
+        <Bloom
+          luminanceThreshold={luminanceThreshold}
+          luminanceSmoothing={0.9}
+        />
       </EffectComposer>
     </>
   );

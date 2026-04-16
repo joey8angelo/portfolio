@@ -19,7 +19,7 @@ export default function Boot() {
   const bootTxtContainerRef = useRef<HTMLDivElement>(null);
   const lastDisplayedIndexRef = useRef(-1);
 
-  const { breakpoint } = useResponsive();
+  const { is } = useResponsive();
 
   useEffect(() => {
     if (progress === 0) {
@@ -58,8 +58,8 @@ export default function Boot() {
     <Html center>
       <div
         style={{
-          opacity: breakpoint === "sm" ? 0.5 : 1,
-          fontSize: breakpoint === "sm" ? "10px" : "16px",
+          opacity: is("sm") ? 0.5 : 1,
+          fontSize: is("sm") ? "10px" : "16px",
           fontFamily: "ProggyTinySZ",
           fontWeight: 200,
           zIndex: -1,
@@ -69,7 +69,7 @@ export default function Boot() {
           flexDirection: "column",
           justifyContent: "end",
           filter: "brightness(1.5)",
-          paddingLeft: "4rem",
+          paddingLeft: is("sm") ? "0" : "4rem",
         }}
         className="text-glow-xl text-[var(--color-text-primary)]"
         ref={bootTxtContainerRef}

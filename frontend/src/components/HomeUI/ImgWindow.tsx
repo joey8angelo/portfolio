@@ -4,6 +4,8 @@ import Label from "./Label";
 import { useGSAP } from "@gsap/react";
 import { useRef, useState } from "react";
 import { gsap } from "gsap";
+import useResponsive from "../../hooks/useResponsive";
+import steppedEase from "../../lib/steppedEase";
 
 interface LabelProps {
   title: string;
@@ -29,6 +31,7 @@ export default function ImgWindow({
   const windowRef = useRef<HTMLDivElement>(null);
   const [show, setShow] = useState(false);
   const isVideo = imgSrc.endsWith(".webm");
+  const { is } = useResponsive();
   useGSAP(() => {
     if (!windowRef.current) return;
 
@@ -40,7 +43,7 @@ export default function ImgWindow({
         y: 0,
         opacity: 1,
         duration: 0.5,
-        ease: "power2.out",
+        ease: steppedEase("power2.out", 8),
         delay: delay,
         onStart: () => setShow(true),
       },
@@ -67,8 +70,8 @@ export default function ImgWindow({
               <video
                 src={imgSrc}
                 className="pointer-events-none p-3 w-full h-full object-cover"
-                autoPlay
-                loop
+                autoPlay={!is("sm")}
+                loop={!is("sm")}
               >
                 {imgAlt}
               </video>

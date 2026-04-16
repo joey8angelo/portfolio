@@ -6,12 +6,13 @@ import {
 } from "../../lib/getSkyEntry";
 import LabeledBox from "../LabeledBox";
 import GlitchText from "../GlitchText";
-import Label from "./Label";
 import useSkySelectionStore from "../../store/useSkySelectionStore";
+import useResponsive from "../../hooks/useResponsive";
 
 export default function SkyContent() {
   const skySelection = useSkySelectionStore((state) => state.selection);
   const [starData, setStarData] = useState<SkyEntry>(null);
+  const { is } = useResponsive();
 
   useEffect(() => {
     let isMounted = true;
@@ -43,17 +44,23 @@ export default function SkyContent() {
 
   return (
     <LabeledBox
+      pointerEvents={!is("sm")}
       label={
-        <a
-          href={anchorHref}
-          className="cursor-pointer underline text-[var(--color-accent)]"
-        >
-          <Label text={title} />
+        <a href={anchorHref} className="pointer-events-auto">
+          <GlitchText
+            text={title}
+            delay={[0, 400]}
+            flickerProbability={[0.2, 0.6]}
+            stepDuration={[100, 150]}
+            stepProbability={[0.3, 0.4]}
+            className="font-[Terminus] uppercase"
+            revertOnUpdate={true}
+          />
         </a>
       }
-      className="m-4 flex-1 overflow-hidden"
+      className="flex-1 overflow-hidden"
     >
-      <div className="w-full h-full p-4 flex flex-col">
+      <div className="w-full h-full p-4 flex flex-col text-[0.9em] sm:text-sm md:text-md 2xl:text-lg">
         <div className="flex-1 overflow-y-scroll">
           <GlitchText
             text={text}
@@ -69,7 +76,7 @@ export default function SkyContent() {
           flickerProbability={[0.2, 0.6]}
           stepDuration={[15, 30]}
           stepProbability={[0.1, 0.2]}
-          className="w-full pt-2 text-xs 2xl:text-sm text-[var(--color-text-muted)] text-center text-balance text-glow-lg"
+          className="w-full pt-2 text-[0.8em] sm:text-[0.9em] md:text-sm 2xl:text-md text-[var(--color-text-muted)] text-center text-balance text-glow-lg"
         />
       </div>
     </LabeledBox>

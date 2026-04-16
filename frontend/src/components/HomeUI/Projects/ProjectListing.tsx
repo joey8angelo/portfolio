@@ -27,15 +27,15 @@ export default function ProjectListing({
         : "text-[var(--color-text-muted)]";
 
   return (
-    <div className="flex flex-row gap-4">
-      <div className="pr-2">{num.toString().padStart(2, "0")}</div>
+    <div className="flex flex-row gap-2">
+      <div>{num.toString().padStart(2, "0")}</div>
       <LinedText
         text={name}
         enabled={hovered || selected}
         onComplete={() => setCompleted(true)}
       />
       <div>{year}</div>
-      <div className={`${statusCn} pl-2`}>[{status}]</div>
+      <div className={`${statusCn} pl-1`}>[{status}]</div>
     </div>
   );
 }

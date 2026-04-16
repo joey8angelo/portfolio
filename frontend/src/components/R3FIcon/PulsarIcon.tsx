@@ -29,7 +29,7 @@ export default function PulsarIcon({
     });
   }, [selected]);
 
-  const luminanceThreshold = is(">xl") ? 0.45 : is(">=md") ? 0.55 : 0.65;
+  const luminanceThreshold = 0.8;
   const pixelSize = is(">xl") ? 2 : 1;
 
   return (
@@ -45,8 +45,11 @@ export default function PulsarIcon({
       </group>
 
       <EffectComposer>
-        <DitherEffect colorNum={3} pixelSize={pixelSize}/>
-        <Bloom luminanceThreshold={luminanceThreshold} luminanceSmoothing={0.9} />
+        <DitherEffect colorNum={3} pixelSize={pixelSize} />
+        <Bloom
+          luminanceThreshold={luminanceThreshold}
+          luminanceSmoothing={0.9}
+        />
       </EffectComposer>
     </>
   );

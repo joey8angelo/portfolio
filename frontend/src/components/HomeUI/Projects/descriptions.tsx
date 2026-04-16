@@ -217,13 +217,11 @@ export function CellularAutomatonDescription() {
             />
           </li>
         </ul>
-        <span>
-          <GlitchText text="see more about this project " delay={500} />
-          <a href="#" className="underline text-[var(--color-accent)] text-glow-xl">
-            <GlitchText text="here" />
-          </a>
-        </span>
       </div>
+
+      <a href="https://github.com/joey8angelo/cellular-automata-3D">
+        <GlitchText text="Learn more" />
+      </a>
     </ProjectDescription>
   );
 }
@@ -278,13 +276,11 @@ export function CLIRaytracerDescription() {
             />
           </li>
         </ul>
-        <span>
-          <GlitchText text="see more about this project " delay={500} />
-          <a href="#" className="underline text-[var(--color-accent)] text-glow-xl">
-            <GlitchText text="here" />
-          </a>
-        </span>
       </div>
+
+      <a href="https://github.com/joey8angelo/raytracer">
+        <GlitchText text="Learn more" />
+      </a>
     </ProjectDescription>
   );
 }
@@ -330,13 +326,11 @@ export function RegularExpressionEngineDescription() {
             delay={20}
           />
         </span>
-        <span>
-          <GlitchText text="see more about this project " delay={500} />
-          <a href="#" className="underline text-[var(--color-accent)] text-glow-xl">
-            <GlitchText text="here" />
-          </a>
-        </span>
       </div>
+
+      <a href="https://github.com/joey8angelo/Regex">
+        <GlitchText text="Learn more" />
+      </a>
     </ProjectDescription>
   );
 }
@@ -411,13 +405,10 @@ export function FourierApproximationDescription() {
         "
           delay={500}
         />
-        <span>
-          <GlitchText text="see more about this project " delay={500} />
-          <a href="/fourier" className="underline text-[var(--color-accent)] text-glow-xl">
-            <GlitchText text="here" />
-          </a>
-        </span>
       </div>
+      <a href="/fourier">
+        <GlitchText text="Learn more" />
+      </a>
     </ProjectDescription>
   );
 }
@@ -454,13 +445,11 @@ export function NeuralNetworkVisualizerDescription() {
           text="The online demo visualizes the trained network for the MNIST dataset, allowing the user to draw numbers to predict."
           delay={500}
         />
-        <span>
-          <GlitchText text="see more about this project " delay={500} />
-          <a href="/neural-net" className="underline text-[var(--color-accent)] text-glow-xl">
-            <GlitchText text="here" />
-          </a>
-        </span>
       </div>
+
+      <a href="/neural-net">
+        <GlitchText text="Learn more" />
+      </a>
     </ProjectDescription>
   );
 }
@@ -505,13 +494,10 @@ export function ParticleSimulationDescription() {
             />
           </li>
         </ul>
-        <span>
-          <GlitchText text="see more about this project " delay={500} />
-          <a href="/particles" className="underline text-[var(--color-accent)] text-glow-xl">
-            <GlitchText text="here" />
-          </a>
-        </span>
       </div>
+      <a href="/particles">
+        <GlitchText text="Learn more" />
+      </a>
     </ProjectDescription>
   );
 }
