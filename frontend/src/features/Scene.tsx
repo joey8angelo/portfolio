@@ -8,8 +8,7 @@ import { useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
 import useLoadingStore from "../store/useLoadingStore";
-import { useLoader } from "@react-three/fiber";
-import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
+import { useGLTF } from "@react-three/drei";
 
 const sceneControlsSchema = {
   useDebugCamera: false,
@@ -54,7 +53,7 @@ export default function Scene() {
       {/* main scene */}
       <Suspense fallback={null}>
         <group visible={isLoaded}>
-          <primitive object={useLoader(OBJLoader, "/assets/guy.obj")} />
+          <primitive object={useGLTF("/assets/guy.glb").scene} />
           <SkyScene />
         </group>
       </Suspense>
