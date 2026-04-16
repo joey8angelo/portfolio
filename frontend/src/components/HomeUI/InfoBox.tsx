@@ -7,7 +7,7 @@ import Label from "./Label";
 const activeViewNames: Record<string, string> = {
   home: "ROOT/",
   sky: "OBJ_REF/",
-  about: "INFO/",
+  about: "ABOUT/",
 };
 
 // format as yyy.mm.dd // hh:mm:ss PST

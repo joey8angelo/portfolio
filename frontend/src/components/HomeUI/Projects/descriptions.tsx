@@ -1,109 +1,13 @@
-import GlitchText, { type RangeValue } from "../../GlitchText";
+import GlitchText from "../../GlitchText";
 import useShowControls from "../../../store/useShowControls";
-import React, { useEffect, useState } from "react";
-
-interface Conf {
-  linearDelay: number;
-  flickerProbability: RangeValue;
-  stepDuration: number;
-  stepProbability: RangeValue;
-  charAppearRandomness: [number, number, number, number];
-  defaultChar: string;
-  delay?: number;
-}
-
-export function ProjectDescription({
-  name,
-  children,
-  glitchConf = {
-    linearDelay: 20,
-    flickerProbability: [0.2, 0.6],
-    stepDuration: 10,
-    stepProbability: [0.3, 0.4],
-    charAppearRandomness: [0.1, 0.3, 0.6, 0.9],
-    defaultChar: "",
-  },
-  selGlitchConf = {
-    linearDelay: 0,
-    flickerProbability: 0,
-    stepDuration: 0,
-    stepProbability: 0,
-    charAppearRandomness: [0, 0, 0, 0],
-    defaultChar: "",
-    delay: 0,
-  },
-}: {
-  name: string;
-  children: React.ReactNode;
-  glitchConf?: Conf;
-  selGlitchConf?: Conf;
-}) {
-  const [hasSelected] = useState(() => {
-    if (typeof window === "undefined") return false;
-
-    const storedValue = localStorage.getItem(name);
-    if (!storedValue) return false;
-
-    const prevSelected = new Date(storedValue);
-    const dayInMs = 24 * 60 * 60 * 1000;
-
-    return Date.now() - prevSelected.getTime() < dayInMs;
-  });
-
-  useEffect(() => {
-    localStorage.setItem(name, new Date().toISOString());
-  }, [name]);
-
-  const activeConf = hasSelected ? selGlitchConf : glitchConf;
-
-  const injectProps = (
-    nodes: React.ReactNode,
-    totalDelay: { current: number } = { current: 0 },
-  ): React.ReactNode => {
-    return React.Children.map(nodes, (child) => {
-      if (!React.isValidElement(child)) return child;
-
-      const el = child as React.ReactElement<{
-        children?: React.ReactNode;
-        text?: string;
-        delay?: number;
-      }>;
-
-      if (child.type === GlitchText) {
-        const text = el.props.text || "";
-        const userDelay = activeConf.delay ?? el.props.delay ?? 0;
-
-        const delay = totalDelay.current + userDelay;
-        totalDelay.current += text.length * activeConf.linearDelay + userDelay;
-
-        return React.cloneElement(el, {
-          ...el.props,
-          ...activeConf,
-          delay,
-        });
-      }
-
-      if (child.props && el.props.children) {
-        const result = injectProps(el.props.children, totalDelay);
-        return React.cloneElement(el, {
-          children: result,
-        });
-      }
-
-      return child;
-    });
-  };
-
-  return (
-    <div className="w-full h-full flex flex-col flex-1">
-      {injectProps(children)}
-    </div>
-  );
-}
+import GlitchTextAnimationWrapper from "../../GlitchTextAnimationWrapper";
 
 export function LiveSkyVisualizerDescription() {
   return (
-    <ProjectDescription name="LiveSkyVisualizer">
+    <GlitchTextAnimationWrapper
+      name="LiveSkyVisualizer"
+      className="w-full h-full flex flex-col flex-1"
+    >
       <div className="flex-1 flex flex-col gap-4 items-left">
         <GlitchText text="This ones easy, you're looking at it..." delay={0} />
         <span>
@@ -140,13 +44,16 @@ export function LiveSkyVisualizerDescription() {
         delay={-9000}
         className="text-[var(--color-text-muted)] italic text-xs md:text-xs lg:text-sm"
       />
-    </ProjectDescription>
+    </GlitchTextAnimationWrapper>
   );
 }
 
 export function CellularAutomatonDescription() {
   return (
-    <ProjectDescription name="CellularAutomaton">
+    <GlitchTextAnimationWrapper
+      name="CellularAutomaton"
+      className="w-full h-full flex flex-col flex-1"
+    >
       <div className="flex-1 flex flex-col gap-4 items-left">
         <GlitchText text="A GPU-accelerated 3D cellular automaton (3D 'Game of Life') with real-time volume rendering using ray voxel traversal." />
         <GlitchText
@@ -222,13 +129,16 @@ export function CellularAutomatonDescription() {
       <a href="https://github.com/joey8angelo/cellular-automata-3D">
         <GlitchText text="Learn more" />
       </a>
-    </ProjectDescription>
+    </GlitchTextAnimationWrapper>
   );
 }
 
 export function CLIRaytracerDescription() {
   return (
-    <ProjectDescription name="CLIRaytracer">
+    <GlitchTextAnimationWrapper
+      name="CLIRaytracer"
+      className="w-full h-full flex flex-col flex-1"
+    >
       <div className="flex-1 flex flex-col gap-4 items-left">
         <span>
           <GlitchText text="A simple ray tracer written in " />
@@ -281,13 +191,16 @@ export function CLIRaytracerDescription() {
       <a href="https://github.com/joey8angelo/raytracer">
         <GlitchText text="Learn more" />
       </a>
-    </ProjectDescription>
+    </GlitchTextAnimationWrapper>
   );
 }
 
 export function RegularExpressionEngineDescription() {
   return (
-    <ProjectDescription name="RegularExpressionEngine">
+    <GlitchTextAnimationWrapper
+      name="RegularExpressionEngine"
+      className="w-full h-full flex flex-col flex-1"
+    >
       <div className="flex-1 flex flex-col gap-4 items-left">
         <span>
           <GlitchText text="This project is a " />
@@ -331,13 +244,16 @@ export function RegularExpressionEngineDescription() {
       <a href="https://github.com/joey8angelo/Regex">
         <GlitchText text="Learn more" />
       </a>
-    </ProjectDescription>
+    </GlitchTextAnimationWrapper>
   );
 }
 
 export function FourierApproximationDescription() {
   return (
-    <ProjectDescription name="FourierApproximation">
+    <GlitchTextAnimationWrapper
+      name="FourierApproximation"
+      className="w-full h-full flex flex-col flex-1"
+    >
       <div className="flex-1 flex flex-col gap-4 items-left">
         <span>
           <GlitchText text="I was inspired by " />
@@ -409,13 +325,16 @@ export function FourierApproximationDescription() {
       <a href="/fourier">
         <GlitchText text="Learn more" />
       </a>
-    </ProjectDescription>
+    </GlitchTextAnimationWrapper>
   );
 }
 
 export function NeuralNetworkVisualizerDescription() {
   return (
-    <ProjectDescription name="NeuralNetworkVisualizer">
+    <GlitchTextAnimationWrapper
+      name="NeuralNetworkVisualizer"
+      className="w-full h-full flex flex-col flex-1"
+    >
       <div className="flex-1 flex flex-col gap-4 items-left">
         <span>
           <GlitchText text="The Neural Network is a very important concept in Machine Learning and Artificial Intelligence. I wanted to dive deep into designing one to fully understand how a neural network learns with gradient descent, how forward and backward propagation work, and the interesting optimization problems of training, such as dynamically setting the learning rate with " />
@@ -450,13 +369,16 @@ export function NeuralNetworkVisualizerDescription() {
       <a href="/neural-net">
         <GlitchText text="Learn more" />
       </a>
-    </ProjectDescription>
+    </GlitchTextAnimationWrapper>
   );
 }
 
 export function ParticleSimulationDescription() {
   return (
-    <ProjectDescription name="ParticleSimulation">
+    <GlitchTextAnimationWrapper
+      name="ParticleSimulation"
+      className="w-full h-full flex flex-col flex-1"
+    >
       <div className="flex-1 flex flex-col gap-4 items-left">
         <GlitchText text="A GPU-accelerated particle simulation with up to 10 million particles driven by simplex noise flow fields." />
         <GlitchText
@@ -498,6 +420,6 @@ export function ParticleSimulationDescription() {
       <a href="/particles">
         <GlitchText text="Learn more" />
       </a>
-    </ProjectDescription>
+    </GlitchTextAnimationWrapper>
   );
 }

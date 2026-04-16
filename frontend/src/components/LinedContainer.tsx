@@ -1,4 +1,3 @@
-import GlitchText from "./GlitchText";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import steppedEase from "../lib/steppedEase";
@@ -6,14 +5,16 @@ import { useGSAP } from "@gsap/react";
 
 const steps = 15;
 
-export default function LinedText({
-  text,
-  enabled,
-  onComplete,
+export default function LinedContainer({
+  children,
+  enabled = false,
+  lineClassName,
+  lineEnabledClassName,
 }: {
-  text: string;
-  enabled: boolean;
-  onComplete: () => void;
+  children: React.ReactNode;
+  enabled?: boolean;
+  lineClassName?: string;
+  lineEnabledClassName?: string;
 }) {
   const lhsRef = useRef<HTMLDivElement>(null);
   const rhsRef = useRef<HTMLDivElement>(null);
@@ -60,7 +61,7 @@ export default function LinedText({
     );
 
     return () => tl.current?.kill();
-  }, [text]);
+  }, []);
 
   useGSAP(
     () => {
@@ -76,31 +77,17 @@ export default function LinedText({
     { dependencies: [enabled] },
   );
 
-  const bgClass = enabled
-    ? "bg-[var(--color-text-primary)]"
-    : "bg-[var(--color-text-muted)]";
-  const textClass = enabled
-    ? "text-[var(--color-text-primary)]"
-    : "text-[var(--color-text-muted)]";
-
   return (
     <div className="flex-1 flex flex-row justify-center items-center gap-2">
-      <div ref={lhsRef} className={`h-[2px] ${bgClass} rounded-full`} />
-      <GlitchText
-        text={text}
-        delay={[0, 1500]}
-        flickerProbability={0}
-        stepDuration={[10, 300]}
-        stepProbability={[0.3, 0.4]}
-        charAppearRandomness={[0.1, 0.3, 0.6, 0.9]}
-        steps={["", "", "", ""]}
-        defaultChar=""
-        onComplete={() => {
-          onComplete();
-        }}
-        className={`${textClass} text-glow-md`}
+      <div
+        ref={lhsRef}
+        className={`${enabled ? lineEnabledClassName : lineClassName}`}
       />
-      <div ref={rhsRef} className={`h-[2px] ${bgClass} rounded-full flex-1`} />
+      {children}
+      <div
+        ref={rhsRef}
+        className={`${enabled ? lineEnabledClassName : lineClassName} flex-1`}
+      />
     </div>
   );
 }
