@@ -50,7 +50,7 @@ export default function Home() {
           id="main-content"
         >
           {/* UI */}
-          <HomeUI className="absolute inset-0 z-50" />
+          <HomeUI className="absolute inset-0 z-50 h-[100dvh]" />
 
           {/* 3D SCENE */}
           <Canvas
