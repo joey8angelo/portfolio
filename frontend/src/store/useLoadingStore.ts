@@ -11,8 +11,8 @@ interface LoadingState {
 // global store for the loading state
 // animates the progress to the target value
 const useLoadingStore = create<LoadingState>((set, get) => ({
-  progress: 100,
-  isLoaded: true,
+  progress: 0,
+  isLoaded: false,
   _proxy: { value: 0 },
   updateProgress: (target, duration = 0.5, ease = "power2.out") => {
     const { _proxy } = get();
