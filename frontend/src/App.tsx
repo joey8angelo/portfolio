@@ -1,52 +1,28 @@
-import { Canvas } from "@react-three/fiber";
-import { Leva } from "leva";
 import "./App.css";
-import Scene from "./features/Scene";
-
-import { Stats } from "@react-three/drei";
-import { LoadingStoreSync, useLoadingStore, useNavigationStore } from "./store";
-import { useEffect } from "react";
-
-const loadingDuration = 10;
+import Home from "./pages/Home";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Fourier from "./pages/legacy/Fourier";
+import LL1 from "./pages/legacy/LL1";
+import LR1 from "./pages/legacy/LR1";
+import Map from "./pages/legacy/Map";
+import NeuralNet from "./pages/legacy/NeuralNet";
+import PlantSystem from "./pages/legacy/PlantSystem";
+import Particles from "./pages/Particles";
 
 function App() {
-  const isDev = import.meta.env.DEV;
-
-  const { setActiveTab } = useNavigationStore();
-  const { isLoaded } = useLoadingStore();
-
-  useEffect(() => {
-    if (isLoaded) {
-      setTimeout(() => {
-        setActiveTab("home");
-      }, 800);
-    }
-  }, [isLoaded, setActiveTab]);
-
   return (
-    <>
-      {isDev && <Leva />}
-      <div className="w-[100dvw] h-[100dvh] grid grid-cols-1 grid-rows-1">
-        <Canvas
-          className="scene"
-          style={{ zIndex: 0 }}
-          raycaster={{
-            params: {
-              Points: { threshold: 0.1 },
-              Mesh: { threshold: 0.1 },
-              Line: { threshold: 0.1 },
-              LOD: { threshold: 0.1 },
-              Sprite: { threshold: 0.1 },
-            },
-          }}
-        >
-          {isDev && <Stats />}
-
-          <LoadingStoreSync duration={loadingDuration} ease={"power1.out"} />
-          <Scene />
-        </Canvas>
-      </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/fourier" element={<Fourier />} />
+        <Route path="/ll1" element={<LL1 />} />
+        <Route path="/lr1" element={<LR1 />} />
+        <Route path="/map" element={<Map />} />
+        <Route path="/neural-net" element={<NeuralNet />} />
+        <Route path="/plant-system" element={<PlantSystem />} />
+        <Route path="/particles" element={<Particles />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

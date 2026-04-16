@@ -2,12 +2,14 @@ import { useLoader, type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import { EXRLoader } from "three/examples/jsm/loaders/EXRLoader.js";
 import * as THREE from "three";
-import { useLoadingStore } from "../../store";
 import { gsap } from "gsap";
-import { useNavigationStore } from "../../store";
+import useLoadingStore from "../../store/useLoadingStore";
+import useSkySelectionStore from "../../store/useSkySelectionStore";
 
 useLoader.preload(EXRLoader, "/textures/milkyway_2020_4k.exr");
 
+// Sphere with milky way texture in celestial coordinates
+// https://svs.gsfc.nasa.gov/4851
 export default function MilkyWay({ radius }: { radius: number }) {
   const texture = useLoader(EXRLoader, "/textures/milkyway_2020_4k.exr");
   const configuredTexture = useMemo(() => {
@@ -20,7 +22,9 @@ export default function MilkyWay({ radius }: { radius: number }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const isLoaded = useLoadingStore((state) => state.isLoaded);
 
-  const { clearSkySelection } = useNavigationStore();
+  const clearSkySelection = useSkySelectionStore(
+    (state) => state.clearSkySelection,
+  );
 
   useEffect(() => {
     if (isLoaded && meshRef.current) {
@@ -33,9 +37,10 @@ export default function MilkyWay({ radius }: { radius: number }) {
   }, [isLoaded]);
 
   const handlePointerDown = (e: ThreeEvent<PointerEvent>) => {
-    e.stopPropagation();
-    console.log(e);
-    clearSkySelection();
+    if (e.button === 0) {
+      e.stopPropagation();
+      clearSkySelection();
+    }
   };
 
   if (!texture)

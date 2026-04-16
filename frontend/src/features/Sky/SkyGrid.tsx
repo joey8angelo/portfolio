@@ -1,6 +1,15 @@
 import * as THREE from "three";
 import { useMemo } from "react";
-import { useDebugControls } from "../../hooks/useDebugControls";
+import { useControls } from "leva";
+
+const gridControlsSchema = {
+  gridOpacity: {
+    value: 0.2,
+    min: 0,
+    max: 1,
+    step: 0.01,
+  },
+};
 
 export default function SkyGrid({
   color,
@@ -13,14 +22,7 @@ export default function SkyGrid({
   lineWidth: number;
   rotation?: [number, number, number];
 }) {
-  const { gridOpacity } = useDebugControls({
-    gridOpacity: {
-      value: 0.2,
-      min: 0,
-      max: 1,
-      step: 0.01,
-    },
-  });
+  const { gridOpacity } = useControls("Sky", gridControlsSchema);
 
   const segments = 12;
   const highlightSegments = segments / 2;

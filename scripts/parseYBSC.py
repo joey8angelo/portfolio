@@ -187,9 +187,9 @@ dec_rad = (decs.astype(float) / 180) * np.pi
 phi = -ra_rad
 theta = dec_rad
 
-xs = np.cos(theta) * np.cos(phi)
-ys = np.sin(theta)
-zs = np.cos(theta) * np.sin(phi)
+xs = np.round(np.cos(theta) * np.cos(phi), decimals=4)
+ys = np.round(np.sin(theta), decimals=4)
+zs = np.round(np.cos(theta) * np.sin(phi), decimals=4)
 
 HDs = np.where(stars_data[3] != None, stars_data[3], "")
 SAOs = np.where(stars_data[4] != None, stars_data[4], "")

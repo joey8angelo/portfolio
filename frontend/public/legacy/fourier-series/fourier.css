@@ -1,0 +1,76 @@
+body{
+    margin: 0;
+    overflow: hidden;
+    width: auto;
+    height: auto;
+}
+.canv{
+    position: absolute;
+    top:0px;
+    left: 0px;
+    z-index: -999;
+    width: 100vw;
+    height: 100vh;
+}
+.options{
+    position: absolute;
+    left: 10px;
+    width: fit-content;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    font-size: 15px;
+    direction: rtl;
+    overflow: scroll;
+    user-select: none;
+}
+.option{
+    direction: ltr;
+    margin-left: 5px;
+    margin-bottom: 10px;
+    text-align: left;
+    user-select: none;
+}
+input{
+    width: 100px;
+    background-color: #262222;
+    color: white;
+    border-radius: 5px;
+    border-color: gray;
+    text-align: left;
+    overflow-wrap:normal;
+    overflow: hidden;
+}
+p{
+    color: white;
+    margin-bottom: 3px;
+    margin-top: 0px;
+    overflow-wrap:normal;
+    overflow: hidden;
+    user-select: none;
+}
+
+.checkboxGrid {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+.checkboxGrid div{
+    width: fit-content;
+    height: fit-content;
+}
+.checkboxGrid input{
+    margin-top: 0px;
+    margin-bottom: 2px;
+    width: fit-content;
+    height: fit-content;
+}
+button{
+    margin-bottom: 0px;
+}
+a{
+    color: white;
+    text-decoration: underline;
+}

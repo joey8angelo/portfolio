@@ -1,8 +1,8 @@
 import { Html } from "@react-three/drei";
-import bootTxt from "../../assets/boot.txt?raw";
+import bootTxt from "./boot.txt?raw";
 import { useEffect, useRef } from "react";
-import { useResponsive } from "../../hooks";
-import { useLoadingStore } from "../../store";
+import useResponsive from "../../hooks/useResponsive";
+import useLoadingStore from "../../store/useLoadingStore";
 
 const bootLines = bootTxt.split("\n");
 const bootLinesMarked = bootLines.map((line) => {
@@ -19,7 +19,7 @@ export default function Boot() {
   const bootTxtContainerRef = useRef<HTMLDivElement>(null);
   const lastDisplayedIndexRef = useRef(-1);
 
-  const { isMobile } = useResponsive();
+  const { breakpoint } = useResponsive();
 
   useEffect(() => {
     if (progress === 0) {
@@ -58,20 +58,20 @@ export default function Boot() {
     <Html center>
       <div
         style={{
-          color: "white",
-          opacity: isMobile ? 0.5 : 1,
-          fontSize: isMobile ? "10px" : "16px",
-          fontFamily: "StampRSPKOne-ExtraLight",
+          opacity: breakpoint === "sm" ? 0.5 : 1,
+          fontSize: breakpoint === "sm" ? "10px" : "16px",
+          fontFamily: "ProggyTinySZ",
+          fontWeight: 200,
           zIndex: -1,
           width: "100vw",
           height: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "end",
-          textShadow:
-            "0 0 8px rgba(255, 255, 255, 0.8), 0 0 15px rgba(255, 255, 255, 0.5)",
           filter: "brightness(1.5)",
+          paddingLeft: "4rem",
         }}
+        className="text-glow-xl text-[var(--color-text-primary)]"
         ref={bootTxtContainerRef}
       ></div>
     </Html>
