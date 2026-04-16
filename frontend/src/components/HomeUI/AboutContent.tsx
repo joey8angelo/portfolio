@@ -14,7 +14,7 @@ export default function AboutContent() {
           name="AboutMe"
           className="w-full h-full flex flex-col flex-1"
         >
-          <div className="flex-1 flex flex-col justify-between">
+          <div className="flex-1 flex flex-col justify-between gap-4">
             <div className="flex flex-col gap-4">
               <GlitchText text="Hi, my name is Joseph D'Angelo, but I go by joey." />
 
@@ -30,7 +30,7 @@ export default function AboutContent() {
               <GlitchText text="I have a passion for building performant and fun applications, and I am always looking for new challenges to tackle. Including programming, my other interests include: " />
             </div>
 
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-1">
                 <GlitchText
                   delay={500}
