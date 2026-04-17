@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
   getPlanetEntry,
   getStarEntry,
+  getSatelliteEntry,
   type SkyEntry,
 } from "../../lib/getSkyEntry";
 import LabeledBox from "../LabeledBox";
@@ -31,6 +32,8 @@ export default function SkyContent() {
     skyEntry = getPlanetEntry(skySelection.id);
   } else if (skySelection?.type === "star") {
     skyEntry = starData;
+  } else if (skySelection?.type === "satellite") {
+    skyEntry = getSatelliteEntry(skySelection.id, skySelection.name);
   }
 
   const title =

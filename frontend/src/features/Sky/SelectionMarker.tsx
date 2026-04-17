@@ -4,9 +4,16 @@ import { Html } from "@react-three/drei/web/Html";
 import { gsap } from "gsap";
 import steppedEase from "../../lib/steppedEase";
 import useNavigationStore from "../../store/useNavigationStore";
+import useSkySelectionStore from "../../store/useSkySelectionStore";
 
 const steps = 4;
 const duration = 1.5;
+
+const markerColor = {
+  planet: "#FFB347",
+  satellite: "#87CEEB",
+  star: "#FFFFFF",
+};
 
 interface SelectionMarkerProps {
   visible: boolean;
@@ -19,6 +26,9 @@ const SelectionMarker = forwardRef<THREE.Group, SelectionMarkerProps>(
     const brR = useRef<SVGPathElement>(null);
     const tlRef = useRef<gsap.core.Timeline | null>(null);
     const { activeTab } = useNavigationStore();
+    const { selection } = useSkySelectionStore();
+
+    const currentColor = selection ? markerColor[selection.type] : "#878787";
 
     useEffect(() => {
       if (!visible) {
@@ -40,7 +50,7 @@ const SelectionMarker = forwardRef<THREE.Group, SelectionMarkerProps>(
           .to(tlR.current, {
             x: 2,
             y: 2,
-            stroke: "#FFFFFF",
+            stroke: currentColor,
             duration: duration,
             ease: steppedEase("power4.out", steps),
           })
@@ -49,7 +59,7 @@ const SelectionMarker = forwardRef<THREE.Group, SelectionMarkerProps>(
             {
               x: -2,
               y: -2,
-              stroke: "#FFFFFF",
+              stroke: currentColor,
               duration: duration,
               ease: steppedEase("power4.out", steps),
             },
@@ -84,7 +94,7 @@ const SelectionMarker = forwardRef<THREE.Group, SelectionMarkerProps>(
           tlRef.current = null;
         }
       };
-    }, [visible, activeTab]);
+    }, [visible, activeTab, currentColor]);
 
     return (
       <group position={position} ref={ref}>

@@ -8,7 +8,6 @@ import { useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "@react-three/drei";
 import useLoadingStore from "../store/useLoadingStore";
-import { useGLTF } from "@react-three/drei";
 
 const sceneControlsSchema = {
   useDebugCamera: false,
@@ -53,7 +52,6 @@ export default function Scene() {
       {/* main scene */}
       <Suspense fallback={null}>
         <group visible={isLoaded}>
-          <primitive object={useGLTF("/assets/guy.glb").scene} />
           <SkyScene />
         </group>
       </Suspense>

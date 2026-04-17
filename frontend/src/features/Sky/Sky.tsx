@@ -10,6 +10,7 @@ import Planets from "./Planets";
 import { EffectComposer, ToneMapping } from "@react-three/postprocessing";
 import { HueSaturation } from "@react-three/postprocessing";
 import useLoadingStore from "../../store/useLoadingStore";
+import Satellites from "./Satellites";
 
 const lat = Number(import.meta.env.VITE_LAT);
 const lon = Number(import.meta.env.VITE_LON);
@@ -24,6 +25,7 @@ const celestialControlsSchema = {
   showStars: true,
   showMilkyWay: true,
   showPlanets: true,
+  showSatellites: true,
 };
 
 // Objects that appear to rotate with the sky
@@ -35,10 +37,13 @@ function CelestialScene() {
   const latRad = useMemo(() => (lat * Math.PI) / 180, []);
   const RADS_PER_SECOND = (2 * Math.PI) / 86400;
 
-  const { showEquatorial, showStars, showMilkyWay, showPlanets } = useControls(
-    "Sky",
-    celestialControlsSchema,
-  );
+  const {
+    showEquatorial,
+    showStars,
+    showMilkyWay,
+    showPlanets,
+    showSatellites,
+  } = useControls("Sky", celestialControlsSchema);
 
   useFrame((_, delta) => {
     if (uniGroup.current) {
@@ -58,7 +63,7 @@ function CelestialScene() {
         {showEquatorial && (
           <SkyGrid color="cyan" radius={gridR} lineWidth={0.01} />
         )}
-        {/* <Satellites /> ???*/}
+        {showSatellites && <Satellites radius={planetsR - 0.1} />}
       </group>
     </group>
   );
@@ -87,7 +92,7 @@ export default function SkyScene() {
       {showAxes && <axesHelper args={[5]} />}
 
       {showAzimuthal && (
-        <SkyGrid color="#8a5137" radius={gridR} lineWidth={0.01} />
+        <SkyGrid color="#ee895b" radius={gridR} lineWidth={0.01} />
       )}
 
       <TerrestrialScene />

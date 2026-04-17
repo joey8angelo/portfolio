@@ -1,5 +1,6 @@
 import parseStarName from "./parseStarName";
 import { getPlanetData } from "./planetData";
+import { satelliteData } from "./satelliteData";
 
 type WikiPageEntry = {
   canonicalurl: string;
@@ -120,4 +121,15 @@ export function getPlanetEntry(id: number): SkyEntry {
         "THIS IS BAD, THIS SHOULD NEVER HAPPEN. YOU DID SOMETHING WRONG BUSTER.",
     };
   }
+}
+
+export function getSatelliteEntry(id: number, name: string): SkyEntry {
+  const satData = (
+    satelliteData as Record<number, { url: string; extract: string }>
+  )[id];
+  return {
+    title: name,
+    url: satData?.url || "#",
+    extract: satData?.extract || "No information found",
+  };
 }

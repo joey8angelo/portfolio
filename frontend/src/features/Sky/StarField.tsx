@@ -223,6 +223,8 @@ export default function StarField({
         ),
       );
 
+      console.log("Star clicked:", parsedStars[e.index]);
+
       setActiveTab("sky");
     }
   };

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-type SkySelectionType = "star" | "planet";
+type SkySelectionType = "star" | "planet" | "satellite";
 
 interface SkySelection {
   type: SkySelectionType;
