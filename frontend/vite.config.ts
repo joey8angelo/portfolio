@@ -8,5 +8,8 @@ export default defineConfig({
   plugins: [react(), glsl(), tailwindcss()],
   build: {
     target: "esnext"
+  },
+  worker: {
+    format: "es"
   }
 });
