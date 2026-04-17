@@ -201,7 +201,7 @@ if __name__ == "__main__":
     ra_hms = getattr(coords, "ra").hms
     dec_dms = getattr(coords, "dec").signed_dms
 
-    HDs = np.where(stars_data[3] != None, stars_data[3], "")
+    DMs = np.where(stars_data[3] != None, stars_data[3], "")
     SAOs = np.where(stars_data[4] != None, stars_data[4], "")
     bvs = np.where(
         stars_data[31] != None, stars_data[31], spec_type_to_bv(stars_data[37])
@@ -213,7 +213,7 @@ if __name__ == "__main__":
         [
             stars_data[0],
             stars_data[1],
-            HDs,
+            DMs,
             SAOs,
             bvs,
             mags,
