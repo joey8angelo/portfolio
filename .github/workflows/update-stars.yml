@@ -1,0 +1,38 @@
+name: Update Stars
+
+on:
+  schedule:
+    - cron: "0 0 1 1 *" # 00:00 on jan 1st
+  workflow_dispatch:
+
+jobs:
+  update-stars:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install astropy numpy
+
+      - name: Run parseYBSC.py
+        run: |
+          cd scripts
+          python parseYBSC.py
+
+      - name: Copy generated file to assets
+        run: |
+          cp scripts/data/ybsc_parsed.csv frontend/public/assets/ybsc_parsed.csv
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(data): auto-update star positions"
+          file_pattern: frontend/public/assets/ybsc_parsed.csv

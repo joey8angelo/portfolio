@@ -1,0 +1,38 @@
+name: Update Satellites
+
+on:
+  schedule:
+    - cron: "0 0 * * 0" # 00:00 on sundays
+  workflow_dispatch:
+
+jobs:
+  update-satellites:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run fetchSatelliteData.py
+        run: |
+          cd scripts
+          python fetchSatelliteData.py
+
+      - name: Copy generated file to assets
+        run: |
+          cp scripts/data/satellite_data.json frontend/public/assets/satellite_data.json
+
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(data): auto-update satellite positions"
+          file_pattern: frontend/public/assets/satellite_data.json
