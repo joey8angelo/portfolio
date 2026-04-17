@@ -3,6 +3,7 @@ from astropy.coordinates import SkyCoord, Distance, FK5
 from astropy.time import Time
 from astropy.units.si import ys
 import numpy as np
+from typing import cast, Any
 
 
 def parse_ybsc_line(line: str):
@@ -138,93 +139,103 @@ def spec_type_to_bv(spec_types):
     return np.select(conds, choices, default=0.65)
 
 
-print("Parsing YBSC data...")
-stars_data = []
-with open("ybsc5.txt", "r") as f:
-    for line in f:
-        if line.strip():
-            data = parse_ybsc_line(line)
-            if data[19] is not None and data[22] is not None:
-                stars_data.append(data)
+if __name__ == "__main__":
+    print("Parsing YBSC data...")
 
-stars_data = np.array(stars_data).T
+    stars_data = []
+    with open("./data/ybsc5.txt", "r") as f:
+        for line in f:
+            if line.strip():
+                data = parse_ybsc_line(line)
+                if data[19] is not None and data[22] is not None:
+                    stars_data.append(data)
 
-ras = stars_data[19] + stars_data[20] / 60 + stars_data[21] / 3600
-decs = np.where(
-    stars_data[22] == "+",
-    stars_data[23] + stars_data[24] / 60 + stars_data[25] / 3600,
-    -(stars_data[23] + stars_data[24] / 60 + stars_data[25] / 3600),
-)
+    stars_data = np.array(stars_data).T
 
-
-pmra_mas = (stars_data[39] * u.arcsec / u.yr).to(u.mas / u.yr)
-
-pmdec_mas = (stars_data[40] * u.arcsec / u.yr).to(u.mas / u.yr)
-
-parallax = stars_data[42] * u.arcsecond
-
-radvel_kms = stars_data[43] * u.km / u.s
-
-coords = (
-    SkyCoord(
-        ra=ras * u.hourangle,
-        dec=decs * u.deg,
-        pm_ra_cosdec=pmra_mas,
-        pm_dec=pmdec_mas,
-        radial_velocity=radvel_kms,
-        frame=FK5(equinox=Time("J2000.0")),
-        obstime=Time("J2000.0"),
-        distance=Distance(parallax=parallax, allow_negative=True),
+    # get RA and Dec in degrees
+    ras = stars_data[19] + stars_data[20] / 60 + stars_data[21] / 3600
+    decs = np.where(
+        stars_data[22] == "+",
+        stars_data[23] + stars_data[24] / 60 + stars_data[25] / 3600,
+        -(stars_data[23] + stars_data[24] / 60 + stars_data[25] / 3600),
     )
-    .apply_space_motion(new_obstime=Time.now())
-    .transform_to(FK5(equinox=Time.now()))
-)
 
+    # convert proper motion to mas/yr
+    pmra_mas = (stars_data[39] * u.arcsec / u.yr).to(u.mas / u.yr)
+    pmdec_mas = (stars_data[40] * u.arcsec / u.yr).to(u.mas / u.yr)
 
-ra_rad = (ras.astype(float) / 24) * np.pi * 2
-dec_rad = (decs.astype(float) / 180) * np.pi
+    # parallax in arcseconds
+    parallax = stars_data[42] * u.arcsecond
 
-phi = -ra_rad
-theta = dec_rad
+    # radial velocity in km/s
+    radvel_kms = stars_data[43] * u.km / u.s
 
-xs = np.round(np.cos(theta) * np.cos(phi), decimals=4)
-ys = np.round(np.sin(theta), decimals=4)
-zs = np.round(np.cos(theta) * np.sin(phi), decimals=4)
-
-HDs = np.where(stars_data[3] != None, stars_data[3], "")
-SAOs = np.where(stars_data[4] != None, stars_data[4], "")
-bvs = np.where(stars_data[31] != None, stars_data[31], spec_type_to_bv(stars_data[37]))
-
-mags = np.where(stars_data[28] != None, stars_data[28], 6.0)
-
-
-data = np.array(
-    [
-        stars_data[0],
-        stars_data[1],
-        HDs,
-        SAOs,
-        bvs,
-        mags,
-        xs,
-        ys,
-        zs,
-        stars_data[19],
-        stars_data[20],
-        stars_data[21],
-        stars_data[22],
-        stars_data[23],
-        stars_data[24],
-        stars_data[25],
-        stars_data[37],
-        stars_data[39],
-        stars_data[40],
-    ]
-).T
-
-with open("ybsc_parsed.csv", "w") as f:
-    f.write(
-        "HR,Name,DM,SAO,B-V,Vmag,x,y,z,RAh,RAm,RAs,DEsn,DEd,DEm,DEs,SpType,pmRA,pmDE\n"
+    # create SkyCoord object
+    coords = (
+        SkyCoord(
+            ra=ras * u.hourangle,
+            dec=decs * u.deg,
+            pm_ra_cosdec=pmra_mas,
+            pm_dec=pmdec_mas,
+            radial_velocity=radvel_kms,
+            frame=FK5(equinox=Time("J2000.0")),
+            obstime=Time("J2000.0"),
+            distance=Distance(parallax=parallax, allow_negative=True),
+        )
+        .apply_space_motion(new_obstime=Time.now())
+        .transform_to(FK5(equinox=Time.now()))
     )
-    for row in data:
-        f.write(",".join(map(str, row)) + "\n")
+
+    # Actually use the SkyCoords to get cartesian coordinates
+    ra_rad = cast(np.ndarray, cast(Any, coords.ra).rad)
+    dec_rad = cast(np.ndarray, cast(Any, coords.dec).rad)
+
+    phi = -ra_rad
+    theta = dec_rad
+
+    xs = np.round(np.cos(theta) * np.cos(phi), decimals=4)
+    ys = np.round(np.sin(theta), decimals=4)
+    zs = np.round(np.cos(theta) * np.sin(phi), decimals=4)
+
+    # Get current RA and Dec in hms/dms format
+    ra_hms = getattr(coords, "ra").hms
+    dec_dms = getattr(coords, "dec").signed_dms
+
+    HDs = np.where(stars_data[3] != None, stars_data[3], "")
+    SAOs = np.where(stars_data[4] != None, stars_data[4], "")
+    bvs = np.where(
+        stars_data[31] != None, stars_data[31], spec_type_to_bv(stars_data[37])
+    )
+
+    mags = np.where(stars_data[28] != None, stars_data[28], 6.0)
+
+    data = np.array(
+        [
+            stars_data[0],
+            stars_data[1],
+            HDs,
+            SAOs,
+            bvs,
+            mags,
+            xs,
+            ys,
+            zs,
+            np.round(ra_hms.h).astype(int),  # RAh
+            np.round(ra_hms.m).astype(int),  # RAm
+            np.round(ra_hms.s, decimals=4),  # RAs
+            np.where(dec_dms.sign < 0, "-", "+"),  # DEsn
+            np.round(dec_dms.d).astype(int),  # DEd
+            np.round(dec_dms.m).astype(int),  # DEm
+            np.round(dec_dms.s, decimals=4),  # DEs
+            stars_data[37],
+            stars_data[39],
+            stars_data[40],
+        ]
+    ).T
+
+    with open("./data/ybsc_parsed.csv", "w") as f:
+        f.write(
+            "HR,Name,DM,SAO,B-V,Vmag,x,y,z,RAh,RAm,RAs,DEsn,DEd,DEm,DEs,SpType,pmRA,pmDE\n"
+        )
+        for row in data:
+            f.write(",".join(map(str, row)) + "\n")

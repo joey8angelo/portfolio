@@ -1,4 +1,4 @@
-with open("./boot.txt") as f:
+with open("./data/boot_s.txt") as f:
     boot = f.read()
 
 lines = boot.splitlines()
@@ -13,5 +13,5 @@ for i, lineNum in enumerate(emptyLines):
     line = lines[lineNum]
     lines[lineNum] = line.replace("[]", f"[ {int(((i+1)/numEmptyLines)*100):0{3}d}% ]")
 
-with open("./boot_p.txt", "w") as f:
+with open("./data/boot.txt", "w") as f:
     f.write("\n".join(lines))
