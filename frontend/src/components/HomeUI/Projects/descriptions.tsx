@@ -23,7 +23,7 @@ export function LiveSkyVisualizerDescription() {
         </span>
 
         <GlitchText
-          text="It features all of the stars from the Yale Bright Star Catalog, all the planets, the milky way in the background, satellites(TODO), and planes(TODO?). Each object in the sky is clickable, so learn something new about the universe!"
+          text="It features all of the stars from the Yale Bright Star Catalog, all the planets, the milky way in the background and visible satellites. Each object in the sky is clickable, so learn something new about the universe!"
           delay={1000}
         />
         <span>
