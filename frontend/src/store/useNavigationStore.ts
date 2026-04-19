@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { trackEvent } from "../hooks/useAnalytics";
 
 type TabType = "home" | "about" | "sky";
 
@@ -7,10 +8,13 @@ interface NavigationState {
   setActiveTab: (tab: TabType) => void;
 }
 
-const useNavigationStore = create<NavigationState>((set) => ({
+const useNavigationStore = create<NavigationState>((set, get) => ({
   activeTab: "home",
   setActiveTab: (tab) => {
-    set({ activeTab: tab });
+    if (get().activeTab !== tab) {
+      trackEvent("Navigation", "Change Tab", tab);
+      set({ activeTab: tab });
+    }
   },
 }));
 

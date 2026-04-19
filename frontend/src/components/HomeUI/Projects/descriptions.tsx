@@ -1,6 +1,7 @@
 import GlitchText from "../../GlitchText";
 import useShowControls from "../../../store/useShowControls";
 import GlitchTextAnimationWrapper from "../../GlitchTextAnimationWrapper";
+import useAnalytics from "../../../hooks/useAnalytics";
 
 export function LiveSkyVisualizerDescription() {
   return (
@@ -49,6 +50,7 @@ export function LiveSkyVisualizerDescription() {
 }
 
 export function CellularAutomatonDescription() {
+  const { trackEvent } = useAnalytics();
   return (
     <GlitchTextAnimationWrapper
       name="CellularAutomaton"
@@ -126,7 +128,12 @@ export function CellularAutomatonDescription() {
         </ul>
       </div>
 
-      <a href="https://github.com/joey8angelo/cellular-automata-3D">
+      <a
+        href="https://github.com/joey8angelo/cellular-automata-3D"
+        onClick={() =>
+          trackEvent("Outbound Link", "Click Link", "Cellular Automaton GitHub")
+        }
+      >
         <GlitchText text="Learn more" />
       </a>
     </GlitchTextAnimationWrapper>
@@ -134,6 +141,7 @@ export function CellularAutomatonDescription() {
 }
 
 export function CLIRaytracerDescription() {
+  const { trackEvent } = useAnalytics();
   return (
     <GlitchTextAnimationWrapper
       name="CLIRaytracer"
@@ -188,7 +196,12 @@ export function CLIRaytracerDescription() {
         </ul>
       </div>
 
-      <a href="https://github.com/joey8angelo/raytracer">
+      <a
+        href="https://github.com/joey8angelo/raytracer"
+        onClick={() =>
+          trackEvent("Outbound Link", "Click Link", "Raytracer GitHub")
+        }
+      >
         <GlitchText text="Learn more" />
       </a>
     </GlitchTextAnimationWrapper>
@@ -196,6 +209,7 @@ export function CLIRaytracerDescription() {
 }
 
 export function RegularExpressionEngineDescription() {
+  const { trackEvent } = useAnalytics();
   return (
     <GlitchTextAnimationWrapper
       name="RegularExpressionEngine"
@@ -215,6 +229,13 @@ export function RegularExpressionEngineDescription() {
           <a
             href="https://en.wikipedia.org/wiki/Finite-state_machine"
             className="underline text-[var(--color-accent)] text-glow-xl"
+            onClick={() =>
+              trackEvent(
+                "Outbound Link",
+                "Click Reference",
+                "Finite State Machine Wikipedia",
+              )
+            }
           >
             <GlitchText text="state machines" />
           </a>
@@ -231,6 +252,13 @@ export function RegularExpressionEngineDescription() {
           <a
             href="https://en.wikipedia.org/wiki/Thompson%27s_construction"
             className="underline text-[var(--color-accent)] text-glow-xl"
+            onClick={() =>
+              trackEvent(
+                "Outbound Link",
+                "Click Reference",
+                "Thompson Construction Wikipedia",
+              )
+            }
           >
             <GlitchText text="Thompson's Construction" />
           </a>
@@ -241,7 +269,12 @@ export function RegularExpressionEngineDescription() {
         </span>
       </div>
 
-      <a href="https://github.com/joey8angelo/Regex">
+      <a
+        href="https://github.com/joey8angelo/Regex"
+        onClick={() =>
+          trackEvent("Outbound Link", "Click Link", "Regex Engine GitHub")
+        }
+      >
         <GlitchText text="Learn more" />
       </a>
     </GlitchTextAnimationWrapper>
@@ -249,6 +282,7 @@ export function RegularExpressionEngineDescription() {
 }
 
 export function FourierApproximationDescription() {
+  const { trackEvent } = useAnalytics();
   return (
     <GlitchTextAnimationWrapper
       name="FourierApproximation"
@@ -260,6 +294,13 @@ export function FourierApproximationDescription() {
           <a
             href="https://youtu.be/r6sGWTCMz2k?si=XbOV8G8x0HVHe2LK"
             className="underline text-[var(--color-accent)] text-glow-xl"
+            onClick={() =>
+              trackEvent(
+                "Outbound Link",
+                "Click Reference",
+                "Fourier 3b1b YouTube",
+              )
+            }
           >
             <GlitchText text="this" />
           </a>
@@ -322,7 +363,12 @@ export function FourierApproximationDescription() {
           delay={500}
         />
       </div>
-      <a href="/fourier">
+      <a
+        href="/fourier"
+        onClick={() =>
+          trackEvent("Project Interaction", "Launch Project", "Fourier")
+        }
+      >
         <GlitchText text="Learn more" />
       </a>
     </GlitchTextAnimationWrapper>
@@ -330,6 +376,7 @@ export function FourierApproximationDescription() {
 }
 
 export function NeuralNetworkVisualizerDescription() {
+  const { trackEvent } = useAnalytics();
   return (
     <GlitchTextAnimationWrapper
       name="NeuralNetworkVisualizer"
@@ -341,6 +388,13 @@ export function NeuralNetworkVisualizerDescription() {
           <a
             href="https://www.ruder.io/optimizing-gradient-descent/#gradientdescentoptimizationalgorithms"
             className="underline text-[var(--color-accent)] text-glow-xl"
+            onClick={() =>
+              trackEvent(
+                "Outbound Link",
+                "Click Reference",
+                "RMSProp Documentation",
+              )
+            }
           >
             <GlitchText text="rmsprop" delay={0} />
           </a>
@@ -366,7 +420,12 @@ export function NeuralNetworkVisualizerDescription() {
         />
       </div>
 
-      <a href="/neural-net">
+      <a
+        href="/neural-net"
+        onClick={() =>
+          trackEvent("Project Interaction", "Launch Project", "Neural Network")
+        }
+      >
         <GlitchText text="Learn more" />
       </a>
     </GlitchTextAnimationWrapper>
@@ -374,6 +433,7 @@ export function NeuralNetworkVisualizerDescription() {
 }
 
 export function ParticleSimulationDescription() {
+  const { trackEvent } = useAnalytics();
   return (
     <GlitchTextAnimationWrapper
       name="ParticleSimulation"
@@ -417,7 +477,12 @@ export function ParticleSimulationDescription() {
           </li>
         </ul>
       </div>
-      <a href="/particles">
+      <a
+        href="/particles"
+        onClick={() =>
+          trackEvent("Project Interaction", "Launch Project", "Particles")
+        }
+      >
         <GlitchText text="Learn more" />
       </a>
     </GlitchTextAnimationWrapper>

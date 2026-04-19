@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { trackEvent } from "../hooks/useAnalytics";
 
 type SkySelectionType = "star" | "planet" | "satellite";
 
@@ -17,7 +18,10 @@ interface SkySelectionState {
 
 const useSkySelectionStore = create<SkySelectionState>((set) => ({
   selection: null,
-  selectSkyObject: (ob) => set({ selection: ob }),
+  selectSkyObject: (ob) => {
+    trackEvent("3D Scene", "Select Object", ob.type);
+    set({ selection: ob });
+  },
   clearSkySelection: () => set({ selection: null }),
 }));
 

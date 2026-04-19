@@ -135,6 +135,7 @@ export default function Planets({ radius }: { radius: number }) {
         pos.getY(e.index),
         pos.getZ(e.index),
       );
+
       selectSkyObject({
         type: "planet",
         id: e.index,

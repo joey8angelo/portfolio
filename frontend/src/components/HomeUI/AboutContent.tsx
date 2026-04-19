@@ -2,8 +2,11 @@ import LabeledBox from "../LabeledBox";
 import Label from "./Label";
 import GlitchText from "../GlitchText";
 import GlitchTextAnimationWrapper from "../GlitchTextAnimationWrapper";
+import useAnalytics from "../../hooks/useAnalytics";
 
 export default function AboutContent() {
+  const { trackEvent } = useAnalytics();
+
   return (
     <LabeledBox
       label={<Label text="About Me" />}
@@ -67,7 +70,10 @@ export default function AboutContent() {
                   text="EMAIL: "
                   className="text-[var(--color-text-muted)]"
                 />
-                <a href="mailto:joey4angelo@gmail.com">
+                <a 
+                  href="mailto:joey4angelo@gmail.com"
+                  onClick={() => trackEvent("Outbound Link", "Click Link", "Email")}
+                >
                   <GlitchText text="joey4angelo@gmail.com" />
                 </a>
               </span>
@@ -80,6 +86,7 @@ export default function AboutContent() {
                   href="https://github.com/joey8angelo"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackEvent("Outbound Link", "Click Link", "GitHub Profile")}
                 >
                   <GlitchText text="github.com/joey4angelo" />
                 </a>
@@ -93,6 +100,7 @@ export default function AboutContent() {
                   href="https://www.linkedin.com/in/joseph-d-angelo-13736a223/"
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackEvent("Outbound Link", "Click Link", "LinkedIn")}
                 >
                   <GlitchText text="linkedin.com/in/joseph-d-angelo-13736a223/" />
                 </a>
