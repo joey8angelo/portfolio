@@ -1,21 +1,21 @@
 export const LiveSkyVisualizerDetails = {
   name: "Live Sky Visualizer",
-  year: 2024,
+  year: 2026,
 };
 
 export const CellularAutomatonDetails = {
   name: "3D Cellular Automaton",
-  year: 2020,
+  year: 2025,
 };
 
 export const CLIRaytracerDetails = {
   name: "CLI Raytracer",
-  year: 2021,
+  year: 2025,
 };
 
 export const RegularExpressionEngineDetails = {
   name: "Regular Expression Engine",
-  year: 2022,
+  year: 2024,
 };
 
 export const FourierApproximationDetails = {
@@ -30,5 +30,5 @@ export const NeuralNetworkVisualizerDetails = {
 
 export const ParticleSimulationDetails = {
   name: "Particle Simulation",
-  year: 2023,
+  year: 2024,
 };

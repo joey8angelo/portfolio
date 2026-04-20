@@ -152,7 +152,7 @@ const projects = [
       },
     ],
   },
-];
+].sort((a, b) => b.details.year - a.details.year);
 
 export default function HomeContent() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
